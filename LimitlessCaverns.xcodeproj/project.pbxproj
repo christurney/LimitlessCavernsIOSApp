@@ -16,6 +16,10 @@
 		757A771E17B0698E005FE9ED /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 757A771D17B0698E005FE9ED /* Default.png */; };
 		757A772017B0698E005FE9ED /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 757A771F17B0698E005FE9ED /* Default@2x.png */; };
 		757A772217B0698E005FE9ED /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 757A772117B0698E005FE9ED /* Default-568h@2x.png */; };
+		757A773F17B06CDC005FE9ED /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757A773E17B06CDC005FE9ED /* CFNetwork.framework */; };
+		757A774117B06CE5005FE9ED /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757A774017B06CE5005FE9ED /* CoreLocation.framework */; };
+		757A774317B06CED005FE9ED /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757A774217B06CED005FE9ED /* AudioToolbox.framework */; };
+		757A774617B06D19005FE9ED /* libBump.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 757A774517B06D19005FE9ED /* libBump.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +36,11 @@
 		757A771D17B0698E005FE9ED /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		757A771F17B0698E005FE9ED /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		757A772117B0698E005FE9ED /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		757A773E17B06CDC005FE9ED /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		757A774017B06CE5005FE9ED /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		757A774217B06CED005FE9ED /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		757A774417B06D19005FE9ED /* BumpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BumpClient.h; path = "../../bump-api-ios/libBump/BumpClient.h"; sourceTree = "<group>"; };
+		757A774517B06D19005FE9ED /* libBump.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBump.a; path = "../../bump-api-ios/libBump/libBump.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,9 +48,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				757A774317B06CED005FE9ED /* AudioToolbox.framework in Frameworks */,
+				757A774117B06CE5005FE9ED /* CoreLocation.framework in Frameworks */,
+				757A773F17B06CDC005FE9ED /* CFNetwork.framework in Frameworks */,
 				757A770C17B0698E005FE9ED /* UIKit.framework in Frameworks */,
 				757A770E17B0698E005FE9ED /* Foundation.framework in Frameworks */,
 				757A771017B0698E005FE9ED /* CoreGraphics.framework in Frameworks */,
+				757A774617B06D19005FE9ED /* libBump.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,6 +81,9 @@
 		757A770A17B0698E005FE9ED /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				757A774217B06CED005FE9ED /* AudioToolbox.framework */,
+				757A774017B06CE5005FE9ED /* CoreLocation.framework */,
+				757A773E17B06CDC005FE9ED /* CFNetwork.framework */,
 				757A770B17B0698E005FE9ED /* UIKit.framework */,
 				757A770D17B0698E005FE9ED /* Foundation.framework */,
 				757A770F17B0698E005FE9ED /* CoreGraphics.framework */,
@@ -80,6 +96,8 @@
 			children = (
 				757A771A17B0698E005FE9ED /* AppDelegate.h */,
 				757A771B17B0698E005FE9ED /* AppDelegate.m */,
+				757A774417B06D19005FE9ED /* BumpClient.h */,
+				757A774517B06D19005FE9ED /* libBump.a */,
 				757A771217B0698E005FE9ED /* Supporting Files */,
 			);
 			path = LimitlessCaverns;
@@ -244,10 +262,16 @@
 		757A772617B0698E005FE9ED /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LimitlessCaverns/LimitlessCaverns-Prefix.pch";
 				INFOPLIST_FILE = "LimitlessCaverns/LimitlessCaverns-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../bump-api-ios/libBump\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -255,10 +279,16 @@
 		757A772717B0698E005FE9ED /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LimitlessCaverns/LimitlessCaverns-Prefix.pch";
 				INFOPLIST_FILE = "LimitlessCaverns/LimitlessCaverns-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../bump-api-ios/libBump\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
