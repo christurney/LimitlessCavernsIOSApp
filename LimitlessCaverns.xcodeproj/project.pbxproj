@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		7574905717B1799F00CAFA4F /* libBump.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7574905617B1799F00CAFA4F /* libBump.a */; };
+		7574905A17B188BA00CAFA4F /* UIView+Dropbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 7574905917B188BA00CAFA4F /* UIView+Dropbox.m */; };
+		7574905C17B18D2900CAFA4F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7574905B17B18D2900CAFA4F /* QuartzCore.framework */; };
 		757A770C17B0698E005FE9ED /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757A770B17B0698E005FE9ED /* UIKit.framework */; };
 		757A770E17B0698E005FE9ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757A770D17B0698E005FE9ED /* Foundation.framework */; };
 		757A771017B0698E005FE9ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757A770F17B0698E005FE9ED /* CoreGraphics.framework */; };
@@ -35,6 +37,9 @@
 /* Begin PBXFileReference section */
 		7574905517B1799F00CAFA4F /* BumpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BumpClient.h; sourceTree = "<group>"; };
 		7574905617B1799F00CAFA4F /* libBump.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libBump.a; sourceTree = "<group>"; };
+		7574905817B188BA00CAFA4F /* UIView+Dropbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Dropbox.h"; sourceTree = "<group>"; };
+		7574905917B188BA00CAFA4F /* UIView+Dropbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Dropbox.m"; sourceTree = "<group>"; };
+		7574905B17B18D2900CAFA4F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		757A770817B0698E005FE9ED /* LimitlessCaverns.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LimitlessCaverns.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		757A770B17B0698E005FE9ED /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		757A770D17B0698E005FE9ED /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -79,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7574905C17B18D2900CAFA4F /* QuartzCore.framework in Frameworks */,
 				757A774317B06CED005FE9ED /* AudioToolbox.framework in Frameworks */,
 				757A774117B06CE5005FE9ED /* CoreLocation.framework in Frameworks */,
 				757A773F17B06CDC005FE9ED /* CFNetwork.framework in Frameworks */,
@@ -95,6 +101,7 @@
 		757A76FF17B0698E005FE9ED = {
 			isa = PBXGroup;
 			children = (
+				7574905B17B18D2900CAFA4F /* QuartzCore.framework */,
 				757A776417B07E99005FE9ED /* AFNetworking */,
 				757A771117B0698E005FE9ED /* LimitlessCaverns */,
 				757A770A17B0698E005FE9ED /* Frameworks */,
@@ -132,6 +139,8 @@
 				757A771B17B0698E005FE9ED /* AppDelegate.m */,
 				757A778117B082A9005FE9ED /* LimitlessCavernsViewController.h */,
 				757A778217B082A9005FE9ED /* LimitlessCavernsViewController.m */,
+				7574905817B188BA00CAFA4F /* UIView+Dropbox.h */,
+				7574905917B188BA00CAFA4F /* UIView+Dropbox.m */,
 				757A771217B0698E005FE9ED /* Supporting Files */,
 			);
 			path = LimitlessCaverns;
@@ -254,6 +263,7 @@
 				757A777F17B07E99005FE9ED /* AFXMLRequestOperation.m in Sources */,
 				757A778017B07E99005FE9ED /* UIImageView+AFNetworking.m in Sources */,
 				757A778317B082A9005FE9ED /* LimitlessCavernsViewController.m in Sources */,
+				7574905A17B188BA00CAFA4F /* UIView+Dropbox.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
