@@ -24,4 +24,21 @@
     return self;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    NSURL *url = [NSURL URLWithString:@"http://limitless-caverns-4433.herokuapp.com"];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+
+    AFJSONRequestOperation *operation = [AFJSONRequestOperation
+                                         JSONRequestOperationWithRequest:request
+
+                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                                             NSLog(@"IP Address: %@", [JSON valueForKeyPath:@"origin"]);
+                                         }
+                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                                             NSLog(@"failed");
+                                         }];
+    [operation start];
+}
+
 @end

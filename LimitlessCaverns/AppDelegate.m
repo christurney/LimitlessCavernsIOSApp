@@ -23,7 +23,7 @@
 
     [[BumpClient sharedClient] setChannelConfirmedBlock:^(BumpChannelID channel) {
         NSLog(@"Channel with %@ confirmed.", [[BumpClient sharedClient] userIDForChannel:channel]);
-        [[BumpClient sharedClient] sendData:[[NSString stringWithFormat:@"Hello, world!"] dataUsingEncoding:NSUTF8StringEncoding]
+        [[BumpClient sharedClient] sendData:[[NSString stringWithFormat:@"12345"] dataUsingEncoding:NSUTF8StringEncoding]
                                   toChannel:channel];
     }];
 
