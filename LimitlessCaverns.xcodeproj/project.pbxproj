@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7574905717B1799F00CAFA4F /* libBump.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7574905617B1799F00CAFA4F /* libBump.a */; };
 		757A770C17B0698E005FE9ED /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757A770B17B0698E005FE9ED /* UIKit.framework */; };
 		757A770E17B0698E005FE9ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757A770D17B0698E005FE9ED /* Foundation.framework */; };
 		757A771017B0698E005FE9ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757A770F17B0698E005FE9ED /* CoreGraphics.framework */; };
@@ -19,7 +20,6 @@
 		757A773F17B06CDC005FE9ED /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757A773E17B06CDC005FE9ED /* CFNetwork.framework */; };
 		757A774117B06CE5005FE9ED /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757A774017B06CE5005FE9ED /* CoreLocation.framework */; };
 		757A774317B06CED005FE9ED /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757A774217B06CED005FE9ED /* AudioToolbox.framework */; };
-		757A774617B06D19005FE9ED /* libBump.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 757A774517B06D19005FE9ED /* libBump.a */; };
 		757A777817B07E99005FE9ED /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 757A776617B07E99005FE9ED /* AFHTTPClient.m */; };
 		757A777917B07E99005FE9ED /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 757A776817B07E99005FE9ED /* AFHTTPRequestOperation.m */; };
 		757A777A17B07E99005FE9ED /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 757A776A17B07E99005FE9ED /* AFImageRequestOperation.m */; };
@@ -33,6 +33,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7574905517B1799F00CAFA4F /* BumpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BumpClient.h; sourceTree = "<group>"; };
+		7574905617B1799F00CAFA4F /* libBump.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libBump.a; sourceTree = "<group>"; };
 		757A770817B0698E005FE9ED /* LimitlessCaverns.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LimitlessCaverns.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		757A770B17B0698E005FE9ED /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		757A770D17B0698E005FE9ED /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -49,8 +51,6 @@
 		757A773E17B06CDC005FE9ED /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		757A774017B06CE5005FE9ED /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		757A774217B06CED005FE9ED /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		757A774417B06D19005FE9ED /* BumpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BumpClient.h; path = "../../bump-api-ios/libBump/BumpClient.h"; sourceTree = "<group>"; };
-		757A774517B06D19005FE9ED /* libBump.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBump.a; path = "../../bump-api-ios/libBump/libBump.a"; sourceTree = "<group>"; };
 		757A776517B07E99005FE9ED /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
 		757A776617B07E99005FE9ED /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPClient.m; sourceTree = "<group>"; };
 		757A776717B07E99005FE9ED /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -85,7 +85,7 @@
 				757A770C17B0698E005FE9ED /* UIKit.framework in Frameworks */,
 				757A770E17B0698E005FE9ED /* Foundation.framework in Frameworks */,
 				757A771017B0698E005FE9ED /* CoreGraphics.framework in Frameworks */,
-				757A774617B06D19005FE9ED /* libBump.a in Frameworks */,
+				7574905717B1799F00CAFA4F /* libBump.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,10 +126,10 @@
 		757A771117B0698E005FE9ED /* LimitlessCaverns */ = {
 			isa = PBXGroup;
 			children = (
+				7574905517B1799F00CAFA4F /* BumpClient.h */,
+				7574905617B1799F00CAFA4F /* libBump.a */,
 				757A771A17B0698E005FE9ED /* AppDelegate.h */,
 				757A771B17B0698E005FE9ED /* AppDelegate.m */,
-				757A774417B06D19005FE9ED /* BumpClient.h */,
-				757A774517B06D19005FE9ED /* libBump.a */,
 				757A778117B082A9005FE9ED /* LimitlessCavernsViewController.h */,
 				757A778217B082A9005FE9ED /* LimitlessCavernsViewController.m */,
 				757A771217B0698E005FE9ED /* Supporting Files */,
@@ -338,7 +338,7 @@
 				INFOPLIST_FILE = "LimitlessCaverns/LimitlessCaverns-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../bump-api-ios/libBump\"",
+					"\"$(SRCROOT)/LimitlessCaverns\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -355,7 +355,7 @@
 				INFOPLIST_FILE = "LimitlessCaverns/LimitlessCaverns-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../bump-api-ios/libBump\"",
+					"\"$(SRCROOT)/LimitlessCaverns\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -382,6 +382,7 @@
 				757A772717B0698E005FE9ED /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

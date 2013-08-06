@@ -14,7 +14,7 @@
 
 - (void) configureBump {
     // userID is a string that you could use as the user's name, or an ID that is semantic within your environment
-    [BumpClient configureWithAPIKey:@"your_api_key" andUserID:[[UIDevice currentDevice] name]];
+    [BumpClient configureWithAPIKey:@"8990ba777c5340f98eb21033cfd9b06e" andUserID:[[UIDevice currentDevice] name]];
 
     [[BumpClient sharedClient] setMatchBlock:^(BumpChannelID channel) {
         NSLog(@"Matched with user: %@", [[BumpClient sharedClient] userIDForChannel:channel]);
