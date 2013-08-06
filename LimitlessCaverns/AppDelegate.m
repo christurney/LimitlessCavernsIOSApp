@@ -7,12 +7,15 @@
 //
 
 #import "AppDelegate.h"
+#ifndef TARGET_IPHONE_SIMULATOR
 #import "BumpClient.h"
+#endif
 #import "LimitlessCavernsViewController.h"
 
 @implementation AppDelegate
 
 - (void) configureBump {
+#ifndef TARGET_IPHONE_SIMULATOR
     // userID is a string that you could use as the user's name, or an ID that is semantic within your environment
     [BumpClient configureWithAPIKey:@"8990ba777c5340f98eb21033cfd9b06e" andUserID:[[UIDevice currentDevice] name]];
 
@@ -54,6 +57,7 @@
                 break;
         }
     }];
+#endif
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
