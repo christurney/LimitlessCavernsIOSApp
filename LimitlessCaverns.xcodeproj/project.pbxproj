@@ -10,6 +10,7 @@
 		7574905717B1799F00CAFA4F /* libBump.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7574905617B1799F00CAFA4F /* libBump.a */; };
 		7574905A17B188BA00CAFA4F /* UIView+Dropbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 7574905917B188BA00CAFA4F /* UIView+Dropbox.m */; };
 		7574905C17B18D2900CAFA4F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7574905B17B18D2900CAFA4F /* QuartzCore.framework */; };
+		7574905F17B1A1CB00CAFA4F /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7574905E17B1A1CB00CAFA4F /* RootViewController.m */; };
 		757A770C17B0698E005FE9ED /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757A770B17B0698E005FE9ED /* UIKit.framework */; };
 		757A770E17B0698E005FE9ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757A770D17B0698E005FE9ED /* Foundation.framework */; };
 		757A771017B0698E005FE9ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 757A770F17B0698E005FE9ED /* CoreGraphics.framework */; };
@@ -31,7 +32,7 @@
 		757A777E17B07E99005FE9ED /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 757A777317B07E99005FE9ED /* AFURLConnectionOperation.m */; };
 		757A777F17B07E99005FE9ED /* AFXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 757A777517B07E99005FE9ED /* AFXMLRequestOperation.m */; };
 		757A778017B07E99005FE9ED /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 757A777717B07E99005FE9ED /* UIImageView+AFNetworking.m */; };
-		757A778317B082A9005FE9ED /* LimitlessCavernsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 757A778217B082A9005FE9ED /* LimitlessCavernsViewController.m */; };
+		757A778317B082A9005FE9ED /* GetStartedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 757A778217B082A9005FE9ED /* GetStartedViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,8 @@
 		7574905817B188BA00CAFA4F /* UIView+Dropbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Dropbox.h"; sourceTree = "<group>"; };
 		7574905917B188BA00CAFA4F /* UIView+Dropbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Dropbox.m"; sourceTree = "<group>"; };
 		7574905B17B18D2900CAFA4F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		7574905D17B1A1CB00CAFA4F /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
+		7574905E17B1A1CB00CAFA4F /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		757A770817B0698E005FE9ED /* LimitlessCaverns.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LimitlessCaverns.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		757A770B17B0698E005FE9ED /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		757A770D17B0698E005FE9ED /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -75,8 +78,8 @@
 		757A777517B07E99005FE9ED /* AFXMLRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFXMLRequestOperation.m; sourceTree = "<group>"; };
 		757A777617B07E99005FE9ED /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		757A777717B07E99005FE9ED /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
-		757A778117B082A9005FE9ED /* LimitlessCavernsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LimitlessCavernsViewController.h; sourceTree = "<group>"; };
-		757A778217B082A9005FE9ED /* LimitlessCavernsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LimitlessCavernsViewController.m; sourceTree = "<group>"; };
+		757A778117B082A9005FE9ED /* GetStartedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetStartedViewController.h; sourceTree = "<group>"; };
+		757A778217B082A9005FE9ED /* GetStartedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetStartedViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,10 +140,12 @@
 				7574905617B1799F00CAFA4F /* libBump.a */,
 				757A771A17B0698E005FE9ED /* AppDelegate.h */,
 				757A771B17B0698E005FE9ED /* AppDelegate.m */,
-				757A778117B082A9005FE9ED /* LimitlessCavernsViewController.h */,
-				757A778217B082A9005FE9ED /* LimitlessCavernsViewController.m */,
+				757A778117B082A9005FE9ED /* GetStartedViewController.h */,
+				757A778217B082A9005FE9ED /* GetStartedViewController.m */,
 				7574905817B188BA00CAFA4F /* UIView+Dropbox.h */,
 				7574905917B188BA00CAFA4F /* UIView+Dropbox.m */,
+				7574905D17B1A1CB00CAFA4F /* RootViewController.h */,
+				7574905E17B1A1CB00CAFA4F /* RootViewController.m */,
 				757A771217B0698E005FE9ED /* Supporting Files */,
 			);
 			path = LimitlessCaverns;
@@ -262,8 +267,9 @@
 				757A777E17B07E99005FE9ED /* AFURLConnectionOperation.m in Sources */,
 				757A777F17B07E99005FE9ED /* AFXMLRequestOperation.m in Sources */,
 				757A778017B07E99005FE9ED /* UIImageView+AFNetworking.m in Sources */,
-				757A778317B082A9005FE9ED /* LimitlessCavernsViewController.m in Sources */,
+				757A778317B082A9005FE9ED /* GetStartedViewController.m in Sources */,
 				7574905A17B188BA00CAFA4F /* UIView+Dropbox.m in Sources */,
+				7574905F17B1A1CB00CAFA4F /* RootViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,11 +6,14 @@
 //  Copyright (c) 2013 Dropbox. All rights reserved.
 //
 
+NSString *const requestURLString = @"http://limitless-caverns-4433.herokuapp.com";
+
 #import "AppDelegate.h"
 #ifndef TARGET_IPHONE_SIMULATOR
 #import "BumpClient.h"
 #endif
-#import "LimitlessCavernsViewController.h"
+#import "GetStartedViewController.h"
+#import "RootViewController.h"
 
 @implementation AppDelegate
 
@@ -64,9 +67,10 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor blueColor];
-    self.viewController = [[LimitlessCavernsViewController alloc] initWithNibName:nil bundle:nil];
-    self.window.rootViewController = self.viewController;
+    self.window.backgroundColor = [UIColor whiteColor];
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:[[RootViewController alloc] initWithNibName:nil bundle:nil]];
+    self.navigationController.navigationBarHidden = YES;
+    self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
     [self configureBump];
     
