@@ -77,4 +77,15 @@ NSString *const requestURLString = @"http://limitless-caverns-4433.herokuapp.com
     return YES;
 }
 
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    NSRange r = [url.query rangeOfString:@"user_id="];
+    NSString *userId = [url.query substringFromIndex:r.location + r.length];
+    if (!userId){
+        return YES;
+    }
+    // Here's where we would do a network request to "register"
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
 @end
