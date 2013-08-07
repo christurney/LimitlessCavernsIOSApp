@@ -121,7 +121,7 @@
 //                                         }];
 //    [operation start];
 //    
-    NSDictionary *mysteryDictionary = @{@"fun fact": @"my family owns santa barbara honda"};
+    NSDictionary *mysteryDictionary = @{@"fun_fact": @"my family owns santa barbara honda"};
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:mysteryDictionary forKey:@"msyteryUserData"];
     [defaults synchronize];

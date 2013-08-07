@@ -11,6 +11,13 @@
 #import <QuartzCore/QuartzCore.h>
 
 @interface GuessWhoViewController ()
+@property (nonatomic, strong) UIImageView *mysteryImageView;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *funFactLabel;
+@property (nonatomic, strong) UIButton *knowThemButton;
+@property (nonatomic, strong) UIButton *playButton;
+@property (nonatomic, strong) UIImageView *leaderboard;
+
 @end
 
 @implementation GuessWhoViewController
@@ -27,78 +34,56 @@
 
 - (void)viewDidLoad
 {
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,
-                                                                    .05 * self.view.height,
-                                                                    self.view.width,
-                                                                    30)];
-    [titleLabel setText:self.titleString];
-    [titleLabel setFont:[UIFont boldSystemFontOfSize:25]];
-    [titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [self.view addSubview:titleLabel];
+    [super viewDidLoad];
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    [self.titleLabel setText:self.titleString];
+    [self.titleLabel setFont:[UIFont boldSystemFontOfSize:25]];
+    [self.titleLabel setTextAlignment:NSTextAlignmentCenter];
+    self.titleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
+    [self.view addSubview:self.titleLabel];
     
-    self.funFactLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,
-                                                                  CGRectGetMaxY(titleLabel.frame) + 12,
-                                                                  self.view.width - 60,
-                                                                  70)];
-    self.funFactLabel.centerX = self.view.width / 2;
+    self.funFactLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [self.funFactLabel setTextAlignment:NSTextAlignmentCenter];
     self.funFactLabel.adjustsFontSizeToFitWidth = NO;
     self.funFactLabel.numberOfLines = 0;
     
     [self.view addSubview:self.funFactLabel];
+    self.mysteryImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+    self.mysteryImageView.contentMode = UIViewContentModeScaleAspectFit;
+    [self.mysteryImageView.layer setBorderColor:[UIColor redColor].CGColor];
+    [self.mysteryImageView.layer setBorderWidth:3];
     
-    int imageBuffer = 30;
-    int imageHeight = 175;
+    [self.mysteryImageView setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"dabney" ofType:@"jpg"]]];
+    [self.view addSubview:self.mysteryImageView];
     
-    UIImageView *mysteryImageView = [[UIImageView alloc] initWithFrame:CGRectMake(imageBuffer,
-                                                                                  CGRectGetMaxY(self.funFactLabel.frame) + 12,
-                                                                                  (self.view.width - imageBuffer*2),
-                                                                                  imageHeight)];
-    mysteryImageView.contentMode = UIViewContentModeScaleAspectFit;
-    [mysteryImageView.layer setBorderColor:[UIColor redColor].CGColor];
-    [mysteryImageView.layer setBorderWidth:3];
-    
-    [mysteryImageView setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"dabney" ofType:@"jpg"]]];
-    [self.view addSubview:mysteryImageView];
-    
-    int buttonHeight = 40;
     
     // know them button
-    UIButton *knowThemButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.knowThemButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     
-    [knowThemButton setFrame:CGRectMake(mysteryImageView.origin.x,
-                                        CGRectGetMaxY(mysteryImageView.frame) + 15,
-                                        CGRectGetWidth(mysteryImageView.frame)/2.0 - 5,
-                                        buttonHeight)];
-    [knowThemButton setTitle:@"Know Them" forState:UIControlStateNormal];
-    [knowThemButton addTarget:self
+    [self.knowThemButton setFrame:CGRectZero];
+    [self.knowThemButton setTitle:@"Know Them" forState:UIControlStateNormal];
+    [self.knowThemButton addTarget:self
                        action:@selector(knowThemClicked)
              forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:knowThemButton];
+    [self.view addSubview:self.knowThemButton];
     
     // play button
-    UIButton *playButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.playButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     
-    [playButton setFrame:CGRectMake(CGRectGetMaxX(knowThemButton.frame) + 10,
-                                    CGRectGetMaxY(mysteryImageView.frame) + 15,
-                                    CGRectGetWidth(mysteryImageView.frame)/2.0 - 5,
-                                    buttonHeight)];
-    [playButton setTitle:@"Play!" forState:UIControlStateNormal];
-    [playButton addTarget:self
+    [self.playButton setFrame:CGRectZero];
+    [self.playButton setTitle:@"Play!" forState:UIControlStateNormal];
+    [self.playButton addTarget:self
                    action:@selector(playClicked)
          forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:playButton];
+    [self.view addSubview:self.playButton];
     
     // leaderboard picture
     
-    int buttonSize = 50;
-    UIImageView *leaderBoard = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(mysteryImageView.frame) - buttonSize,
-                                                                             CGRectGetMaxY(playButton.frame) + 15,
-                                                                             buttonSize,
-                                                                             buttonSize)];
-    [self.view addSubview:leaderBoard];
-    [leaderBoard.layer setBorderColor:[UIColor redColor].CGColor];
-    [leaderBoard.layer setBorderWidth:3];
+    self.leaderboard = [[UIImageView alloc] initWithFrame:CGRectZero];
+    [self.view addSubview:self.leaderboard];
+    [self.leaderboard.layer setBorderColor:[UIColor redColor].CGColor];
+    [self.leaderboard.layer setBorderWidth:3];
 }
 
 - (void)knowThemClicked
@@ -135,5 +120,77 @@
     
 }
 
+- (void)viewWillLayoutSubviews
+{
+    int imageBuffer = 30;
+    int imageHeight = 175;
+    int buttonHeight = 40;
+    int buttonSize = 50;
+    self.titleLabel.frame = CGRectMake(0, .05 * self.view.height, self.view.width, 30);
+
+    
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)){
+                
+        self.funFactLabel.frame = CGRectMake(0, CGRectGetMaxY(self.titleLabel.frame) + 12, self.view.width - 60, 70);
+        self.funFactLabel.centerX = self.view.width / 2;
+        
+        
+        self.mysteryImageView.frame = CGRectMake(imageBuffer,
+                                                 CGRectGetMaxY(self.funFactLabel.frame) + 12,
+                                                 (self.view.width - imageBuffer*2),
+                                                 imageHeight);
+        
+        
+        // know them button
+        
+        self.knowThemButton.frame = CGRectMake(self.mysteryImageView.origin.x,
+                                            CGRectGetMaxY(self.mysteryImageView.frame) + 15,
+                                            CGRectGetWidth(self.mysteryImageView.frame)/2.0 - 5,
+                                            buttonHeight);        
+        // play button
+        
+        [self.playButton setFrame:CGRectMake(CGRectGetMaxX(self.knowThemButton.frame) + 10,
+                                        CGRectGetMaxY(self.mysteryImageView.frame) + 15,
+                                        CGRectGetWidth(self.mysteryImageView.frame)/2.0 - 5,
+                                        buttonHeight)];
+        
+        self.leaderboard.frame = CGRectMake(CGRectGetMaxX(self.mysteryImageView.frame) - buttonSize,
+                                                                                 CGRectGetMaxY(self.playButton.frame) + 15,
+                                                                                 buttonSize,
+                                                                                 buttonSize);
+    } else {
+        
+        self.mysteryImageView.frame = CGRectMake(imageBuffer,
+                                                 CGRectGetMaxY(self.titleLabel.frame) + 20,
+                                                 (self.view.height - imageBuffer*2),
+                                                 imageHeight);
+
+        self.funFactLabel.frame = CGRectMake(CGRectGetMaxX(self.mysteryImageView.frame) + imageBuffer, CGRectGetMaxY(self.titleLabel.frame) + 12, self.view.height - 60, 70);
+        
+        
+        
+        
+        // know them button
+        
+        self.knowThemButton.frame = CGRectMake(CGRectGetMaxX(self.mysteryImageView.frame) + imageBuffer,
+                                               CGRectGetMaxY(self.funFactLabel.frame) + 15,
+                                               CGRectGetWidth(self.mysteryImageView.frame)/2.0 - 5,
+                                               buttonHeight);
+        // play button
+        
+        [self.playButton setFrame:CGRectMake(CGRectGetMinX(self.knowThemButton.frame),
+                                        CGRectGetMaxY(self.knowThemButton.frame) + 12,
+                                        CGRectGetWidth(self.mysteryImageView.frame)/2.0 - 5,
+                                        buttonHeight)];
+        
+        self.leaderboard.frame = CGRectMake(CGRectGetMaxX(self.playButton.frame) + 40,
+                                            CGRectGetMaxY(self.playButton.frame) - buttonSize,
+                                            buttonSize,
+                                            buttonSize);
+
+        
+    }
+    [self setFunFactString:self.funFactString];
+}
 
 @end

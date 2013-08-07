@@ -14,7 +14,6 @@
 
 @property (nonatomic, copy) NSString *funFactString;
 @property (nonatomic, copy) NSString *titleString;
-@property (nonatomic, strong) UILabel *funFactLabel;
 @property (nonatomic, weak) id delegate;
 
 @end
