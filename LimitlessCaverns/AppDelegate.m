@@ -83,10 +83,9 @@ NSString *const requestURLString = @"https://limitless-caverns-4433.herokuapp.co
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     NSString *urlString = [url absoluteString];
-    NSString *userID = [urlString stringByReplacingOccurrencesOfString:@"guesswhodropbox://" withString:@""];
+    NSString *userID = [urlString stringByReplacingOccurrencesOfString:@"GuessWho://" withString:@""];
     //todo - present loading indicator
     [self authenticateUserId:userID];
-
 
     return YES;
 }
