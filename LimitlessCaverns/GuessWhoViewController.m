@@ -88,12 +88,12 @@
 
 - (void)knowThemClicked
 {
-    [self.delegate guessWhoViewControllerPressedAButton:self];
+    [self.delegate guessWhoViewControllerPressedKnowThemButton:self];
 }
 
 - (void)playClicked
 {
-    [self.delegate guessWhoViewControllerPressedAButton:self];
+    [self.delegate guessWhoViewControllerPressedPlayButton:self];
 }
 
 -(void)setFunFactString:(NSString *)str

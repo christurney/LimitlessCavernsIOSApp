@@ -13,11 +13,12 @@
 #import "AFJSONRequestOperation.h"
 #import "AppDelegate.h"
 #import "GuessWhoViewController.h"
+#import "GuessWhoHalpersViewController.h"
 
 @interface RootViewController ()
 
 @property (nonatomic, strong) NSString *mysteryUserID;
-@property (nonatomic, weak) GuessWhoViewController *currentGuessWhoController;
+@property (nonatomic, weak) UIViewController *currentlyDisplayedController;
 @end
 
 @implementation RootViewController
@@ -50,31 +51,49 @@
     // TODO decide what the initial UI should be
 }
 
-- (void)showControllerForData:(NSDictionary*)userData
+- (UIViewController *)viewControllerForData:(NSDictionary*)userData showHalpers:(BOOL)showHalpers
 {
-    GuessWhoViewController *controller = [[GuessWhoViewController alloc] initWithDictionary:userData];
-    controller.delegate = self;
-    if (self.currentGuessWhoController){
+    if (showHalpers)
+    {
+        GuessWhoHalpersViewController *controller = [[GuessWhoHalpersViewController alloc] initWithDictionary:userData];
+        return controller;
+    }
+    else
+    {
+        GuessWhoViewController *controller = [[GuessWhoViewController alloc] initWithDictionary:userData];
+        controller.delegate = self;
+        return controller;
+    }
+}
+
+- (void)showControllerForData:(NSDictionary*)userData showHalpers:(BOOL)showHalpers
+{
+    if (self.currentlyDisplayedController){
         // Animate a transition 
-        [self.currentGuessWhoController willMoveToParentViewController:nil];
+        [self.currentlyDisplayedController willMoveToParentViewController:nil];
+
+        UIViewController *controller = [self viewControllerForData:userData showHalpers:showHalpers];
+
         [self addChildViewController:controller];
         [self.view addSubview:controller.view];
         controller.view.frame = CGRectOffset(self.view.bounds, self.view.width, 0);
         [UIView transitionWithView:self.view duration:.25 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.currentGuessWhoController.view.frame = CGRectOffset(self.view.bounds, -self.view.width, 0);
+            self.currentlyDisplayedController.view.frame = CGRectOffset(self.view.bounds, -self.view.width, 0);
             controller.view.frame = self.view.bounds;
         } completion:^(BOOL finished) {
-            [self.currentGuessWhoController.view removeFromSuperview];
-            [self.currentGuessWhoController removeFromParentViewController];
+            [self.currentlyDisplayedController.view removeFromSuperview];
+            [self.currentlyDisplayedController removeFromParentViewController];
             [controller didMoveToParentViewController:self];
-            self.currentGuessWhoController = controller;
+            self.currentlyDisplayedController = controller;
         }];
     } else {
+        GuessWhoViewController *controller = [[GuessWhoViewController alloc] initWithDictionary:userData];
+        controller.delegate = self;
         [self addChildViewController:controller];
         [self.view addSubview:controller.view];
         controller.view.frame = self.view.bounds;
         [controller didMoveToParentViewController:self];
-        self.currentGuessWhoController = controller;
+        self.currentlyDisplayedController = controller;
     }
 }
 
@@ -89,13 +108,13 @@
     }
     else
     {
-        [self showControllerForData:[defaults valueForKey:@"mysteryUserData"]];
+        [self showControllerForData:[defaults valueForKey:@"mysteryUserData"] showHalpers:NO];
     }
 }
 
 -(void)getMysteryUserInfo:(NSString *)userID
 {
-//    NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[@"/mystery_user_info_for_user/" stringByAppendingString:userID]]];
+//    NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[@"/get_new_assignment/" stringByAppendingString:userID]]];
 //    NSURLRequest *request = [NSURLRequest requestWithURL:url];
 //
 //    AFJSONRequestOperation *operation = [AFJSONRequestOperation
@@ -123,16 +142,23 @@
 //    
     NSDictionary *mysteryDictionary = @{@"fun_fact": @"my family owns santa barbara honda"};
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:mysteryDictionary forKey:@"msyteryUserData"];
+    [defaults setObject:mysteryDictionary forKey:@"mysteryUserData"];
     [defaults synchronize];
-    [self showControllerForData:mysteryDictionary];
+    [self showControllerForData:mysteryDictionary showHalpers:FALSE];
 }
 
-- (void)guessWhoViewControllerPressedAButton:(GuessWhoViewController *)guessWhoVC
+- (void)guessWhoViewControllerPressedKnowThemButton:(GuessWhoViewController *)guessWhoVC
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *data = [defaults valueForKey:@"myteryUserData"];
-    [self showControllerForData:data];
+    NSDictionary *data = [defaults valueForKey:@"mysteryUserData"];
+    [self showControllerForData:data showHalpers:NO];
+}
+
+- (void)guessWhoViewControllerPressedPlayButton:(GuessWhoViewController *)guessWhoVC
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *data = [defaults valueForKey:@"mysteryUserData"];
+    [self showControllerForData:data showHalpers:YES];
 }
 
 

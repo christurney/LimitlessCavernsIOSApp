@@ -20,7 +20,7 @@
 
 
 @protocol  GuessWhoViewControllerDelegate
-// This is just so I can trigger the transition...
-- (void)guessWhoViewControllerPressedAButton:(GuessWhoViewController*)guessWhoVC;
+- (void)guessWhoViewControllerPressedKnowThemButton:(GuessWhoViewController *)guessWhoVC;
+- (void)guessWhoViewControllerPressedPlayButton:(GuessWhoViewController *)guessWhoVC;
 
 @end
