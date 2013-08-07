@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "GuessWhoViewController.h"
+#import "GuessWhoHalpersViewController.h"
 
-@interface RootViewController : UIViewController <GuessWhoViewControllerDelegate>
+@interface RootViewController : UIViewController <GuessWhoViewControllerDelegate, GuessWhoHalpersViewControllerDelegate>
 - (void)getMysteryUserInfo:(NSString *)userID;
 - (void)showUserInfo;
 @end

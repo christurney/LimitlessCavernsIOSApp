@@ -13,5 +13,11 @@
 - (id)initWithDictionary:(NSDictionary*)dictionary;
 
 @property (nonatomic, copy) NSString *funFactString;
+@property (nonatomic, weak) id delegate;
+
+@end
+
+@protocol  GuessWhoHalpersViewControllerDelegate
+- (void)guessWhoHalpersViewControllerPressedSkipButton:(GuessWhoHalpersViewController *)guessWhoHalpersVC;
 
 @end

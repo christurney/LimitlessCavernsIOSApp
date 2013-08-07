@@ -10,7 +10,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIView+Dropbox.h"
 
-@interface GuessWhoHalpersViewController ()
+@interface GuessWhoHalpersViewController () <UIAlertViewDelegate>
 
 @property (nonatomic, strong) UIView *pointsBoxView;
 @property (nonatomic, strong) UILabel *pointsBoxLabel;
@@ -31,6 +31,8 @@
 @property (nonatomic, strong) UIView *tableBottomView;
 @property (nonatomic, strong) UIButton *skipButton;
 @property (nonatomic, strong) UIButton *leaderboardButton;
+
+@property (nonatomic, strong) UIAlertView *skipAlertView;
 
 @end
 
@@ -357,14 +359,34 @@
      */
 }
 
+#pragma mark - Button methods
+
 - (void)skipClicked
 {
-    
+    self.skipAlertView = [[UIAlertView alloc] initWithTitle:@"Giving up!?"
+                                                    message:@"Are you SURE you want to give up and skip?"
+                                                   delegate:self
+                                          cancelButtonTitle:@"Keep Trying!"
+                                          otherButtonTitles:@"Lamesauce", nil];
+    [self.skipAlertView show];
 }
 
 - (void)leaderboardClicked
 {
     NSLog(@"Leaderboard clicked!");
+}
+
+#pragma mark - Alert view delegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
+{
+    if (alertView == self.skipAlertView)
+    {
+        if (buttonIndex != alertView.cancelButtonIndex)
+        {
+            [self.delegate guessWhoHalpersViewControllerPressedSkipButton:self];
+        }
+    }
 }
 
 @end

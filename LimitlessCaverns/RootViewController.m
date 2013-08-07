@@ -56,6 +56,7 @@
     if (showHalpers)
     {
         GuessWhoHalpersViewController *controller = [[GuessWhoHalpersViewController alloc] initWithDictionary:userData];
+        controller.delegate = self;
         return controller;
     }
     else
@@ -161,5 +162,11 @@
     [self showControllerForData:data showHalpers:YES];
 }
 
+- (void)guessWhoHalpersViewControllerPressedSkipButton:(GuessWhoHalpersViewController *)guessWhoHalpersVC
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *data = [defaults valueForKey:@"mysteryUserData"];
+    [self showControllerForData:data showHalpers:NO];
+}
 
 @end
