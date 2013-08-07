@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "GuessWhoViewController.h"
 #import "GuessWhoHalpersViewController.h"
+#import "LeaderboardViewController.h"
 
 @interface RootViewController ()
 
@@ -113,7 +114,14 @@
     }
 }
 
--(void)getMysteryUserInfo:(NSString *)userID
+- (void)showLeaderBoard
+{
+    [self.navigationController presentViewController:[[UINavigationController alloc]
+                                                      initWithRootViewController:[[LeaderboardViewController alloc] init]]
+                                            animated:YES completion:nil];
+}
+
+-(void)getMysteryUserInfo:(NSString *)userID   
 {
 //    NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[@"/get_new_assignment/" stringByAppendingString:userID]]];
 //    NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -167,6 +175,16 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *data = [defaults valueForKey:@"mysteryUserData"];
     [self showControllerForData:data showHalpers:NO];
+}
+
+- (void)guessWhoViewControllerPressedLeaderboardButton:(GuessWhoViewController *)guessWhoVC
+{
+    [self showLeaderBoard];
+}
+
+- (void)guessWhoHalpersViewControllerPressedLeaderboardButton:(GuessWhoHalpersViewController *)guessWhoHalpersVC
+{
+    [self showLeaderBoard];
 }
 
 @end

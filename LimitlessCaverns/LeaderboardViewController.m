@@ -22,6 +22,20 @@ static NSString *cellIdentifier = @"Cell";
 
 @implementation LeaderboardViewController
 
+- (id)init
+{
+    self = [super init];
+    if (self){
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(closeLeaderboard)];
+    }
+    return self;
+}
+
+- (void)closeLeaderboard
+{
+    [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 -(UIImage*)placeHolderImage
 {
     if(_placeHolderImage) return _placeHolderImage;

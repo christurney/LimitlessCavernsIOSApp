@@ -374,6 +374,7 @@
 
 - (void)leaderboardClicked
 {
+    [self.delegate guessWhoHalpersViewControllerPressedLeaderboardButton:self];
     NSLog(@"Leaderboard clicked!");
 }
 

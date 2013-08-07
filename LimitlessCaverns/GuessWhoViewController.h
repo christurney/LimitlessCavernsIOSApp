@@ -22,5 +22,5 @@
 @protocol  GuessWhoViewControllerDelegate
 - (void)guessWhoViewControllerPressedKnowThemButton:(GuessWhoViewController *)guessWhoVC;
 - (void)guessWhoViewControllerPressedPlayButton:(GuessWhoViewController *)guessWhoVC;
-
+- (void)guessWhoViewControllerPressedLeaderboardButton:(GuessWhoViewController*)guessWhoVC;
 @end
