@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B71BCA817B1E7BD00412975 /* GuessWhoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B71BCA717B1E7BC00412975 /* GuessWhoViewController.m */; };
 		7574905717B1799F00CAFA4F /* libBump.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7574905617B1799F00CAFA4F /* libBump.a */; };
 		7574905A17B188BA00CAFA4F /* UIView+Dropbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 7574905917B188BA00CAFA4F /* UIView+Dropbox.m */; };
 		7574905C17B18D2900CAFA4F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7574905B17B18D2900CAFA4F /* QuartzCore.framework */; };
@@ -36,6 +37,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B71BCA617B1E7BB00412975 /* GuessWhoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuessWhoViewController.h; sourceTree = "<group>"; };
+		1B71BCA717B1E7BC00412975 /* GuessWhoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuessWhoViewController.m; sourceTree = "<group>"; };
 		7574905517B1799F00CAFA4F /* BumpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BumpClient.h; sourceTree = "<group>"; };
 		7574905617B1799F00CAFA4F /* libBump.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libBump.a; sourceTree = "<group>"; };
 		7574905817B188BA00CAFA4F /* UIView+Dropbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Dropbox.h"; sourceTree = "<group>"; };
@@ -146,6 +149,8 @@
 				7574905917B188BA00CAFA4F /* UIView+Dropbox.m */,
 				7574905D17B1A1CB00CAFA4F /* RootViewController.h */,
 				7574905E17B1A1CB00CAFA4F /* RootViewController.m */,
+				1B71BCA617B1E7BB00412975 /* GuessWhoViewController.h */,
+				1B71BCA717B1E7BC00412975 /* GuessWhoViewController.m */,
 				757A771217B0698E005FE9ED /* Supporting Files */,
 			);
 			path = LimitlessCaverns;
@@ -270,6 +275,7 @@
 				757A778317B082A9005FE9ED /* GetStartedViewController.m in Sources */,
 				7574905A17B188BA00CAFA4F /* UIView+Dropbox.m in Sources */,
 				7574905F17B1A1CB00CAFA4F /* RootViewController.m in Sources */,
+				1B71BCA817B1E7BD00412975 /* GuessWhoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

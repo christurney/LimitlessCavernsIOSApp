@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Dropbox. All rights reserved.
 //
 
-NSString *const requestURLString = @"http://limitless-caverns-4433.herokuapp.com";
+NSString *const requestURLString = @"https://limitless-caverns-4433.herokuapp.com";
 
 #import "AppDelegate.h"
 #import "AFJSONRequestOperation.h"
@@ -70,16 +70,17 @@ NSString *const requestURLString = @"http://limitless-caverns-4433.herokuapp.com
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
-    self.navigationController = [[UINavigationController alloc] initWithRootViewController:[[RootViewController alloc] initWithNibName:nil bundle:nil]];
+    self.viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
+    self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.viewController];
     self.navigationController.navigationBarHidden = YES;
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
     [self configureBump];
-    
+    [self checkLoginState];
     return YES;
 }
 
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     NSString *urlString = [url absoluteString];
     NSString *userID = [urlString stringByReplacingOccurrencesOfString:@"guesswhodropbox://" withString:@""];
@@ -90,38 +91,66 @@ NSString *const requestURLString = @"http://limitless-caverns-4433.herokuapp.com
     return YES;
 }
 
+
+- (void)checkLoginState
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *userID = [defaults valueForKey:@"userID"];
+    
+    if (!userID)
+    {
+        [self.navigationController presentViewController:[[GetStartedViewController alloc] init]
+                                                animated:NO
+                                              completion:^{
+                                                  nil;
+                                              }];
+    }
+    else
+    {
+        [self.viewController showUserInfo];
+    }
+}
+
+
 -(void)authenticateUserId:(NSString *)userID
 {
     //NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[@"/authenticate/" stringByAppendingString:userID]]];
-    NSURL *url = [NSURL URLWithString:requestURLString];
-    
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+//    NSURL *url = [NSURL URLWithString:requestURLString];
+//    
+//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+//
+//    AFJSONRequestOperation *operation = [AFJSONRequestOperation
+//                                         JSONRequestOperationWithRequest:request
+//
+//                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+//
+//                                             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//                                             [defaults setObject:userID forKey:@"userID"];
+//                                             [defaults synchronize];
+//
+//                                             if([self.navigationController.visibleViewController isKindOfClass:[GetStartedViewController class]])
+//                                             {
+//                                                 [self.navigationController.visibleViewController dismissViewControllerAnimated:YES completion:^{
+//                                                     nil;
+//                                                 }];
+//                                             }
+//                                         }
+//                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+//                                             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
+//                                                                                                 message:[JSON valueForKeyPath:@"message"]
+//                                                                                                delegate:self
+//                                                                                       cancelButtonTitle:@"OK"
+//                                                                                       otherButtonTitles:nil];
+//                                             [alertView show];
+//                                         }];
+//     [operation start];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:@"BogusUserId" forKey:@"userID"];
+    [defaults synchronize];
+    [self.viewController showUserInfo];
+    [self.navigationController dismissViewControllerAnimated:NO completion:nil];
 
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation
-                                         JSONRequestOperationWithRequest:request
 
-                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-
-                                             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                                             [defaults setObject:userID forKey:@"userID"];
-                                             [defaults synchronize];
-
-                                             if([self.navigationController.visibleViewController isKindOfClass:[GetStartedViewController class]])
-                                             {
-                                                 [self.navigationController.visibleViewController dismissViewControllerAnimated:YES completion:^{
-                                                     nil;
-                                                 }];
-                                             }
-                                         }
-                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-                                             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
-                                                                                                 message:[JSON valueForKeyPath:@"message"]
-                                                                                                delegate:self
-                                                                                       cancelButtonTitle:@"OK"
-                                                                                       otherButtonTitles:nil];
-                                             [alertView show];
-                                         }];
-    [operation start];
 }
 
 @end

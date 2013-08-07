@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GuessWhoViewController.h"
 
-@interface RootViewController : UIViewController
-
+@interface RootViewController : UIViewController <GuessWhoViewControllerDelegate>
+- (void)getMysteryUserInfo:(NSString *)userID;
+- (void)showUserInfo;
 @end
+
+
