@@ -54,8 +54,11 @@
                                                                                   CGRectGetMaxY(self.funFactLabel.frame) + 12,
                                                                                   (self.view.width - imageBuffer*2),
                                                                                   imageHeight)];
+    mysteryImageView.contentMode = UIViewContentModeScaleAspectFit;
     [mysteryImageView.layer setBorderColor:[UIColor redColor].CGColor];
     [mysteryImageView.layer setBorderWidth:3];
+    
+    [mysteryImageView setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"dabney" ofType:@"jpg"]]];
     [self.view addSubview:mysteryImageView];
     
     int buttonHeight = 40;
