@@ -9,6 +9,8 @@
 NSString *const requestURLString = @"http://limitless-caverns-4433.herokuapp.com";
 
 #import "AppDelegate.h"
+#import "AFJSONRequestOperation.h"
+
 #ifndef TARGET_IPHONE_SIMULATOR
 #import "BumpClient.h"
 #endif
@@ -75,6 +77,52 @@ NSString *const requestURLString = @"http://limitless-caverns-4433.herokuapp.com
     [self configureBump];
     
     return YES;
+}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    NSString *urlString = [url absoluteString];
+    NSString *userID = [urlString stringByReplacingOccurrencesOfString:@"guesswhodropbox://" withString:@""];
+    //todo - present loading indicator
+    [self authenticateUserId:userID];
+
+
+    return YES;
+}
+
+-(void)authenticateUserId:(NSString *)userID
+{
+    //NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[@"/authenticate/" stringByAppendingString:userID]]];
+    NSURL *url = [NSURL URLWithString:requestURLString];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+
+    AFJSONRequestOperation *operation = [AFJSONRequestOperation
+                                         JSONRequestOperationWithRequest:request
+
+                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+
+                                             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                             [defaults setObject:userID forKey:@"userID"];
+                                             [defaults synchronize];
+
+                                             if([self.navigationController.visibleViewController isKindOfClass:[GetStartedViewController class]])
+                                             {
+                                                 [self.navigationController.visibleViewController dismissViewControllerAnimated:YES completion:^{
+                                                     nil;
+                                                 }];
+                                             }
+                                         }
+                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                                             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
+                                                                                                 message:[JSON valueForKeyPath:@"message"]
+                                                                                                delegate:self
+                                                                                       cancelButtonTitle:@"OK"
+                                                                                       otherButtonTitles:nil];
+                                             [alertView show];
+                                         }];
+    [operation start];
+
 }
 
 @end

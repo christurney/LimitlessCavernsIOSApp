@@ -10,12 +10,15 @@
 #import "UIView+Dropbox.h"
 #import "GetStartedViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "AFJSONRequestOperation.h"
+#import "AppDelegate.h"
+
 
 @interface RootViewController ()
 
 @property (nonatomic, strong) NSString *funFactString;
 @property (nonatomic, strong) UILabel *funFactLabel;
-
+@property (nonatomic, strong) NSString *mysteryUserID;
 
 @end
 
@@ -60,6 +63,11 @@
 	// Do any additional setup after loading the view.
 
     [self setupInitialUI];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     [self checkLoginState];
 }
 
@@ -140,8 +148,9 @@
 - (void)checkLoginState
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *userID = [defaults valueForKey:@"userID"];
 
-    if (![defaults valueForKey:@"user_id"])
+    if (!userID)
     {
         [self.navigationController presentViewController:[[GetStartedViewController alloc] init]
                                                 animated:NO
@@ -149,6 +158,49 @@
                                                   nil;
                                               }];
     }
+    else
+    {
+        if (![defaults valueForKey:@"mysteryUserID"])
+        {
+            NSLog(@"Make server request!");
+            [self getMysteryUserInfo:userID];
+        }
+        else
+        {
+            self.funFactString = [defaults objectForKey:@"mysteryUserFunFact"];
+        }
+    }
+}
+
+-(void)getMysteryUserInfo:(NSString *)userID
+{
+    NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[@"/mystery_user_info_for_user/" stringByAppendingString:userID]]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+
+    AFJSONRequestOperation *operation = [AFJSONRequestOperation
+                                         JSONRequestOperationWithRequest:request
+
+                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                                             // store user info and update the text box
+                                             self.mysteryUserID = [JSON valueForKeyPath:@"mystery_user_id"];
+                                             self.funFactString = [JSON valueForKeyPath:@"fun_fact"];
+
+                                             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                             [defaults setObject:self.mysteryUserID forKey:@"mysteryUserID"];
+                                             [defaults setObject:self.funFactString forKey:@"funFact"];
+                                             [defaults synchronize];
+
+
+                                         }
+                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                                             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
+                                                                                                 message:[JSON valueForKeyPath:@"message"]
+                                                                                                delegate:self
+                                                                                       cancelButtonTitle:@"OK"
+                                                                                       otherButtonTitles:nil];
+                                             [alertView show];
+                                         }];
+    [operation start];
 }
 
 
