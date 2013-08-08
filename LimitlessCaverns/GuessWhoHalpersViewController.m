@@ -68,10 +68,19 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
+    // Add notification observer
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(verifySuccessFailure:) name:@"VerifySuccessFailureNotification" object:nil];
+
+    // Set up loading indicator
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     activityIndicator.color = [UIColor blackColor];
     [self.view addSubview:activityIndicator];
@@ -464,15 +473,22 @@
     [self.failureAlertView show];
 }
 
-- (void)verifySuccessFailure:(NSString *)bumpedUserID
+- (void)verifySuccessFailure:(NSNotification *)notification
 {
-    if ([[self.userDataDictionary objectForKey:@"target_id"] isEqualToString:bumpedUserID])
+    // Ensure that this isn't called when user has Leaderboard opened.
+    if (self.navigationController.presentedViewController == self)
     {
-        [self userSucceeded];
-    }
-    else
-    {
-        [self showFailureAlertView];
+        NSDictionary *dict = [notification userInfo];
+        NSString *bumpedUserID = [dict objectForKey:@"bumped_user_id"];
+
+        if ([[self.userDataDictionary objectForKey:@"target_id"] isEqualToString:bumpedUserID])
+        {
+            [self userSucceeded];
+        }
+        else
+        {
+            [self showFailureAlertView];
+        }
     }
 }
 
