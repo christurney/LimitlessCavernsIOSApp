@@ -158,6 +158,10 @@
     [self.tableBottomView addSubview:self.leaderboardButton];
     
     self.tableView.backgroundColor = [UIColor clearColor];
+    for (UIView *view in self.views){
+        view.hidden = YES;
+    }
+
 }
 
 - (void)viewWillLayoutSubviews
@@ -248,9 +252,6 @@
                                         buttonWidth,
                                         60);
     
-    for (UIView *view in self.views){
-        view.hidden = YES;
-    }
 }
 
 -(void)setFunFactString:(NSString *)str
