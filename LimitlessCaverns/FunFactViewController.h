@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FunFactViewController : UIViewController <UITextFieldDelegate>
+@protocol FunFactViewControllerDelegate;
 
+@interface FunFactViewController : UIViewController <UITextViewDelegate>
+@property (nonatomic, weak) id<FunFactViewControllerDelegate> delegate;
+@end
+
+@protocol FunFactViewControllerDelegate <NSObject>
+- (void)funFactViewControllerPressedGoButton:(FunFactViewController *)funFactVC;
+- (void)funFactViewControllerPressedSkipButton:(FunFactViewController *)funFactVC;
 @end

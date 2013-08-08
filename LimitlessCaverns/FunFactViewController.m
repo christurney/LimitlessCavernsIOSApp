@@ -15,7 +15,7 @@
 
 @interface FunFactViewController ()
 
-@property (nonatomic, strong) UITextField *funFactEntryField;
+@property (nonatomic, strong) UITextView *funFactEntryField;
 
 @end
 
@@ -32,7 +32,7 @@
                                                                     0,
                                                                     self.view.width - 2 * imageBuffer,
                                                                     65)];
-    titleLabel.centerY = self.view.height*.15;
+    titleLabel.centerY = self.view.height*.12;
     titleLabel.centerX = self.view.width / 2.0;
     [titleLabel setNumberOfLines:2];
     [titleLabel setText:@"Add a fun fact about yourself:"];
@@ -41,29 +41,33 @@
     [self.view addSubview:titleLabel];
 
     // fun fact entry field
-    self.funFactEntryField = [[UITextField alloc] initWithFrame:CGRectMake(0,
-                                                                           CGRectGetMaxY(titleLabel.frame) + 20,
+    self.funFactEntryField = [[UITextView alloc] initWithFrame:CGRectMake(0,
+                                                                           CGRectGetMaxY(titleLabel.frame) + 15,
                                                                            self.view.width - 2 * imageBuffer,
-                                                                           200)];
+                                                                           80)];
     self.funFactEntryField.centerX = self.view.width / 2.0;
 
     self.funFactEntryField.delegate = self;
-    self.funFactEntryField.placeholder = @"Enter a fun fact";
-    self.funFactEntryField.borderStyle = UITextBorderStyleRoundedRect;
+    self.funFactEntryField.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
+    self.funFactEntryField.layer.cornerRadius = 5;
+    [self.funFactEntryField.layer setBorderColor:[[[UIColor grayColor] colorWithAlphaComponent:0.5] CGColor]];
+    [self.funFactEntryField.layer setBorderWidth:2.0];
+    self.funFactEntryField.clipsToBounds = YES;
     self.funFactEntryField.returnKeyType = UIReturnKeyDone;
     [self.view addSubview:self.funFactEntryField];
 
     int buttonWidth = 75;
     int buttonHeight = 40;
+    int buttonInset = 40;
+    int buttonOffset = 15;
 
     // Go button
     UIButton *goButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 
-    [goButton setFrame:CGRectMake(0,
-                                  CGRectGetMaxY(self.funFactEntryField.frame) + 20,
+    [goButton setFrame:CGRectMake(buttonInset + CGRectGetMinX(self.funFactEntryField.frame),
+                                  CGRectGetMaxY(self.funFactEntryField.frame) + buttonOffset,
                                   buttonWidth,
                                   buttonHeight)];
-    goButton.centerX = self.view.width / 2.0;
     [goButton setTitle:@"Go" forState:UIControlStateNormal];
     [goButton addTarget:self
                  action:@selector(goButtonClicked)
@@ -73,11 +77,10 @@
     // Skip button
     UIButton *skipButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 
-    [skipButton setFrame:CGRectMake(0,
-                                    CGRectGetMaxY(goButton.frame) + 15,
+    [skipButton setFrame:CGRectMake(CGRectGetMaxX(self.funFactEntryField.frame) - buttonInset - buttonWidth,
+                                    CGRectGetMaxY(self.funFactEntryField.frame) + buttonOffset,
                                     buttonWidth,
                                     buttonHeight)];
-    skipButton.centerX = self.view.width / 2.0;
 
     [skipButton setTitle:@"Skip" forState:UIControlStateNormal];
     [skipButton addTarget:self
@@ -88,7 +91,7 @@
 
 - (void)goButtonClicked
 {
-    if (self.funFactEntryField.text.length > 0) {
+    if ([self.funFactEntryField hasText]) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSString *userID = [defaults valueForKey:@"userID"];
         if(!userID) return;
@@ -96,18 +99,15 @@
         AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:requestURLString]];
         [httpClient setParameterEncoding:AFFormURLParameterEncoding];
         NSURLRequest *request = [httpClient requestWithMethod:@"POST"
-                                                                path:[NSString stringWithFormat:@"%@/%@/facts", requestURLString, userID]
+                                                                path:[NSString stringWithFormat:@"%@/users/%@/facts", requestURLString, userID]
                                                           parameters:@{@"fact":self.funFactEntryField.text}];
 
         AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
         [httpClient registerHTTPOperationClass:[AFHTTPRequestOperation class]];
 
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            if([self.navigationController.visibleViewController isKindOfClass:[FunFactViewController class]])
-            {
-                [self.navigationController.visibleViewController dismissViewControllerAnimated:YES completion:^{
-                    nil;
-                }];
+            if([self.delegate respondsToSelector:@selector(funFactViewControllerPressedGoButton:)]){
+                [self.delegate funFactViewControllerPressedGoButton:self];
             }
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
@@ -124,22 +124,20 @@
 
 - (void)skipButtonClicked
 {
-    // I'm assuming this view was presented modally
-    if([self.navigationController.visibleViewController isKindOfClass:[FunFactViewController class]])
-    {
-        [self.navigationController.visibleViewController dismissViewControllerAnimated:YES completion:^{
-            nil;
-        }];
+    if([self.delegate respondsToSelector:@selector(funFactViewControllerPressedSkipButton:)]){
+        [self.delegate funFactViewControllerPressedSkipButton:self];
     }
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [textField resignFirstResponder];
-    [self goButtonClicked];
+// when the user clicks Done don't treat it as if they typed a newline
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    if ([text isEqual:@"\n"]) {
+        [textView resignFirstResponder];
+        [self goButtonClicked];
+        return NO;
+    }
     return YES;
 }
-
 
 
 @end
