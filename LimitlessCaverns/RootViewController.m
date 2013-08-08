@@ -13,11 +13,14 @@
 #import "AFJSONRequestOperation.h"
 #import "AppDelegate.h"
 #import "GuessWhoViewController.h"
+#import "GuessWhoHalpersViewController.h"
+#import "LeaderboardViewController.h"
 
 @interface RootViewController ()
 
 @property (nonatomic, strong) NSString *mysteryUserID;
-@property (nonatomic, weak) GuessWhoViewController *currentGuessWhoController;
+@property (nonatomic, weak) UIViewController *currentlyDisplayedController;
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @end
 
 @implementation RootViewController
@@ -36,7 +39,14 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-        
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityIndicator.color = [UIColor blackColor];
+    [self.view addSubview:activityIndicator];
+    activityIndicator.center = [self.view convertPoint:self.view.center fromView:self.view.superview];
+    activityIndicator.hidesWhenStopped = YES;
+    self.activityIndicator = activityIndicator;
+    self.activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
+    
     [self setupInitialUI];
 }
 
@@ -50,31 +60,50 @@
     // TODO decide what the initial UI should be
 }
 
-- (void)showControllerForData:(NSDictionary*)userData
+- (UIViewController *)viewControllerForData:(NSDictionary*)userData showHalpers:(BOOL)showHalpers
 {
-    GuessWhoViewController *controller = [[GuessWhoViewController alloc] initWithDictionary:userData];
-    controller.delegate = self;
-    if (self.currentGuessWhoController){
+    if (showHalpers)
+    {
+        GuessWhoHalpersViewController *controller = [[GuessWhoHalpersViewController alloc] initWithDictionary:userData];
+        controller.delegate = self;
+        return controller;
+    }
+    else
+    {
+        GuessWhoViewController *controller = [[GuessWhoViewController alloc] initWithDictionary:userData];
+        controller.delegate = self;
+        return controller;
+    }
+}
+
+- (void)showControllerForData:(NSDictionary*)userData showHalpers:(BOOL)showHalpers
+{
+    if (self.currentlyDisplayedController){
         // Animate a transition 
-        [self.currentGuessWhoController willMoveToParentViewController:nil];
+        [self.currentlyDisplayedController willMoveToParentViewController:nil];
+
+        UIViewController *controller = [self viewControllerForData:userData showHalpers:showHalpers];
+
         [self addChildViewController:controller];
         [self.view addSubview:controller.view];
         controller.view.frame = CGRectOffset(self.view.bounds, self.view.width, 0);
         [UIView transitionWithView:self.view duration:.25 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            self.currentGuessWhoController.view.frame = CGRectOffset(self.view.bounds, -self.view.width, 0);
+            self.currentlyDisplayedController.view.frame = CGRectOffset(self.view.bounds, -self.view.width, 0);
             controller.view.frame = self.view.bounds;
         } completion:^(BOOL finished) {
-            [self.currentGuessWhoController.view removeFromSuperview];
-            [self.currentGuessWhoController removeFromParentViewController];
+            [self.currentlyDisplayedController.view removeFromSuperview];
+            [self.currentlyDisplayedController removeFromParentViewController];
             [controller didMoveToParentViewController:self];
-            self.currentGuessWhoController = controller;
+            self.currentlyDisplayedController = controller;
         }];
     } else {
+        GuessWhoViewController *controller = [[GuessWhoViewController alloc] initWithDictionary:userData];
+        controller.delegate = self;
         [self addChildViewController:controller];
         [self.view addSubview:controller.view];
         controller.view.frame = self.view.bounds;
         [controller didMoveToParentViewController:self];
-        self.currentGuessWhoController = controller;
+        self.currentlyDisplayedController = controller;
     }
 }
 
@@ -89,51 +118,93 @@
     }
     else
     {
-        [self showControllerForData:[defaults valueForKey:@"mysteryUserData"]];
+        [self showControllerForData:[defaults valueForKey:@"mysteryUserData"] showHalpers:NO];
     }
 }
 
--(void)getMysteryUserInfo:(NSString *)userID
+- (void)showLeaderBoard
 {
-//    NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[@"/mystery_user_info_for_user/" stringByAppendingString:userID]]];
-//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-//
-//    AFJSONRequestOperation *operation = [AFJSONRequestOperation
-//                                         JSONRequestOperationWithRequest:request
-//
-//                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-//                                             // store user info and update the text box
-//
-//                                             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//                                             
-//                                             [defaults setObject:JSON forKey:@"msyteryUserData"];
-//                                             [defaults synchronize];
-//
-//                                             [self showControllerForData:JSON];
-//                                         }
-//                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-//                                             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
-//                                                                                                 message:[JSON valueForKeyPath:@"message"]
-//                                                                                                delegate:self
-//                                                                                       cancelButtonTitle:@"OK"
-//                                                                                       otherButtonTitles:nil];
-//                                             [alertView show];
-//                                         }];
-//    [operation start];
-//    
-    NSDictionary *mysteryDictionary = @{@"fun_fact": @"my family owns santa barbara honda"};
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:mysteryDictionary forKey:@"msyteryUserData"];
-    [defaults synchronize];
-    [self showControllerForData:mysteryDictionary];
+    [self.navigationController presentViewController:[[UINavigationController alloc]
+                                                      initWithRootViewController:[[LeaderboardViewController alloc] init]]
+                                            animated:YES completion:nil];
 }
 
-- (void)guessWhoViewControllerPressedAButton:(GuessWhoViewController *)guessWhoVC
+-(void)getMysteryUserInfo:(NSString *)userID   
 {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *data = [defaults valueForKey:@"myteryUserData"];
-    [self showControllerForData:data];
+    NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[NSString stringWithFormat:@"/users/%@/new_assignment", userID]]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+//TODO add a status overlay
+    self.currentlyDisplayedController.view.alpha = .5;
+    self.view.userInteractionEnabled = NO;
+    [self.view bringSubviewToFront:self.activityIndicator];
+    [self.activityIndicator startAnimating];
+    AFJSONRequestOperation *operation = [AFJSONRequestOperation
+                                         JSONRequestOperationWithRequest:request
+
+                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                                             // store user info and update the text box
+
+                                             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                             
+                                             [defaults setObject:JSON forKey:@"mysteryUserData"];
+                                             [defaults synchronize];
+
+                                             [self showControllerForData:JSON showHalpers:NO];
+                                             self.view.userInteractionEnabled = YES;
+                                             self.currentlyDisplayedController.view.alpha = 1;
+                                             [self.activityIndicator stopAnimating];
+                                         }
+                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                                             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
+                                                                                                 message:[JSON valueForKeyPath:@"message"]
+                                                                                                delegate:self
+                                                                                       cancelButtonTitle:@"OK"
+                                                                                       otherButtonTitles:nil];
+                                             [alertView show];
+                                             self.view.userInteractionEnabled = YES;
+                                             self.view.alpha = 1;
+                                             self.currentlyDisplayedController.view.alpha = 1;
+                                             [self.activityIndicator stopAnimating];
+
+                                         }];
+    [operation start];
+    
+//    NSDictionary *mysteryDictionary = @{@"fun_fact": @"my family owns santa barbara honda"};
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    [defaults setObject:mysteryDictionary forKey:@"mysteryUserData"];
+//    [defaults synchronize];
+//    [self showControllerForData:mysteryDictionary showHalpers:FALSE];
 }
 
+- (void)guessWhoViewControllerPressedKnowThemButton:(GuessWhoViewController *)guessWhoVC
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *userID = [defaults valueForKey:@"userID"];
+    [self getMysteryUserInfo:userID];
+}
+
+- (void)guessWhoViewControllerPressedPlayButton:(GuessWhoViewController *)guessWhoVC
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *data = [defaults valueForKey:@"mysteryUserData"];
+    [self showControllerForData:data showHalpers:YES];
+}
+
+- (void)guessWhoHalpersViewControllerPressedSkipButton:(GuessWhoHalpersViewController *)guessWhoHalpersVC
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *userID = [defaults valueForKey:@"userID"];
+    [self getMysteryUserInfo:userID];
+}
+
+- (void)guessWhoViewControllerPressedLeaderboardButton:(GuessWhoViewController *)guessWhoVC
+{
+    [self showLeaderBoard];
+}
+
+- (void)guessWhoHalpersViewControllerPressedLeaderboardButton:(GuessWhoHalpersViewController *)guessWhoHalpersVC
+{
+    [self showLeaderBoard];
+}
 
 @end

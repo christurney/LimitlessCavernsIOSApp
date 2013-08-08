@@ -16,7 +16,7 @@
 @property (nonatomic, strong) UILabel *funFactLabel;
 @property (nonatomic, strong) UIButton *knowThemButton;
 @property (nonatomic, strong) UIButton *playButton;
-@property (nonatomic, strong) UIImageView *leaderboard;
+@property (nonatomic, strong) UIButton *leaderboardButton;
 
 @end
 
@@ -26,7 +26,7 @@
 {
     self = [super init];
     if (self){
-        self.funFactString = dictionary[@"fun_fact"];
+        self.funFactString = dictionary[@"fact"];
         self.titleString = @"Mystery Dropboxer";
     }
     return self;
@@ -80,20 +80,27 @@
     
     // leaderboard picture
     
-    self.leaderboard = [[UIImageView alloc] initWithFrame:CGRectZero];
-    [self.view addSubview:self.leaderboard];
-    [self.leaderboard.layer setBorderColor:[UIColor redColor].CGColor];
-    [self.leaderboard.layer setBorderWidth:3];
+    self.leaderboardButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.view addSubview:self.leaderboardButton];
+    [self.leaderboardButton.layer setBorderColor:[UIColor redColor].CGColor];
+    [self.leaderboardButton.layer setBorderWidth:3];
+    [self.leaderboardButton addTarget:self action:@selector(leaderboardClicked)
+                     forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)knowThemClicked
 {
-    [self.delegate guessWhoViewControllerPressedAButton:self];
+    [self.delegate guessWhoViewControllerPressedKnowThemButton:self];
 }
 
 - (void)playClicked
 {
-    [self.delegate guessWhoViewControllerPressedAButton:self];
+    [self.delegate guessWhoViewControllerPressedPlayButton:self];
+}
+
+- (void)leaderboardClicked
+{
+    [self.delegate guessWhoViewControllerPressedLeaderboardButton:self];
 }
 
 -(void)setFunFactString:(NSString *)str
@@ -154,7 +161,7 @@
                                         CGRectGetWidth(self.mysteryImageView.frame)/2.0 - 5,
                                         buttonHeight)];
         
-        self.leaderboard.frame = CGRectMake(CGRectGetMaxX(self.mysteryImageView.frame) - buttonSize,
+        self.leaderboardButton.frame = CGRectMake(CGRectGetMaxX(self.mysteryImageView.frame) - buttonSize,
                                                                                  CGRectGetMaxY(self.playButton.frame) + 15,
                                                                                  buttonSize,
                                                                                  buttonSize);
@@ -183,7 +190,7 @@
                                         CGRectGetWidth(self.mysteryImageView.frame)/2.0 - 5,
                                         buttonHeight)];
         
-        self.leaderboard.frame = CGRectMake(CGRectGetMaxX(self.playButton.frame) + 40,
+        self.leaderboardButton.frame = CGRectMake(CGRectGetMaxX(self.playButton.frame) + 40,
                                             CGRectGetMaxY(self.playButton.frame) - buttonSize,
                                             buttonSize,
                                             buttonSize);
