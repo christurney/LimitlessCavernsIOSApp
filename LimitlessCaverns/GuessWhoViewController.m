@@ -104,8 +104,8 @@
     self.knowThemAlertView = [[UIAlertView alloc] initWithTitle:@"Sure You Want To Skip?"
                                                         message:@"Get 1 point (and some exercise) by bumping phones with the Mystery Dropboxer!"
                                                        delegate:self
-                                              cancelButtonTitle:@"No"
-                                              otherButtonTitles:@"Yes", nil];
+                                              cancelButtonTitle:@"Go Back"
+                                              otherButtonTitles:@"Skip", nil];
     [self.knowThemAlertView show];
 }
 
