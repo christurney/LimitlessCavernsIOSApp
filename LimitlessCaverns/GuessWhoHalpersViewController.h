@@ -11,6 +11,7 @@
 @interface GuessWhoHalpersViewController : UITableViewController
 
 - (id)initWithDictionary:(NSDictionary*)dictionary;
+- (void)verifySuccessFailure:(NSString *)bumpedUserID;
 
 @property (nonatomic, copy) NSString *funFactString;
 @property (nonatomic, weak) id delegate;

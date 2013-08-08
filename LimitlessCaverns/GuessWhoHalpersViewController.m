@@ -10,8 +10,12 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIView+Dropbox.h"
 #import "UIImageView+AFNetworking.h"
+#import "AFNetworking.h"
+#import "AppDelegate.h"
 
 @interface GuessWhoHalpersViewController () <UIAlertViewDelegate>
+
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
 @property (nonatomic, strong) UIView *pointsBoxView;
 @property (nonatomic, strong) UILabel *pointsBoxLabel;
@@ -66,6 +70,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityIndicator.color = [UIColor blackColor];
+    [self.view addSubview:activityIndicator];
+    activityIndicator.center = [self.view convertPoint:self.view.center fromView:self.view.superview];
+    activityIndicator.hidesWhenStopped = YES;
+    self.activityIndicator = activityIndicator;
+    self.activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
+
     self.views = [NSMutableArray array];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 
@@ -124,15 +137,22 @@
     [self.views addObject:self.meetTheseHalpersView];
 
     self.halper1ImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+    self.halper1ImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.halper1ImageView.layer setBorderColor:[UIColor yellowColor].CGColor];
     [self.halper1ImageView.layer setBorderWidth:3];
+
     self.halper2ImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+    self.halper2ImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.halper2ImageView.layer setBorderColor:[UIColor redColor].CGColor];
     [self.halper2ImageView.layer setBorderWidth:3];
+
     self.halper3ImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+    self.halper3ImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.halper3ImageView.layer setBorderColor:[UIColor greenColor].CGColor];
     [self.halper3ImageView.layer setBorderWidth:3];
+
     self.halper4ImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+    self.halper4ImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.halper4ImageView.layer setBorderColor:[UIColor blueColor].CGColor];
     [self.halper4ImageView.layer setBorderWidth:3];
 
@@ -260,12 +280,12 @@
                                         60);
 
     NSArray *halperImageViewsArray = @[self.halper1ImageView, self.halper2ImageView, self.halper3ImageView, self.halper4ImageView];
-    NSArray *halperURLStrings = [self.userDataDictionary objectForKey:@"halpers"];
+    NSArray *halpers = [self.userDataDictionary objectForKey:@"halpers"];
 
-    for (NSString *urlString in halperURLStrings)
+    for (NSDictionary *halperDictionary in halpers)
     {
-        NSURL *url = [NSURL URLWithString:urlString];
-        [[halperImageViewsArray objectAtIndex:[halperURLStrings indexOfObject:urlString]] setImageWithURL:url placeholderImage:nil];
+        NSURL *url = [NSURL URLWithString:[halperDictionary objectForKey:@"image"]];
+        [[halperImageViewsArray objectAtIndex:[halpers indexOfObject:halperDictionary]] setImageWithURL:url placeholderImage:nil];
     }
 }
 
@@ -418,7 +438,7 @@
                                                            message:messageString
                                                           delegate:self
                                                  cancelButtonTitle:nil
-                                                 otherButtonTitles:@"Next Challange", nil];
+                                                 otherButtonTitles:@"Next Challenge", nil];
     }
     else
     {
@@ -441,6 +461,54 @@
                                              otherButtonTitles:nil];
 
     [self.failureAlertView show];
+}
+
+- (void)verifySuccessFailure:(NSString *)bumpedUserID
+{
+    if ([[self.userDataDictionary objectForKey:@"target_id"] isEqualToString:bumpedUserID])
+    {
+        [self userSucceeded];
+    }
+    else
+    {
+        [self showFailureAlertView];
+    }
+}
+
+- (void)userSucceeded
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *userID = [defaults objectForKey:@"user_id"];
+    NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[NSString stringWithFormat:@"/users/%@/complete_assignment", userID]]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    //TODO add a status overlay
+    self.view.alpha = .5;
+    self.view.userInteractionEnabled = NO;
+    [self.view bringSubviewToFront:self.activityIndicator];
+    [self.activityIndicator startAnimating];
+    AFJSONRequestOperation *operation = [AFJSONRequestOperation
+                                         JSONRequestOperationWithRequest:request
+
+                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                                             self.view.userInteractionEnabled = YES;
+                                             self.view.alpha = 1;
+                                             [self.activityIndicator stopAnimating];
+                                             [self showSuccessAlertView];
+                                         }
+                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                                             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
+                                                                                                 message:[JSON valueForKeyPath:@"message"]
+                                                                                                delegate:self
+                                                                                       cancelButtonTitle:@"OK"
+                                                                                       otherButtonTitles:nil];
+                                             [alertView show];
+                                             self.view.userInteractionEnabled = YES;
+                                             self.view.alpha = 1;
+                                             [self.activityIndicator stopAnimating];
+                                         }];
+    [operation start];
+
+    [self showSuccessAlertView];
 }
 
 #pragma mark - Alert view delegate

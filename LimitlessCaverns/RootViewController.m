@@ -11,10 +11,10 @@
 #import "GetStartedViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "AFJSONRequestOperation.h"
-#import "AppDelegate.h"
 #import "GuessWhoViewController.h"
 #import "GuessWhoHalpersViewController.h"
 #import "LeaderboardViewController.h"
+#import "AppDelegate.h"
 
 @interface RootViewController ()
 
@@ -116,7 +116,7 @@
     if (![defaults valueForKey:@"mysteryUserData"])
     {
         NSLog(@"Make server request!");
-        [self getMysteryUserInfo:userID];
+        [self getMysteryUserInfo:userID userDidSkip:NO];
     }
     else
     {
@@ -131,9 +131,19 @@
                                             animated:YES completion:nil];
 }
 
--(void)getMysteryUserInfo:(NSString *)userID   
+-(void)getMysteryUserInfo:(NSString *)userID userDidSkip:(BOOL)userDidSkip
 {
-    NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[NSString stringWithFormat:@"/users/%@/new_assignment", userID]]];
+    NSURL *url = nil;
+
+    if (userDidSkip)
+    {
+        url = [NSURL URLWithString:[requestURLString stringByAppendingString:[NSString stringWithFormat:@"/users/%@/skip_assignment", userID]]];
+    }
+    else
+    {
+        url = [NSURL URLWithString:[requestURLString stringByAppendingString:[NSString stringWithFormat:@"/users/%@/current_assignment", userID]]];
+    }
+
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
 //TODO add a status overlay
     self.currentlyDisplayedController.view.alpha = .5;
@@ -182,7 +192,7 @@
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *userID = [defaults valueForKey:@"userID"];
-    [self getMysteryUserInfo:userID];
+    [self getMysteryUserInfo:userID userDidSkip:YES];
 }
 
 - (void)guessWhoViewControllerPressedPlayButton:(GuessWhoViewController *)guessWhoVC
@@ -196,7 +206,7 @@
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *userID = [defaults valueForKey:@"userID"];
-    [self getMysteryUserInfo:userID];
+    [self getMysteryUserInfo:userID userDidSkip:YES];
 }
 
 - (void)guessWhoViewControllerPressedLeaderboardButton:(GuessWhoViewController *)guessWhoVC
