@@ -63,10 +63,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 
     // Number of points box
     self.pointsBoxView = [[UIView alloc] initWithFrame:CGRectZero];
+    
     [self.pointsBoxView.layer setBorderColor:[UIColor redColor].CGColor];
     [self.pointsBoxView.layer setBorderWidth:3];
 
