@@ -18,6 +18,8 @@
 @property (nonatomic, strong) UIButton *playButton;
 @property (nonatomic, strong) UIButton *leaderboardButton;
 @property (nonatomic, strong) NSArray *views;
+@property (nonatomic, strong) UIAlertView *knowThemAlertView;
+
 @end
 
 @implementation GuessWhoViewController
@@ -99,7 +101,23 @@
 
 - (void)knowThemClicked
 {
-    [self.delegate guessWhoViewControllerPressedKnowThemButton:self];
+    self.knowThemAlertView = [[UIAlertView alloc] initWithTitle:@"Sure You Want To Skip?"
+                                                        message:@"Get 1 point (and some exercise) by bumping phones with the Mystery Dropboxer!"
+                                                       delegate:self
+                                              cancelButtonTitle:@"No"
+                                              otherButtonTitles:@"Yes", nil];
+    [self.knowThemAlertView show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
+{
+    if (alertView == self.knowThemAlertView)
+    {
+        if (buttonIndex != alertView.cancelButtonIndex)
+        {
+            [self.delegate guessWhoViewControllerPressedKnowThemButton:self];
+        }
+    }
 }
 
 - (void)playClicked
