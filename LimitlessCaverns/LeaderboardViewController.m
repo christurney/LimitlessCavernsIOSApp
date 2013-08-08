@@ -39,7 +39,7 @@ static NSString *cellIdentifier = @"Cell";
 -(UIImage*)placeHolderImage
 {
     if(_placeHolderImage) return _placeHolderImage;
-    
+
     _placeHolderImage = [UIImage imageNamed:@"placeholderImage.jpg"];
     return _placeHolderImage;
 }
@@ -50,41 +50,21 @@ static NSString *cellIdentifier = @"Cell";
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:cellIdentifier];
 
     self.leaders = [NSMutableArray array];
-
-    [self.leaders addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                             @"person A", @"name", @"http://wdfw.wa.gov/conservation/fisher/graphics/fisher_fullbody.jpg", @"image_url", nil]];
-    [self.leaders addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                             @"person B", @"name", @"http://wdfw.wa.gov/conservation/fisher/graphics/fisher_fullbody.jpg", @"image_url", nil]];
-    [self.leaders addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                             @"person C", @"name", @"http://wdfw.wa.gov/conservation/fisher/graphics/fisher_fullbody.jpg", @"image_url", nil]];
-    [self.leaders addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                             @"person D", @"name", @"http://wdfw.wa.gov/conservation/fisher/graphics/fisher_fullbody.jpg", @"image_url", nil]];
-    [self.leaders addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                             @"person E", @"name", @"http://wdfw.wa.gov/conservation/fisher/graphics/fisher_fullbody.jpg", @"image_url", nil]];
-    [self.leaders addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                             @"person F", @"name", @"http://wdfw.wa.gov/conservation/fisher/graphics/fisher_fullbody.jpg", @"image_url", nil]];
-    [self.leaders addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                             @"person G", @"name", @"http://wdfw.wa.gov/conservation/fisher/graphics/fisher_fullbody.jpg", @"image_url", nil]];
-    [self.leaders addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                             @"person H", @"name", @"http://wdfw.wa.gov/conservation/fisher/graphics/fisher_fullbody.jpg", @"image_url", nil]];
-
-    // TODO - actually make a server request to populate the self.leaders array
-    /*
     NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:@"/leaderboard"]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
 
     AFJSONRequestOperation *operation = [AFJSONRequestOperation
                                          JSONRequestOperationWithRequest:request
-                                         
+
                                          success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                                              // fill self.leaders with the leaderboard info
                                              for (NSDictionary *dict in JSON) {
                                                  [self.leaders addObject:dict];
                                              }
-                                             // reload the data in the table view???
+                                             // reload the data in the table view
                                              [self.tableView reloadData];
                                          }
-                                         
+
                                          failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
                                              UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
                                                                                                  message:[JSON valueForKeyPath:@"message"]
@@ -94,7 +74,7 @@ static NSString *cellIdentifier = @"Cell";
                                              [alertView show];
                                          }];
     [operation start];
-     */
+
 }
 
 #pragma mark - Table view data source
@@ -126,13 +106,14 @@ static NSString *cellIdentifier = @"Cell";
     if(indexPath.section != 0 || indexPath.row >= numLeaders || indexPath.row < 0) return nil;
 
     NSDictionary *leader = [self.leaders objectAtIndex:indexPath.row];
-    NSString *positionInLeaderboard = [NSString stringWithFormat:@"#%ld - ", (long)indexPath.row + 1];
+    NSString *textForCell = [NSString stringWithFormat:@"%d points - %@", [[leader objectForKey:@"score"] intValue], [leader objectForKey:@"name"]];
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    cell.textLabel.text = [positionInLeaderboard stringByAppendingString: [leader objectForKey:@"name"]];
-    [cell.imageView setImageWithURL:[NSURL URLWithString:[leader objectForKey:@"image_url"]] placeholderImage:self.placeHolderImage];    
+    cell.textLabel.text = textForCell;
+    cell.textLabel.adjustsFontSizeToFitWidth = YES;
+    [cell.imageView setImageWithURL:[NSURL URLWithString:[leader objectForKey:@"image"]] placeholderImage:self.placeHolderImage];
     return cell;
 }
 
