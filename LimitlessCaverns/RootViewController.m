@@ -20,6 +20,7 @@
 
 @property (nonatomic, strong) NSString *mysteryUserID;
 @property (nonatomic, weak) UIViewController *currentlyDisplayedController;
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @end
 
 @implementation RootViewController
@@ -38,7 +39,14 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-        
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityIndicator.color = [UIColor blackColor];
+    [self.view addSubview:activityIndicator];
+    activityIndicator.center = [self.view convertPoint:self.view.center fromView:self.view.superview];
+    activityIndicator.hidesWhenStopped = YES;
+    self.activityIndicator = activityIndicator;
+    self.activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
+    
     [self setupInitialUI];
 }
 
@@ -123,44 +131,56 @@
 
 -(void)getMysteryUserInfo:(NSString *)userID   
 {
-//    NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[@"/get_new_assignment/" stringByAppendingString:userID]]];
-//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-//
-//    AFJSONRequestOperation *operation = [AFJSONRequestOperation
-//                                         JSONRequestOperationWithRequest:request
-//
-//                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-//                                             // store user info and update the text box
-//
-//                                             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//                                             
-//                                             [defaults setObject:JSON forKey:@"msyteryUserData"];
-//                                             [defaults synchronize];
-//
-//                                             [self showControllerForData:JSON];
-//                                         }
-//                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-//                                             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
-//                                                                                                 message:[JSON valueForKeyPath:@"message"]
-//                                                                                                delegate:self
-//                                                                                       cancelButtonTitle:@"OK"
-//                                                                                       otherButtonTitles:nil];
-//                                             [alertView show];
-//                                         }];
-//    [operation start];
-//    
-    NSDictionary *mysteryDictionary = @{@"fun_fact": @"my family owns santa barbara honda"};
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:mysteryDictionary forKey:@"mysteryUserData"];
-    [defaults synchronize];
-    [self showControllerForData:mysteryDictionary showHalpers:FALSE];
+    NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[NSString stringWithFormat:@"/users/%@/new_assignment", userID]]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+//TODO add a status overlay
+    self.currentlyDisplayedController.view.alpha = .5;
+    self.view.userInteractionEnabled = NO;
+    [self.view bringSubviewToFront:self.activityIndicator];
+    [self.activityIndicator startAnimating];
+    AFJSONRequestOperation *operation = [AFJSONRequestOperation
+                                         JSONRequestOperationWithRequest:request
+
+                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                                             // store user info and update the text box
+
+                                             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                             
+                                             [defaults setObject:JSON forKey:@"mysteryUserData"];
+                                             [defaults synchronize];
+
+                                             [self showControllerForData:JSON showHalpers:NO];
+                                             self.view.userInteractionEnabled = YES;
+                                             self.currentlyDisplayedController.view.alpha = 1;
+                                             [self.activityIndicator stopAnimating];
+                                         }
+                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                                             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
+                                                                                                 message:[JSON valueForKeyPath:@"message"]
+                                                                                                delegate:self
+                                                                                       cancelButtonTitle:@"OK"
+                                                                                       otherButtonTitles:nil];
+                                             [alertView show];
+                                             self.view.userInteractionEnabled = YES;
+                                             self.view.alpha = 1;
+                                             self.currentlyDisplayedController.view.alpha = 1;
+                                             [self.activityIndicator stopAnimating];
+
+                                         }];
+    [operation start];
+    
+//    NSDictionary *mysteryDictionary = @{@"fun_fact": @"my family owns santa barbara honda"};
+//    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//    [defaults setObject:mysteryDictionary forKey:@"mysteryUserData"];
+//    [defaults synchronize];
+//    [self showControllerForData:mysteryDictionary showHalpers:FALSE];
 }
 
 - (void)guessWhoViewControllerPressedKnowThemButton:(GuessWhoViewController *)guessWhoVC
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *data = [defaults valueForKey:@"mysteryUserData"];
-    [self showControllerForData:data showHalpers:NO];
+    NSString *userID = [defaults valueForKey:@"userID"];
+    [self getMysteryUserInfo:userID];
 }
 
 - (void)guessWhoViewControllerPressedPlayButton:(GuessWhoViewController *)guessWhoVC
@@ -173,8 +193,8 @@
 - (void)guessWhoHalpersViewControllerPressedSkipButton:(GuessWhoHalpersViewController *)guessWhoHalpersVC
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *data = [defaults valueForKey:@"mysteryUserData"];
-    [self showControllerForData:data showHalpers:NO];
+    NSString *userID = [defaults valueForKey:@"userID"];
+    [self getMysteryUserInfo:userID];
 }
 
 - (void)guessWhoViewControllerPressedLeaderboardButton:(GuessWhoViewController *)guessWhoVC
