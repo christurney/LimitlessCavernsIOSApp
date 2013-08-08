@@ -83,7 +83,8 @@ NSString *const requestURLString = @"https://limitless-caverns-4433.herokuapp.co
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     NSString *urlString = [url absoluteString];
-    NSString *userID = [urlString stringByReplacingOccurrencesOfString:@"GuessWho://" withString:@""];
+    NSRange range = [urlString rangeOfString:@"://"];
+    NSString *userID = [urlString substringFromIndex:range.location+range.length];
     //todo - present loading indicator
     [self authenticateUserId:userID];
 
@@ -113,41 +114,36 @@ NSString *const requestURLString = @"https://limitless-caverns-4433.herokuapp.co
 
 -(void)authenticateUserId:(NSString *)userID
 {
-    //NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[@"/authenticate/" stringByAppendingString:userID]]];
-//    NSURL *url = [NSURL URLWithString:requestURLString];
-//    
-//    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-//
-//    AFJSONRequestOperation *operation = [AFJSONRequestOperation
-//                                         JSONRequestOperationWithRequest:request
-//
-//                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-//
-//                                             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//                                             [defaults setObject:userID forKey:@"userID"];
-//                                             [defaults synchronize];
-//
-//                                             if([self.navigationController.visibleViewController isKindOfClass:[GetStartedViewController class]])
+    NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[@"/authenticate_user/" stringByAppendingString:userID]]];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+
+    AFJSONRequestOperation *operation = [AFJSONRequestOperation
+                                         JSONRequestOperationWithRequest:request
+
+                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+
+                                             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                             [defaults setObject:userID forKey:@"userID"];
+                                             [defaults synchronize];
+                                             [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+                                             [self.viewController showUserInfo];
+//                                             if([self.navigationController.presentingViewController isKindOfClass:[GetStartedViewController class]])
 //                                             {
 //                                                 [self.navigationController.visibleViewController dismissViewControllerAnimated:YES completion:^{
 //                                                     nil;
 //                                                 }];
 //                                             }
-//                                         }
-//                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-//                                             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
-//                                                                                                 message:[JSON valueForKeyPath:@"message"]
-//                                                                                                delegate:self
-//                                                                                       cancelButtonTitle:@"OK"
-//                                                                                       otherButtonTitles:nil];
-//                                             [alertView show];
-//                                         }];
-//     [operation start];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:@"BogusUserId" forKey:@"userID"];
-    [defaults synchronize];
-    [self.viewController showUserInfo];
-    [self.navigationController dismissViewControllerAnimated:NO completion:nil];
+                                         }
+                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                                             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
+                                                                                                 message:[JSON valueForKeyPath:@"message"]
+                                                                                                delegate:self
+                                                                                       cancelButtonTitle:@"OK"
+                                                                                       otherButtonTitles:nil];
+                                             [alertView show];
+                                         }];
+     [operation start];
 
 
 }

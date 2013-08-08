@@ -56,6 +56,7 @@
     self.emailEntryField.borderStyle = UITextBorderStyleRoundedRect;
     self.emailEntryField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     self.emailEntryField.returnKeyType = UIReturnKeyDone;
+    self.emailEntryField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [self.view addSubview:self.emailEntryField];
 
 
@@ -73,9 +74,9 @@
                     action:@selector(startButtonClicked)
           forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:startButton];
-    
+
     // Welcome image
-    
+
     int imageHeight = 200;
 
     UIImageView *welcomeImage = [[UIImageView alloc] initWithFrame:CGRectMake(imageBuffer,
@@ -92,22 +93,31 @@
 {
     if (self.emailEntryField.text.length > 0)
     {
-        NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[@"/create_user/" stringByAppendingString:self.emailEntryField.text]]];
+        NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[@"/register/" stringByAppendingString:self.emailEntryField.text]]];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
 
         AFJSONRequestOperation *operation = [AFJSONRequestOperation
                                              JSONRequestOperationWithRequest:request
 
                                              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-                                                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Check Your E-mail"
-                                                                                                     message:@"Check your e-mail to verify you're the owner of the email address you inputted."
-                                                                                                    delegate:self
-                                                                                           cancelButtonTitle:@"OK"
-                                                                                           otherButtonTitles:nil];
-                                                 [alertView show];
-
-
+                                                 if (JSON[@"error"]){
+                                                     NSLog(@"%@", JSON);
+                                                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
+                                                                                                         message:[JSON valueForKeyPath:@"message"]
+                                                                                                        delegate:self
+                                                                                               cancelButtonTitle:@"OK"
+                                                                                               otherButtonTitles:nil];
+                                                     [alertView show];
+                                                 } else {
+                                                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Check Your E-mail"
+                                                                                                         message:@"Check your e-mail to verify you're the owner of the email address you inputted."
+                                                                                                        delegate:self
+                                                                                               cancelButtonTitle:@"OK"
+                                                                                               otherButtonTitles:nil];
+                                                     [alertView show];
+                                                 }
                                              }
+
                                              failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
                                                  UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
                                                                                                      message:[JSON valueForKeyPath:@"message"]
