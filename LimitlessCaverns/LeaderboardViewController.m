@@ -120,7 +120,7 @@ static NSString *cellIdentifier = @"Cell";
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
     cell.textLabel.text = textForCell;
-    cell.textLabel.adjustsFontSizeToFitWidth = YES;
+    cell.textLabel.font = [UIFont boldSystemFontOfSize:14];
     [cell.imageView setImageWithURL:[NSURL URLWithString:[leader objectForKey:@"image"]] placeholderImage:self.placeHolderImage];
     return cell;
 }
