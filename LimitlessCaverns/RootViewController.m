@@ -21,6 +21,7 @@
 @property (nonatomic, strong) NSString *mysteryUserID;
 @property (nonatomic, weak) UIViewController *currentlyDisplayedController;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, strong) CAGradientLayer *gradientLayer;
 @end
 
 @implementation RootViewController
@@ -46,7 +47,14 @@
     activityIndicator.hidesWhenStopped = YES;
     self.activityIndicator = activityIndicator;
     self.activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
-    
+    //0, 133, 242
+    //0, 116, 212
+    self.gradientLayer = [[CAGradientLayer alloc] init];
+    self.gradientLayer.frame = self.view.bounds;
+    [self.view.layer addSublayer:self.gradientLayer];
+    self.gradientLayer.colors = @[(id)[[UIColor colorWithRed:0 green:133.0/255.0 blue:242.0/255.0 alpha:.8] CGColor],
+                                 (id)[[UIColor colorWithRed:0 green:116.0/255.0 blue:216.0/255.0 alpha:1] CGColor]];
+
     [self setupInitialUI];
 }
 
@@ -205,6 +213,11 @@
 - (void)guessWhoHalpersViewControllerPressedLeaderboardButton:(GuessWhoHalpersViewController *)guessWhoHalpersVC
 {
     [self showLeaderBoard];
+}
+
+- (void)viewWillLayoutSubviews
+{
+   self.gradientLayer.frame = self.view.bounds;
 }
 
 @end

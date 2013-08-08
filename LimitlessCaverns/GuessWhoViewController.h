@@ -12,6 +12,7 @@
 
 - (id)initWithDictionary:(NSDictionary*)dictionary;
 
+
 @property (nonatomic, copy) NSString *funFactString;
 @property (nonatomic, copy) NSString *titleString;
 @property (nonatomic, weak) id delegate;

@@ -149,6 +149,8 @@
     [self.leaderboardButton.layer setBorderColor:[UIColor blackColor].CGColor];
     [self.leaderboardButton.layer setBorderWidth:3];
     [self.tableBottomView addSubview:self.leaderboardButton];
+    
+    self.tableView.backgroundColor = [UIColor clearColor];
 }
 
 - (void)viewWillLayoutSubviews
@@ -342,7 +344,6 @@
     {
         [cell.contentView addSubview:self.tableBottomView];
     }
-
     return cell;
 }
 

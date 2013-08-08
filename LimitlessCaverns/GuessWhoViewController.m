@@ -40,6 +40,7 @@
     [self.titleLabel setText:self.titleString];
     [self.titleLabel setFont:[UIFont boldSystemFontOfSize:25]];
     [self.titleLabel setTextAlignment:NSTextAlignmentCenter];
+    self.titleLabel.backgroundColor = [UIColor clearColor];
     self.titleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
     [self.view addSubview:self.titleLabel];
     
@@ -47,13 +48,15 @@
     [self.funFactLabel setTextAlignment:NSTextAlignmentCenter];
     self.funFactLabel.adjustsFontSizeToFitWidth = NO;
     self.funFactLabel.numberOfLines = 0;
+    self.funFactLabel.backgroundColor = [UIColor clearColor];
     
     [self.view addSubview:self.funFactLabel];
     self.mysteryImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     self.mysteryImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.mysteryImageView.layer setBorderColor:[UIColor redColor].CGColor];
     [self.mysteryImageView.layer setBorderWidth:3];
-    
+    self.mysteryImageView.layer.cornerRadius = 5;
+    self.mysteryImageView.backgroundColor = [UIColor redColor];
     [self.mysteryImageView setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"dabney" ofType:@"jpg"]]];
     [self.view addSubview:self.mysteryImageView];
     
@@ -86,6 +89,15 @@
     [self.leaderboardButton.layer setBorderWidth:3];
     [self.leaderboardButton addTarget:self action:@selector(leaderboardClicked)
                      forControlEvents:UIControlEventTouchUpInside];
+    
+    self.titleLabel.hidden = YES;
+    self.funFactLabel.hidden = YES;
+    self.mysteryImageView.hidden = YES;
+    self.knowThemButton.hidden = YES;
+    self.playButton.hidden = YES;
+    self.leaderboardButton.hidden = YES;
+    
+    
 }
 
 - (void)knowThemClicked
@@ -199,5 +211,27 @@
     }
     [self setFunFactString:self.funFactString];
 }
+
+- (void)didMoveToParentViewController:(UIViewController *)parent
+{
+    [super didMoveToParentViewController:parent];
+    if (parent){
+        CGFloat duration = .1;
+        NSArray *views = @[self.titleLabel, self.funFactLabel, self.mysteryImageView, self.knowThemButton, self.playButton, self.leaderboardButton];
+        for (UIView *view in views){
+            view.frame = CGRectOffset(view.frame, self.view.width, 0);
+            view.hidden = NO;
+        }
+        [views enumerateObjectsUsingBlock:^(UIView *view, NSUInteger idx, BOOL *stop) {
+            [UIView animateWithDuration:duration delay:duration*idx options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                view.frame = CGRectOffset(view.frame, -self.view.width, 0);
+            } completion:^(BOOL finished) {
+                
+            }];
+        }];
+
+    }
+}
+
 
 @end
