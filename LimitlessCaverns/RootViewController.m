@@ -15,6 +15,8 @@
 #import "GuessWhoHalpersViewController.h"
 #import "LeaderboardViewController.h"
 #import "AppDelegate.h"
+#import "FunFactViewController.h"
+
 
 @interface RootViewController ()
 
@@ -131,6 +133,13 @@
                                             animated:YES completion:nil];
 }
 
+- (void)showFunFacts
+{
+    [self.navigationController presentViewController:[[UINavigationController alloc]
+                                                      initWithRootViewController:[[FunFactViewController alloc] init]]
+                                            animated:YES completion:nil];
+}
+
 -(void)getMysteryUserInfo:(NSString *)userID userDidSkip:(BOOL)userDidSkip
 {
     NSURL *url = nil;
@@ -207,6 +216,11 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *userID = [defaults valueForKey:@"userID"];
     [self getMysteryUserInfo:userID userDidSkip:YES];
+}
+
+- (void)guessWhoViewControllerPressedFunFactsButton:(GuessWhoViewController *)guessWhoVC
+{
+    [self showFunFacts];
 }
 
 - (void)guessWhoViewControllerPressedLeaderboardButton:(GuessWhoViewController *)guessWhoVC

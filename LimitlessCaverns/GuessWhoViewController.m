@@ -19,6 +19,7 @@
 @property (nonatomic, strong) UIButton *leaderboardButton;
 @property (nonatomic, strong) NSArray *views;
 @property (nonatomic, strong) UIAlertView *knowThemAlertView;
+@property (nonatomic, strong) UIButton *funFactButton;
 
 @end
 
@@ -97,6 +98,12 @@
     for (UIView *view in self.views){
         view.hidden = YES;
     }
+    
+    self.funFactButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.view addSubview:self.funFactButton];
+    [self.funFactButton.layer setBorderColor:[UIColor blueColor].CGColor];
+    [self.funFactButton.layer setBorderWidth:3];
+    [self.funFactButton addTarget:self action:@selector(funFactsClicked) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)knowThemClicked
@@ -130,6 +137,11 @@
     [self.delegate guessWhoViewControllerPressedLeaderboardButton:self];
 }
 
+- (void)funFactsClicked
+{
+    [self.delegate guessWhoViewControllerPressedFunFactsButton:self];
+}
+
 -(void)setFunFactString:(NSString *)str
 {
     _funFactString = str;
@@ -151,7 +163,6 @@
     
     //set font size
     self.funFactLabel.font = [UIFont systemFontOfSize:fontSize];
-    
 }
 
 - (void)viewWillLayoutSubviews
@@ -192,6 +203,8 @@
                                                                                  CGRectGetMaxY(self.playButton.frame) + 15,
                                                                                  buttonSize,
                                                                                  buttonSize);
+        
+        self.funFactButton.frame = CGRectMake(CGRectGetMinX(self.leaderboardButton.frame) - 2*buttonSize, CGRectGetMinY(self.leaderboardButton.frame), buttonSize, buttonSize);
     } else {
         
         self.mysteryImageView.frame = CGRectMake(imageBuffer,

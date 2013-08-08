@@ -21,10 +21,24 @@
 
 @implementation FunFactViewController
 
+- (id)init
+{
+    self = [super init];
+    if (self){
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
+    }
+    return self;
+}
+
+- (void)close
+{
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    self.view.backgroundColor = [UIColor whiteColor];
     int imageBuffer = 30;
 
     // Title label
