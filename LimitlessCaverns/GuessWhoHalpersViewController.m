@@ -10,8 +10,9 @@
 #import <QuartzCore/QuartzCore.h>
 #import "UIView+Dropbox.h"
 #import "UIImageView+AFNetworking.h"
+#import "FunFactViewController.h"
 
-@interface GuessWhoHalpersViewController () <UIAlertViewDelegate>
+@interface GuessWhoHalpersViewController () <UIAlertViewDelegate, FunFactViewControllerDelegate>
 
 @property (nonatomic, strong) UIView *pointsBoxView;
 @property (nonatomic, strong) UILabel *pointsBoxLabel;
@@ -71,11 +72,11 @@
 
     // Number of points box
     self.pointsBoxView = [[UIView alloc] initWithFrame:CGRectZero];
-    
+
     [self.pointsBoxView.layer setBorderColor:[UIColor redColor].CGColor];
     [self.pointsBoxView.layer setBorderWidth:3];
     [self.views addObject:self.pointsBoxView];
-    
+
     self.pointsBoxLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [self.pointsBoxLabel setText:@"Bump phones with this mystery Dropboxer to get 1 point:"];
     [self.pointsBoxLabel setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]]];
@@ -108,7 +109,7 @@
     [self.meetTheseHalpersTitleView.layer setBorderColor:[UIColor redColor].CGColor];
     [self.meetTheseHalpersTitleView.layer setBorderWidth:3];
     [self.views addObject:self.meetTheseHalpersTitleView];
-    
+
     self.meetTheseHalpersTitleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [self.meetTheseHalpersTitleLabel setText:@"Meet these HALPers to get clues:"];
     [self.meetTheseHalpersTitleLabel setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]]];
@@ -158,12 +159,12 @@
     UIImage *leaderboardButtonImage = [UIImage imageNamed:@"leaderboard_button.jpeg"];
     [self.leaderboardButton setBackgroundImage:leaderboardButtonImage forState:UIControlStateNormal];
     [self.leaderboardButton addTarget:self
-                        action:@selector(leaderboardClicked)
-              forControlEvents:UIControlEventTouchUpInside];
+                               action:@selector(leaderboardClicked)
+                     forControlEvents:UIControlEventTouchUpInside];
     [self.leaderboardButton.layer setBorderColor:[UIColor blackColor].CGColor];
     [self.leaderboardButton.layer setBorderWidth:3];
     [self.tableBottomView addSubview:self.leaderboardButton];
-    
+
     self.tableView.backgroundColor = [UIColor clearColor];
     for (UIView *view in self.views){
         view.hidden = YES;
@@ -255,9 +256,9 @@
                                               60);
 
     self.skipButton.frame = CGRectMake(CGRectGetMinX(self.leaderboardButton.frame) - leftBuffer - buttonWidth,
-                                        leftBuffer,
-                                        buttonWidth,
-                                        60);
+                                       leftBuffer,
+                                       buttonWidth,
+                                       60);
 
     NSArray *halperImageViewsArray = @[self.halper1ImageView, self.halper2ImageView, self.halper3ImageView, self.halper4ImageView];
     NSArray *halperURLStrings = [self.userDataDictionary objectForKey:@"halpers"];
@@ -458,8 +459,11 @@
     {
         if (buttonIndex == 0 && alertView.numberOfButtons > 1)
         {
-            //TODO: Open Add fun fact controller if user presses 'Add fun fact'
+            //Open Add fun fact controller if user presses 'Add fun fact'
             NSLog(@"%d", buttonIndex);
+            FunFactViewController *funFactVC = [[FunFactViewController alloc] init];
+            funFactVC.delegate = self;
+            [self presentViewController:funFactVC animated:YES completion:^(void){nil;}];
         }
         else
         {
@@ -467,6 +471,12 @@
             [self.delegate guessWhoHalpersViewControllerPressedSkipButton:self];
         }
     }
+}
+
+// FunFactViewControllerDelegate method
+-(void)funFactViewControllerFinished:(FunFactViewController *)funFactVC
+{
+    [self.delegate guessWhoHalpersViewControllerPressedSkipButton:self];
 }
 
 - (void)didMoveToParentViewController:(UIViewController *)parent

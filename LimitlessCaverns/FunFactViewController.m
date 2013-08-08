@@ -106,8 +106,8 @@
         [httpClient registerHTTPOperationClass:[AFHTTPRequestOperation class]];
 
         [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            if([self.delegate respondsToSelector:@selector(funFactViewControllerPressedGoButton:)]){
-                [self.delegate funFactViewControllerPressedGoButton:self];
+            if([self.delegate respondsToSelector:@selector(funFactViewControllerFinished:)]){
+                [self.delegate funFactViewControllerFinished:self];
             }
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
@@ -124,8 +124,8 @@
 
 - (void)skipButtonClicked
 {
-    if([self.delegate respondsToSelector:@selector(funFactViewControllerPressedSkipButton:)]){
-        [self.delegate funFactViewControllerPressedSkipButton:self];
+    if([self.delegate respondsToSelector:@selector(funFactViewControllerFinished:)]){
+        [self.delegate funFactViewControllerFinished:self];
     }
 }
 

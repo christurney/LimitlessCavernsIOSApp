@@ -15,6 +15,5 @@
 @end
 
 @protocol FunFactViewControllerDelegate <NSObject>
-- (void)funFactViewControllerPressedGoButton:(FunFactViewController *)funFactVC;
-- (void)funFactViewControllerPressedSkipButton:(FunFactViewController *)funFactVC;
+- (void)funFactViewControllerFinished:(FunFactViewController *)funFactVC;
 @end
