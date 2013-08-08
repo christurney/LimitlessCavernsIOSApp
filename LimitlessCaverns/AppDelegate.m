@@ -22,7 +22,9 @@ NSString *const requestURLString = @"https://limitless-caverns-4433.herokuapp.co
 - (void) configureBump {
 #ifndef TARGET_IPHONE_SIMULATOR
     // userID is a string that you could use as the user's name, or an ID that is semantic within your environment
-    [BumpClient configureWithAPIKey:@"8990ba777c5340f98eb21033cfd9b06e" andUserID:[[UIDevice currentDevice] name]];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+    [BumpClient configureWithAPIKey:@"8990ba777c5340f98eb21033cfd9b06e" andUserID:[defaults objectForKey@"user_id"]];
 
     [[BumpClient sharedClient] setMatchBlock:^(BumpChannelID channel) {
         NSLog(@"Matched with user: %@", [[BumpClient sharedClient] userIDForChannel:channel]);
