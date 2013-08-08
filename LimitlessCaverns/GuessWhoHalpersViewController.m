@@ -34,6 +34,8 @@
 @property (nonatomic, strong) UIButton *leaderboardButton;
 
 @property (nonatomic, strong) UIAlertView *skipAlertView;
+@property (nonatomic, strong) UIAlertView *failureAlertView;
+@property (nonatomic, strong) UIAlertView *successAlertView;
 @property (nonatomic, strong) NSMutableArray *views;
 
 @property (nonatomic, strong) NSDictionary *userDataDictionary;
@@ -91,6 +93,8 @@
     self.mysteryPersonImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     [self.mysteryPersonImageView.layer setBorderColor:[UIColor yellowColor].CGColor];
     [self.mysteryPersonImageView.layer setBorderWidth:3];
+    [self.mysteryPersonImageView setImage:[UIImage imageNamed:@"head_w_question_mark"]];
+    self.mysteryPersonImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.mysteryPersonView addSubview:self.mysteryPersonImageView];
 
     self.funFactLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -402,6 +406,43 @@
     NSLog(@"Leaderboard clicked!");
 }
 
+- (void)showSuccessAlertView
+{
+    NSString *titleString = @"YOU DID IT!!";
+    NSString *messageString = @"+1 for finding the Mystery Dropboxer :-)";
+
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults boolForKey:@"added_fun_fact"])
+    {
+        self.successAlertView = [[UIAlertView alloc] initWithTitle:titleString
+                                                           message:messageString
+                                                          delegate:self
+                                                 cancelButtonTitle:nil
+                                                 otherButtonTitles:@"Next Challange", nil];
+    }
+    else
+    {
+        self.successAlertView = [[UIAlertView alloc] initWithTitle:titleString
+                                                           message:messageString
+                                                          delegate:self
+                                                 cancelButtonTitle:nil
+                                                 otherButtonTitles:@"Add Fun Fact", @"Next Challenge", nil];
+    }
+
+    [self.successAlertView show];
+}
+
+- (void)showFailureAlertView
+{
+    self.failureAlertView = [[UIAlertView alloc] initWithTitle:@"Nice Try..."
+                                                       message:@"Keep searching! Don't forget to ask your Halpers."
+                                                      delegate:self
+                                             cancelButtonTitle:@"OK"
+                                             otherButtonTitles:nil];
+
+    [self.failureAlertView show];
+}
+
 #pragma mark - Alert view delegate
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
@@ -410,6 +451,19 @@
     {
         if (buttonIndex != alertView.cancelButtonIndex)
         {
+            [self.delegate guessWhoHalpersViewControllerPressedSkipButton:self];
+        }
+    }
+    else if (alertView == self.successAlertView)
+    {
+        if (buttonIndex == 0 && alertView.numberOfButtons > 1)
+        {
+            //TODO: Open Add fun fact controller if user presses 'Add fun fact'
+            NSLog(@"%d", buttonIndex);
+        }
+        else
+        {
+            //Show next person
             [self.delegate guessWhoHalpersViewControllerPressedSkipButton:self];
         }
     }
