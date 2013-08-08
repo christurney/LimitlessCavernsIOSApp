@@ -17,6 +17,7 @@ static NSString *cellIdentifier = @"Cell";
 
 @property (nonatomic, strong) NSMutableArray *leaders;
 @property (nonatomic, strong) UIImage *placeHolderImage;
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
 @end
 
@@ -26,7 +27,8 @@ static NSString *cellIdentifier = @"Cell";
 {
     self = [super init];
     if (self){
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(closeLeaderboard)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(closeLeaderboard)];
+        self.title = @"Leaderboard";
     }
     return self;
 }
@@ -47,6 +49,18 @@ static NSString *cellIdentifier = @"Cell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityIndicator.color = [UIColor blackColor];
+    [self.view addSubview:activityIndicator];
+    activityIndicator.center = [self.view convertPoint:self.view.center fromView:self.view.superview];
+    activityIndicator.hidesWhenStopped = YES;
+    self.activityIndicator = activityIndicator;
+    self.activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
+    self.view.userInteractionEnabled = NO;
+    [self.view bringSubviewToFront:self.activityIndicator];
+    [self.activityIndicator startAnimating];
+
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:cellIdentifier];
 
     self.leaders = [NSMutableArray array];
@@ -63,6 +77,8 @@ static NSString *cellIdentifier = @"Cell";
                                              }
                                              // reload the data in the table view
                                              [self.tableView reloadData];
+                                             self.view.userInteractionEnabled = YES;
+                                             [self.activityIndicator stopAnimating];
                                          }
 
                                          failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
@@ -90,14 +106,6 @@ static NSString *cellIdentifier = @"Cell";
         return [self.leaders count];
     }
     return 0;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if(section == 0){
-        return @"Leaderboard";
-    }
-    return nil;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

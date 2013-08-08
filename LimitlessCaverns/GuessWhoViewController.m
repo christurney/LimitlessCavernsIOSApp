@@ -57,7 +57,7 @@
     [self.mysteryImageView.layer setBorderWidth:3];
     self.mysteryImageView.layer.cornerRadius = 5;
     self.mysteryImageView.backgroundColor = [UIColor redColor];
-    [self.mysteryImageView setImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"dabney" ofType:@"jpg"]]];
+    [self.mysteryImageView setImage:[UIImage imageNamed:@"head_w_question_mark"]];
     [self.view addSubview:self.mysteryImageView];
     
     

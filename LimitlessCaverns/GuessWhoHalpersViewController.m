@@ -91,6 +91,8 @@
     self.mysteryPersonImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     [self.mysteryPersonImageView.layer setBorderColor:[UIColor yellowColor].CGColor];
     [self.mysteryPersonImageView.layer setBorderWidth:3];
+    [self.mysteryPersonImageView setImage:[UIImage imageNamed:@"head_w_question_mark"]];
+    self.mysteryPersonImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.mysteryPersonView addSubview:self.mysteryPersonImageView];
 
     self.funFactLabel = [[UILabel alloc] initWithFrame:CGRectZero];
