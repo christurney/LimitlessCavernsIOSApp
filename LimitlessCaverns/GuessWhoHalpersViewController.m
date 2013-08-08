@@ -33,6 +33,7 @@
 @property (nonatomic, strong) UIButton *leaderboardButton;
 
 @property (nonatomic, strong) UIAlertView *skipAlertView;
+@property (nonatomic, strong) NSMutableArray *views;
 
 @end
 
@@ -60,6 +61,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.views = [NSMutableArray array];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 
     // Number of points box
@@ -67,7 +69,8 @@
     
     [self.pointsBoxView.layer setBorderColor:[UIColor redColor].CGColor];
     [self.pointsBoxView.layer setBorderWidth:3];
-
+    [self.views addObject:self.pointsBoxView];
+    
     self.pointsBoxLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [self.pointsBoxLabel setText:@"Bump phones with this mystery Dropboxer to get 1 point:"];
     [self.pointsBoxLabel setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]]];
@@ -80,6 +83,7 @@
     self.mysteryPersonView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.mysteryPersonView.layer setBorderColor:[UIColor greenColor].CGColor];
     [self.mysteryPersonView.layer setBorderWidth:3];
+    [self.views addObject:self.mysteryPersonView];
 
     self.mysteryPersonImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     [self.mysteryPersonImageView.layer setBorderColor:[UIColor yellowColor].CGColor];
@@ -96,7 +100,8 @@
     self.meetTheseHalpersTitleView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.meetTheseHalpersTitleView.layer setBorderColor:[UIColor redColor].CGColor];
     [self.meetTheseHalpersTitleView.layer setBorderWidth:3];
-
+    [self.views addObject:self.meetTheseHalpersTitleView];
+    
     self.meetTheseHalpersTitleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [self.meetTheseHalpersTitleLabel setText:@"Meet these HALPers to get clues:"];
     [self.meetTheseHalpersTitleLabel setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]]];
@@ -109,6 +114,7 @@
     self.meetTheseHalpersView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     [self.meetTheseHalpersView.layer setBorderColor:[UIColor yellowColor].CGColor];
     [self.meetTheseHalpersView.layer setBorderWidth:3];
+    [self.views addObject:self.meetTheseHalpersView];
 
     self.halper1ImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     [self.halper1ImageView.layer setBorderColor:[UIColor yellowColor].CGColor];
@@ -132,6 +138,7 @@
     self.tableBottomView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.tableBottomView.layer setBorderColor:[UIColor blackColor].CGColor];
     [self.tableBottomView.layer setBorderWidth:3];
+    [self.views addObject:self.tableBottomView];
 
     self.skipButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.skipButton setTitle:@"Skip" forState:UIControlStateNormal];
@@ -240,6 +247,10 @@
                                         leftBuffer,
                                         buttonWidth,
                                         60);
+    
+    for (UIView *view in self.views){
+        view.hidden = YES;
+    }
 }
 
 -(void)setFunFactString:(NSString *)str
@@ -389,6 +400,25 @@
         {
             [self.delegate guessWhoHalpersViewControllerPressedSkipButton:self];
         }
+    }
+}
+
+- (void)didMoveToParentViewController:(UIViewController *)parent
+{
+    [super didMoveToParentViewController:parent];
+    if (parent){
+        CGFloat duration = .1;
+        for (UIView *view in self.views){
+            view.frame = CGRectOffset(view.frame, self.view.width, 0);
+            view.hidden = NO;
+        }
+        [self.views enumerateObjectsUsingBlock:^(UIView *view, NSUInteger idx, BOOL *stop) {
+            [UIView animateWithDuration:duration delay:duration*idx options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                view.frame = CGRectOffset(view.frame, -self.view.width, 0);
+            } completion:^(BOOL finished) {
+                
+            }];
+        }];
     }
 }
 

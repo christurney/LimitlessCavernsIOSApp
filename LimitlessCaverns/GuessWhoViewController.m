@@ -17,7 +17,7 @@
 @property (nonatomic, strong) UIButton *knowThemButton;
 @property (nonatomic, strong) UIButton *playButton;
 @property (nonatomic, strong) UIButton *leaderboardButton;
-
+@property (nonatomic, strong) NSArray *views;
 @end
 
 @implementation GuessWhoViewController
@@ -90,14 +90,11 @@
     [self.leaderboardButton addTarget:self action:@selector(leaderboardClicked)
                      forControlEvents:UIControlEventTouchUpInside];
     
-    self.titleLabel.hidden = YES;
-    self.funFactLabel.hidden = YES;
-    self.mysteryImageView.hidden = YES;
-    self.knowThemButton.hidden = YES;
-    self.playButton.hidden = YES;
-    self.leaderboardButton.hidden = YES;
     
-    
+    self.views = @[self.titleLabel, self.funFactLabel, self.mysteryImageView, self.knowThemButton, self.playButton, self.leaderboardButton];
+    for (UIView *view in self.views){
+        view.hidden = YES;
+    }
 }
 
 - (void)knowThemClicked
@@ -217,12 +214,11 @@
     [super didMoveToParentViewController:parent];
     if (parent){
         CGFloat duration = .1;
-        NSArray *views = @[self.titleLabel, self.funFactLabel, self.mysteryImageView, self.knowThemButton, self.playButton, self.leaderboardButton];
-        for (UIView *view in views){
+        for (UIView *view in self.views){
             view.frame = CGRectOffset(view.frame, self.view.width, 0);
             view.hidden = NO;
         }
-        [views enumerateObjectsUsingBlock:^(UIView *view, NSUInteger idx, BOOL *stop) {
+        [self.views enumerateObjectsUsingBlock:^(UIView *view, NSUInteger idx, BOOL *stop) {
             [UIView animateWithDuration:duration delay:duration*idx options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 view.frame = CGRectOffset(view.frame, -self.view.width, 0);
             } completion:^(BOOL finished) {
