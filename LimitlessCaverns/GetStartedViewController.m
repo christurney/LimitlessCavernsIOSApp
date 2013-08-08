@@ -56,6 +56,7 @@
     self.emailEntryField.borderStyle = UITextBorderStyleRoundedRect;
     self.emailEntryField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     self.emailEntryField.returnKeyType = UIReturnKeyDone;
+    self.emailEntryField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     [self.view addSubview:self.emailEntryField];
 
 
