@@ -92,13 +92,16 @@
 {
     if (self.emailEntryField.text.length > 0)
     {
-        NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[@"/create_user/" stringByAppendingString:self.emailEntryField.text]]];
+        NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[@"/register/" stringByAppendingString:self.emailEntryField.text]]];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
 
         AFJSONRequestOperation *operation = [AFJSONRequestOperation
                                              JSONRequestOperationWithRequest:request
 
                                              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                                                 if (JSON[@"error"]){
+                                                     NSLog(@"%@", JSON);
+                                                 }
                                                  UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Check Your E-mail"
                                                                                                      message:@"Check your e-mail to verify you're the owner of the email address you inputted."
                                                                                                     delegate:self
