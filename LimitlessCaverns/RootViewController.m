@@ -115,7 +115,7 @@
 
 -(void)getMysteryUserInfo:(NSString *)userID
 {
-//    NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[@"/get_new_assignment/" stringByAppendingString:userID]]];
+//    NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[NSString stringWithFormat:@"/users/%@/new_assignment", userID]]];
 //    NSURLRequest *request = [NSURLRequest requestWithURL:url];
 //
 //    AFJSONRequestOperation *operation = [AFJSONRequestOperation
@@ -125,11 +125,11 @@
 //                                             // store user info and update the text box
 //
 //                                             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//                                             
-//                                             [defaults setObject:JSON forKey:@"msyteryUserData"];
+//
+//                                             [defaults setObject:JSON forKey:@"mysteryUserData"];
 //                                             [defaults synchronize];
 //
-//                                             [self showControllerForData:JSON];
+//                                             [self showControllerForData:JSON showHalpers:NO];
 //                                         }
 //                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
 //                                             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
@@ -140,8 +140,8 @@
 //                                             [alertView show];
 //                                         }];
 //    [operation start];
-//    
-    NSDictionary *mysteryDictionary = @{@"fun_fact": @"my family owns santa barbara honda"};
+
+    NSDictionary *mysteryDictionary = @{@"fact": @"my family owns santa barbara honda", @"id": @"abcdefg", @"halpers":@[@"http://onesentencereview.com/images/avatar_placeholder_large.png?1301662607", @"http://developersdevelopersdevelopersdevelopers.org/assets/icons/avatar-placeholder-1729c5f2a2b4e35e1bf1f04606895af4.png"]};
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:mysteryDictionary forKey:@"mysteryUserData"];
     [defaults synchronize];

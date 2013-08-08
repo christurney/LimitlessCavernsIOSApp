@@ -26,7 +26,7 @@
 {
     self = [super init];
     if (self){
-        self.funFactString = dictionary[@"fun_fact"];
+        self.funFactString = dictionary[@"fact"];
         self.titleString = @"Mystery Dropboxer";
     }
     return self;

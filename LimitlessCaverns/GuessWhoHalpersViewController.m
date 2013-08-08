@@ -9,6 +9,7 @@
 #import "GuessWhoHalpersViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UIView+Dropbox.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface GuessWhoHalpersViewController () <UIAlertViewDelegate>
 
@@ -34,6 +35,8 @@
 
 @property (nonatomic, strong) UIAlertView *skipAlertView;
 
+@property (nonatomic, strong) NSDictionary *userDataDictionary;
+
 @end
 
 @implementation GuessWhoHalpersViewController
@@ -51,8 +54,8 @@
 {
     self = [super init];
     if (self){
-        self.funFactString = dictionary[@"fun_fact"];
-        //TODO Add in rest of objects here
+        self.funFactString = dictionary[@"fact"];
+        self.userDataDictionary = dictionary;
     }
     return self;
 }
@@ -237,6 +240,15 @@
                                         leftBuffer,
                                         buttonWidth,
                                         60);
+
+    NSArray *halperImageViewsArray = @[self.halper1ImageView, self.halper2ImageView, self.halper3ImageView, self.halper4ImageView];
+    NSArray *halperURLStrings = [self.userDataDictionary objectForKey:@"halpers"];
+
+    for (NSString *urlString in halperURLStrings)
+    {
+        NSURL *url = [NSURL URLWithString:urlString];
+        [[halperImageViewsArray objectAtIndex:[halperURLStrings indexOfObject:urlString]] setImageWithURL:url placeholderImage:nil];
+    }
 }
 
 -(void)setFunFactString:(NSString *)str
