@@ -73,9 +73,9 @@
                     action:@selector(startButtonClicked)
           forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:startButton];
-    
+
     // Welcome image
-    
+
     int imageHeight = 200;
 
     UIImageView *welcomeImage = [[UIImageView alloc] initWithFrame:CGRectMake(imageBuffer,
@@ -101,16 +101,22 @@
                                              success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                                                  if (JSON[@"error"]){
                                                      NSLog(@"%@", JSON);
+                                                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
+                                                                                                         message:[JSON valueForKeyPath:@"message"]
+                                                                                                        delegate:self
+                                                                                               cancelButtonTitle:@"OK"
+                                                                                               otherButtonTitles:nil];
+                                                     [alertView show];
+                                                 } else {
+                                                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Check Your E-mail"
+                                                                                                         message:@"Check your e-mail to verify you're the owner of the email address you inputted."
+                                                                                                        delegate:self
+                                                                                               cancelButtonTitle:@"OK"
+                                                                                               otherButtonTitles:nil];
+                                                     [alertView show];
                                                  }
-                                                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Check Your E-mail"
-                                                                                                     message:@"Check your e-mail to verify you're the owner of the email address you inputted."
-                                                                                                    delegate:self
-                                                                                           cancelButtonTitle:@"OK"
-                                                                                           otherButtonTitles:nil];
-                                                 [alertView show];
-
-
                                              }
+
                                              failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
                                                  UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
                                                                                                      message:[JSON valueForKeyPath:@"message"]
