@@ -14,6 +14,7 @@
 #import "AFNetworking.h"
 #import "AppDelegate.h"
 #import "FunFactsView.h"
+#import "GradientButton.h"
 
 
 @interface GuessWhoHalpersViewController () <UIAlertViewDelegate>
@@ -37,7 +38,7 @@
 @property (nonatomic, strong) UIImageView *halper4ImageView;
 
 @property (nonatomic, strong) UIView *tableBottomView;
-@property (nonatomic, strong) UIButton *skipButton;
+@property (nonatomic, strong) GrayGradientButton *skipButton;
 @property (nonatomic, strong) UIButton *leaderboardButton;
 
 @property (nonatomic, strong) UIAlertView *skipAlertView;
@@ -68,6 +69,9 @@
     if (self){
         self.funFacts = dictionary[@"facts"];
         self.userDataDictionary = dictionary;
+        if ([self respondsToSelector:@selector(automaticallyAdjustsScrollViewInsets)]){
+            self.tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
+        }
     }
     return self;
 }
@@ -95,31 +99,29 @@
 
     self.views = [NSMutableArray array];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     // Number of points box
     self.pointsBoxView = [[UIView alloc] initWithFrame:CGRectZero];
-
-    [self.pointsBoxView.layer setBorderColor:[UIColor redColor].CGColor];
-    [self.pointsBoxView.layer setBorderWidth:3];
+    self.pointsBoxView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
     [self.views addObject:self.pointsBoxView];
 
     self.pointsBoxLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    [self.pointsBoxLabel setText:@"Bump phones with this mystery Dropboxer to get 1 point:"];
-    [self.pointsBoxLabel setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]]];
+    [self.pointsBoxLabel setText:@"Bump phones with this Mystery Dropboxer to get 1 point:"];
+    //[self.pointsBoxLabel setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]]];
+    [self.pointsBoxLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:16]];
+    self.pointsBoxLabel.textColor = [UIColor redColor];
     [self.pointsBoxLabel setTextAlignment:NSTextAlignmentLeft];
     self.pointsBoxLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
     self.pointsBoxLabel.numberOfLines = 2;
+    self.pointsBoxLabel.backgroundColor = self.pointsBoxView.backgroundColor;
     [self.pointsBoxView addSubview:self.pointsBoxLabel];
 
     // Mystery person info
     self.mysteryPersonView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self.mysteryPersonView.layer setBorderColor:[UIColor greenColor].CGColor];
-    [self.mysteryPersonView.layer setBorderWidth:3];
     [self.views addObject:self.mysteryPersonView];
 
     self.mysteryPersonImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-    [self.mysteryPersonImageView.layer setBorderColor:[UIColor yellowColor].CGColor];
-    [self.mysteryPersonImageView.layer setBorderWidth:3];
     [self.mysteryPersonImageView setImage:[UIImage imageNamed:@"head_w_question_mark"]];
     self.mysteryPersonImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.mysteryPersonView addSubview:self.mysteryPersonImageView];
@@ -130,43 +132,42 @@
 
     // Meet these halpers title
     self.meetTheseHalpersTitleView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self.meetTheseHalpersTitleView.layer setBorderColor:[UIColor redColor].CGColor];
-    [self.meetTheseHalpersTitleView.layer setBorderWidth:3];
+    self.meetTheseHalpersTitleView.backgroundColor = self.pointsBoxView.backgroundColor;
     [self.views addObject:self.meetTheseHalpersTitleView];
 
     self.meetTheseHalpersTitleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [self.meetTheseHalpersTitleLabel setText:@"Meet these HALPers to get clues:"];
-    [self.meetTheseHalpersTitleLabel setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]]];
+    [self.meetTheseHalpersTitleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:16]];
+    self.meetTheseHalpersTitleLabel.textColor = [UIColor redColor];
     [self.meetTheseHalpersTitleLabel setTextAlignment:NSTextAlignmentLeft];
     self.meetTheseHalpersTitleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
+    self.meetTheseHalpersTitleLabel.backgroundColor = self.pointsBoxView.backgroundColor;
     [self.meetTheseHalpersTitleView addSubview:self.meetTheseHalpersTitleLabel];
 
     // Meet these halpers
     self.meetTheseHalpersView = [[UIView alloc] initWithFrame:CGRectZero];
     self.meetTheseHalpersView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    [self.meetTheseHalpersView.layer setBorderColor:[UIColor yellowColor].CGColor];
-    [self.meetTheseHalpersView.layer setBorderWidth:3];
     [self.views addObject:self.meetTheseHalpersView];
 
     self.halper1ImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     self.halper1ImageView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.halper1ImageView.layer setBorderColor:[UIColor yellowColor].CGColor];
-    [self.halper1ImageView.layer setBorderWidth:3];
+    [self.halper1ImageView.layer setBorderColor:[UIColor colorWithWhite:0.8 alpha:1].CGColor];
+    [self.halper1ImageView.layer setBorderWidth:1];
 
     self.halper2ImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     self.halper2ImageView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.halper2ImageView.layer setBorderColor:[UIColor redColor].CGColor];
-    [self.halper2ImageView.layer setBorderWidth:3];
+    [self.halper2ImageView.layer setBorderColor:[UIColor colorWithWhite:0.8 alpha:1].CGColor];
+    [self.halper2ImageView.layer setBorderWidth:1];
 
     self.halper3ImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     self.halper3ImageView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.halper3ImageView.layer setBorderColor:[UIColor greenColor].CGColor];
-    [self.halper3ImageView.layer setBorderWidth:3];
+    [self.halper3ImageView.layer setBorderColor:[UIColor colorWithWhite:0.8 alpha:1].CGColor];
+    [self.halper3ImageView.layer setBorderWidth:1];
 
     self.halper4ImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     self.halper4ImageView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.halper4ImageView.layer setBorderColor:[UIColor blueColor].CGColor];
-    [self.halper4ImageView.layer setBorderWidth:3];
+    [self.halper4ImageView.layer setBorderColor:[UIColor colorWithWhite:0.8 alpha:1].CGColor];
+    [self.halper4ImageView.layer setBorderWidth:1];
 
     [self.meetTheseHalpersView addSubview:self.halper1ImageView];
     [self.meetTheseHalpersView addSubview:self.halper2ImageView];
@@ -175,11 +176,11 @@
 
     // Skip / leaderboard button
     self.tableBottomView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self.tableBottomView.layer setBorderColor:[UIColor blackColor].CGColor];
-    [self.tableBottomView.layer setBorderWidth:3];
+    self.tableBottomView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
     [self.views addObject:self.tableBottomView];
 
-    self.skipButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.skipButton = [[GrayGradientButton alloc] init];
+    [self.skipButton configure];
     [self.skipButton setTitle:@"Skip" forState:UIControlStateNormal];
     [self.skipButton addTarget:self
                         action:@selector(skipClicked)
@@ -187,13 +188,11 @@
     [self.tableBottomView addSubview:self.skipButton];
 
     self.leaderboardButton = [[UIButton alloc] initWithFrame:CGRectZero];
-    UIImage *leaderboardButtonImage = [UIImage imageNamed:@"leaderboard_button.jpeg"];
+    UIImage *leaderboardButtonImage = [UIImage imageNamed:@"leaderboard_button"];
     [self.leaderboardButton setBackgroundImage:leaderboardButtonImage forState:UIControlStateNormal];
     [self.leaderboardButton addTarget:self
                                action:@selector(leaderboardClicked)
                      forControlEvents:UIControlEventTouchUpInside];
-    [self.leaderboardButton.layer setBorderColor:[UIColor blackColor].CGColor];
-    [self.leaderboardButton.layer setBorderWidth:3];
     [self.tableBottomView addSubview:self.leaderboardButton];
 
     self.tableView.backgroundColor = [UIColor clearColor];
@@ -242,13 +241,34 @@
     meetTheseHalpersTitleLabelFrame.size.width -= leftBuffer;
     self.meetTheseHalpersTitleLabel.frame = meetTheseHalpersTitleLabelFrame;
 
+    int meetTheseHalpersViewHeight = 0;
+    int halperImageHeightWidth = 0;
+
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+    {
+        if (IS_IPHONE5)
+        {
+            meetTheseHalpersViewHeight = 288;
+            halperImageHeightWidth = 120;
+        }
+        else
+        {
+            meetTheseHalpersViewHeight = 200;
+            halperImageHeightWidth = 80;
+        }
+    }
+    else
+    {
+        meetTheseHalpersViewHeight = 200;
+        halperImageHeightWidth = 80;
+    }
+
     self.meetTheseHalpersView.frame = CGRectMake(0,
                                                  0,
                                                  self.view.width,
-                                                 200);
+                                                 meetTheseHalpersViewHeight);
 
     // This is so pictures scale up both horizontally and vertically when iPhone 5 is used
-    int halperImageHeightWidth = 80/self.meetTheseHalpersView.height * 200;
     int halperImageTopBuffer = (self.meetTheseHalpersView.height - (halperImageHeightWidth)*2)/3;
     int halperImageBuffer = (self.meetTheseHalpersView.width - (halperImageHeightWidth)*2)/3;
 
@@ -284,7 +304,7 @@
                                               60,
                                               60);
 
-    self.skipButton.frame = CGRectMake(CGRectGetMinX(self.leaderboardButton.frame) - leftBuffer - buttonWidth,
+    self.skipButton.frame = CGRectMake(CGRectGetMinX(self.leaderboardButton.frame) - leftBuffer - 10 - buttonWidth,
                                        leftBuffer,
                                        buttonWidth,
                                        60);
