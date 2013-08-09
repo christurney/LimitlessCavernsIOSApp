@@ -11,7 +11,7 @@
 #import "AFJSONRequestOperation.h"
 #import "UIImageView+AFNetworking.h"
 
-static NSString *cellIdentifier = @"Cell";
+static NSString *cellIdentifier = @"leaderboardCell";
 
 @interface LeaderboardViewController ()
 
@@ -42,7 +42,7 @@ static NSString *cellIdentifier = @"Cell";
 {
     if(_placeHolderImage) return _placeHolderImage;
 
-    _placeHolderImage = [UIImage imageNamed:@"placeholderImage.jpg"];
+    _placeHolderImage = [UIImage imageNamed:@"placeHolderImage.png"];
     return _placeHolderImage;
 }
 
@@ -60,8 +60,6 @@ static NSString *cellIdentifier = @"Cell";
     self.view.userInteractionEnabled = NO;
     [self.view bringSubviewToFront:self.activityIndicator];
     [self.activityIndicator startAnimating];
-
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:cellIdentifier];
 
     self.leaders = [NSMutableArray array];
     NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:@"/leaderboard"]];
@@ -114,13 +112,24 @@ static NSString *cellIdentifier = @"Cell";
     if(indexPath.section != 0 || indexPath.row >= numLeaders || indexPath.row < 0) return nil;
 
     NSDictionary *leader = [self.leaders objectAtIndex:indexPath.row];
-    NSString *textForCell = [NSString stringWithFormat:@"%d points - %@", [[leader objectForKey:@"score"] intValue], [leader objectForKey:@"name"]];
+    NSString *name = [leader objectForKey:@"name"];
+    NSString *scoreText = [NSString stringWithFormat:@"%d points", [[leader objectForKey:@"score"] intValue]];
 
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if(!cell){
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+    }
+    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    cell.textLabel.text = textForCell;
-    cell.textLabel.font = [UIFont boldSystemFontOfSize:14];
+
+    cell.textLabel.text = name;
+    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:30];
+
+    cell.detailTextLabel.text = scoreText;
+    cell.detailTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16];
+    cell.detailTextLabel.textColor = [UIColor redColor];
+    
     [cell.imageView setImageWithURL:[NSURL URLWithString:[leader objectForKey:@"image"]] placeholderImage:self.placeHolderImage];
     return cell;
 }
