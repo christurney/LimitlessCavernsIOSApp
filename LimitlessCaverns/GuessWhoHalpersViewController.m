@@ -432,10 +432,13 @@
     NSLog(@"Leaderboard clicked!");
 }
 
-- (void)showSuccessAlertView
+- (void)showSuccessAlertView:(id)targetInfoJSON
 {
-    NSString *titleString = @"YOU DID IT!!";
-    NSString *messageString = @"+1 for finding the Mystery Dropboxer :-)";
+    NSDictionary *targetInfo = targetInfoJSON[@"target_info"];
+    NSInteger pointsScored = [targetInfoJSON[@"points_scored"] integerValue];
+    
+    NSString *titleString = [NSString stringWithFormat:@"You found %@!", targetInfo[@"fname"]];
+    NSString *messageString = pointsScored == 1 ? @"1 point for finding this Mystery Dropboxer" : [NSString stringWithFormat:@"%d points for finding this Mystery Dropboxer", pointsScored];
 
     self.successAlertView = [[UIAlertView alloc] initWithTitle:titleString
                                                        message:messageString
@@ -495,7 +498,7 @@
                                              self.view.userInteractionEnabled = YES;
                                              self.view.alpha = 1;
                                              [self.activityIndicator stopAnimating];
-                                             [self showSuccessAlertView];
+                                             [self showSuccessAlertView:JSON];
                                          }
                                          failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
                                              UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
