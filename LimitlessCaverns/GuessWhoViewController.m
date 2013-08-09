@@ -195,32 +195,33 @@
     } else {
 
         int imageHeight = 175;
-
+        imageBuffer = 10;
         self.mysteryImageView.frame = CGRectMake(imageBuffer,
                                                  CGRectGetMaxY(self.titleLabel.frame) + 20,
-                                                 (self.view.height - imageBuffer*2),
+                                                 imageHeight,
                                                  imageHeight);
 
-        self.funFactsView.frame = CGRectMake(CGRectGetMaxX(self.mysteryImageView.frame) + imageBuffer, CGRectGetMaxY(self.titleLabel.frame) + 12, self.view.width - CGRectGetMaxX(self.mysteryImageView.frame) - imageBuffer, 70);
+        self.funFactsView.frame = CGRectMake(CGRectGetMaxX(self.mysteryImageView.frame), CGRectGetMaxY(self.titleLabel.frame) + 12, self.view.width - CGRectGetMaxX(self.mysteryImageView.frame), 70);
         
         
         
         
         // know them button
+        CGFloat buttonWidth = floorf((self.view.width - imageHeight) / 2) - 36;
         
-        self.knowThemButton.frame = CGRectMake(CGRectGetMaxX(self.mysteryImageView.frame) + imageBuffer,
-                                               CGRectGetMaxY(self.funFactsView.frame) + 15,
-                                               CGRectGetWidth(self.mysteryImageView.frame)/2.0 - 5,
+        self.knowThemButton.frame = CGRectMake(CGRectGetMaxX(self.mysteryImageView.frame) + 24,
+                                               CGRectGetMaxY(self.funFactsView.frame) + 27 + buttonHeight,
+                                               buttonWidth ,
                                                buttonHeight);
         // play button
         
-        [self.playButton setFrame:CGRectMake(CGRectGetMinX(self.knowThemButton.frame),
-                                        CGRectGetMaxY(self.knowThemButton.frame) + 12,
-                                        CGRectGetWidth(self.mysteryImageView.frame)/2.0 - 5,
+        [self.playButton setFrame:CGRectMake(CGRectGetMaxX(self.knowThemButton.frame) + 12,
+                                        CGRectGetMinY(self.knowThemButton.frame),
+                                        buttonWidth,
                                         buttonHeight)];
         
-        self.leaderboardButton.frame = CGRectMake(CGRectGetMaxX(self.playButton.frame) + 40,
-                                            CGRectGetMaxY(self.playButton.frame) - buttonSize,
+        self.leaderboardButton.frame = CGRectMake(CGRectGetMinX(self.playButton.frame) - buttonSize/2 - 6,
+                                            CGRectGetMaxY(self.playButton.frame) + 12,
                                             buttonSize,
                                             buttonSize);
 
