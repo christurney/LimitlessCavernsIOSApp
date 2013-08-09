@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FunFactsView : UIScrollView
+@interface FunFactsView : UIScrollView <UIScrollViewDelegate>
 
 - (void)setFunFacts:(NSArray*)funFacts;
 

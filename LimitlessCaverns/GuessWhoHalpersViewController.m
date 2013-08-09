@@ -15,6 +15,7 @@
 #import "AppDelegate.h"
 #import "FunFactsView.h"
 
+
 @interface GuessWhoHalpersViewController () <UIAlertViewDelegate>
 
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
