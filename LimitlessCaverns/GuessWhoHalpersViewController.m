@@ -543,17 +543,14 @@
     }
     else if (alertView == self.successAlertView)
     {
+        [self.delegate guessWhoHalpersSucceeded:self];
+
         if (buttonIndex == 0 && alertView.numberOfButtons > 1)
         {
             //Open Add fun fact controller if user presses 'Add fun fact'
             NSLog(@"%d", buttonIndex);
             FunFactViewController *funFactVC = [[FunFactViewController alloc] init];
             [self presentViewController:funFactVC animated:YES completion:^(void){nil;}];
-        }
-        else
-        {
-            //Show next person
-            [self.delegate guessWhoHalpersSucceeded:self];
         }
     }
     else if (alertView == self.failureAlertView){
