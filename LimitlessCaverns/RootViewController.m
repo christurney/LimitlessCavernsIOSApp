@@ -133,8 +133,7 @@
 
 - (void)showFunFacts
 {
-    [self.navigationController presentViewController:[[UINavigationController alloc]
-                                                      initWithRootViewController:[[FunFactViewController alloc] init]]
+    [self.navigationController presentViewController:[[FunFactViewController alloc] init] 
                                             animated:YES completion:nil];
 }
 

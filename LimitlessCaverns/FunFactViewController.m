@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "AFHTTPRequestOperation.h"
 #import "AFJSONRequestOperation.h"
+#import "GradientButton.h"
 
 static NSString *cellIdentifier = @"Cell";
 
@@ -23,6 +24,10 @@ static NSString *cellIdentifier = @"Cell";
 @property (nonatomic, strong) NSMutableArray *funFacts;
 @property (nonatomic, strong) UITableView *funFactsTableView;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, strong) UIView *headerGrayView;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) GrayGradientButton *cancelButton;
+@property (nonatomic, strong) GrayGradientButton *doneButton;
 
 @end
 
@@ -32,9 +37,6 @@ static NSString *cellIdentifier = @"Cell";
 {
     self = [super init];
     if (self){
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
-        self.title = @"Manage Facts";
     }
     return self;
 }
@@ -58,6 +60,35 @@ static NSString *cellIdentifier = @"Cell";
 
     self.view.backgroundColor = [UIColor whiteColor];
 
+    self.headerGrayView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.headerGrayView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
+    [self.view addSubview:self.headerGrayView];
+
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    self.titleLabel.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
+    self.titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.titleLabel.text = @"Manage facts";
+    self.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25];
+    self.titleLabel.textColor = [UIColor redColor];
+    self.titleLabel.numberOfLines = 1;
+    [self.headerGrayView addSubview:self.titleLabel];
+
+    self.cancelButton = [[GrayGradientButton alloc] initWithFrame:CGRectZero];
+    [self.cancelButton configure];
+    [self.cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+    [self.cancelButton addTarget:self
+                     action:@selector(close)
+           forControlEvents:UIControlEventTouchUpInside];
+    [self.headerGrayView addSubview: self.cancelButton];
+
+    self.doneButton = [[GrayGradientButton alloc] initWithFrame:CGRectZero];
+    [self.doneButton configure];
+    [self.doneButton setTitle:@"Done" forState:UIControlStateNormal];
+    [self.doneButton addTarget:self
+                   action:@selector(done)
+         forControlEvents:UIControlEventTouchUpInside];
+    [self.headerGrayView addSubview: self.doneButton];
+    
     CGFloat corderRadius = 5.0;
     CGFloat borderWidth = 2.0;
     UIColor *borderColor = [[UIColor grayColor] colorWithAlphaComponent:0.5];
@@ -133,9 +164,33 @@ static NSString *cellIdentifier = @"Cell";
 - (void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-
+    CGFloat titleHeight = 60;
+    CGFloat titleBuffer = 10;
+    CGFloat buttonBuffer = 7.5;
+    CGFloat cancelButtonWidth = 70;
+    CGFloat doneButtonWidth = 70;
+    CGFloat buttonHeight = 30;
     CGFloat buffer = 30.0;
 
+    self.headerGrayView.frame = CGRectMake(0,
+                                           0,
+                                           self.view.bounds.size.width,
+                                           titleHeight);
+    self.titleLabel.frame = self.headerGrayView.bounds;
+    self.titleLabel.width = 150;
+    self.titleLabel.centerX = self.headerGrayView.centerX;
+    self.cancelButton.frame = CGRectMake(buttonBuffer,
+                                         0,
+                                         cancelButtonWidth,
+                                         buttonHeight);
+    self.cancelButton.centerY = self.headerGrayView.centerY;
+
+    self.doneButton.frame = CGRectMake(CGRectGetMaxX(self.headerGrayView.bounds) - buttonBuffer - doneButtonWidth,
+                                       0,
+                                       doneButtonWidth,
+                                       buttonHeight);
+    self.doneButton.centerY = self.headerGrayView.centerY;
+    
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
     {
 
@@ -150,41 +205,41 @@ static NSString *cellIdentifier = @"Cell";
         }
 
         self.funFactEntryField.frame = CGRectMake(0,
-                                                  15,
-                                                  self.view.width - 2 * buffer,
+                                                  titleHeight + titleBuffer,
+                                                  self.view.bounds.size.width - 2 * buffer,
                                                   80);
 
-        self.funFactEntryField.centerX = self.view.centerX;
+        self.funFactEntryField.centerX = self.headerGrayView.centerX;
 
         self.funFactEntryPlaceholderLabel.frame = CGRectMake(5,
                                                              0,
-                                                             self.funFactEntryField.width,
+                                                             self.funFactEntryField.bounds.size.width,
                                                              30);
 
         self.funFactsTableView.frame = CGRectMake(CGRectGetMinX(self.funFactEntryField.frame),
                                                   CGRectGetMaxY(self.funFactEntryField.frame) + 15,
-                                                  self.funFactEntryField.width,
+                                                  self.funFactEntryField.bounds.size.width,
                                                   tableViewHeight);
     }
     else
     {
 
         self.funFactEntryField.frame = CGRectMake(0,
-                                                  15,
-                                                  self.view.width - 2 * buffer,
+                                                  titleHeight + titleBuffer,
+                                                  self.view.bounds.size.width - 2 * buffer,
                                                   80);
 
-        self.funFactEntryField.centerX = self.view.centerX;
+        self.funFactEntryField.centerX = self.headerGrayView.centerX;
 
         self.funFactEntryPlaceholderLabel.frame = CGRectMake(5,
                                                              0,
-                                                             self.funFactEntryField.width,
+                                                             self.funFactEntryField.bounds.size.width,
                                                              30);
 
         self.funFactsTableView.frame = CGRectMake(CGRectGetMinX(self.funFactEntryField.frame),
                                                   CGRectGetMaxY(self.funFactEntryField.frame) + 15,
-                                                  self.funFactEntryField.width,
-                                                  140);
+                                                  self.funFactEntryField.bounds.size.width,
+                                                  CGRectGetMaxY(self.view.bounds) - (CGRectGetMaxY(self.funFactEntryField.frame) + 15) - 10);
     }
 }
 
