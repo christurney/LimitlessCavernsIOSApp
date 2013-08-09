@@ -70,7 +70,7 @@ static NSString *cellIdentifier = @"leaderboardCell";
     title.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
     title.textAlignment = NSTextAlignmentCenter;
     title.text = @"Leaderboard";
-    title.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25];
+    title.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:24];
     title.numberOfLines = 1;
     [headerGrayView addSubview:title];
     title.textColor = [UIColor redColor];

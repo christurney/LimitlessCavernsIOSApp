@@ -27,7 +27,7 @@ static NSString *cellIdentifier = @"Cell";
 @property (nonatomic, strong) UIView *headerGrayView;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) GrayGradientButton *cancelButton;
-@property (nonatomic, strong) GrayGradientButton *doneButton;
+@property (nonatomic, strong) BlueGradientButton *doneButton;
 
 @end
 
@@ -67,8 +67,8 @@ static NSString *cellIdentifier = @"Cell";
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     self.titleLabel.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
-    self.titleLabel.text = @"Manage facts";
-    self.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25];
+    self.titleLabel.text = @"Manage Facts";
+    self.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:24];
     self.titleLabel.textColor = [UIColor redColor];
     self.titleLabel.numberOfLines = 1;
     [self.headerGrayView addSubview:self.titleLabel];
@@ -81,7 +81,7 @@ static NSString *cellIdentifier = @"Cell";
            forControlEvents:UIControlEventTouchUpInside];
     [self.headerGrayView addSubview: self.cancelButton];
 
-    self.doneButton = [[GrayGradientButton alloc] initWithFrame:CGRectZero];
+    self.doneButton = [[BlueGradientButton alloc] initWithFrame:CGRectZero];
     [self.doneButton configure];
     [self.doneButton setTitle:@"Done" forState:UIControlStateNormal];
     [self.doneButton addTarget:self
@@ -169,7 +169,7 @@ static NSString *cellIdentifier = @"Cell";
     CGFloat buttonBuffer = 7.5;
     CGFloat cancelButtonWidth = 70;
     CGFloat doneButtonWidth = 70;
-    CGFloat buttonHeight = 30;
+    CGFloat buttonHeight = 40;
     CGFloat buffer = 30.0;
 
     self.headerGrayView.frame = CGRectMake(0,
