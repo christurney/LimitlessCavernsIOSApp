@@ -19,6 +19,7 @@ static NSString *cellIdentifier = @"Cell";
 @interface FunFactViewController ()
 
 @property (nonatomic, strong) UITextView *funFactEntryField;
+@property (nonatomic, strong) UILabel *funFactEntryPlaceholderLabel;
 @property (nonatomic, strong) NSMutableArray *funFacts;
 @property (nonatomic, strong) UITableView *funFactsTableView;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
@@ -33,7 +34,7 @@ static NSString *cellIdentifier = @"Cell";
     if (self){
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
-        self.title = @"Manage your facts";
+        self.title = @"Manage Facts";
     }
     return self;
 }
@@ -57,32 +58,14 @@ static NSString *cellIdentifier = @"Cell";
 
     self.view.backgroundColor = [UIColor whiteColor];
 
-    CGFloat buffer = 30.0;
     CGFloat corderRadius = 5.0;
     CGFloat borderWidth = 2.0;
     UIColor *borderColor = [[UIColor grayColor] colorWithAlphaComponent:0.5];
 
-    // directionsLabel label
-    UILabel *directionsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,
-                                                                         0,
-                                                                         self.view.width,
-                                                                         30)];
-    directionsLabel.centerY = self.view.height*.07;
-    directionsLabel.centerX = self.view.centerX;
-    [directionsLabel setNumberOfLines:1];
-    [directionsLabel setText:@"Edit facts in list or type new ones:"];
-    [directionsLabel setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]]];
-    [directionsLabel setTextAlignment:NSTextAlignmentCenter];
-    [self.view addSubview:directionsLabel];
-
     // fun fact entry field
-    self.funFactEntryField = [[UITextView alloc] initWithFrame:CGRectMake(0,
-                                                                          CGRectGetMaxY(directionsLabel.frame) + 15,
-                                                                          self.view.width - 2 * buffer,
-                                                                          80)];
-    self.funFactEntryField.centerX = self.view.centerX;
+    self.funFactEntryField = [[UITextView alloc] initWithFrame:CGRectZero];
     self.funFactEntryField.delegate = self;
-    self.funFactEntryField.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
+    self.funFactEntryField.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
     self.funFactEntryField.layer.cornerRadius = corderRadius;
     [self.funFactEntryField.layer setBorderColor:[borderColor CGColor]];
     [self.funFactEntryField.layer setBorderWidth:borderWidth];
@@ -90,11 +73,17 @@ static NSString *cellIdentifier = @"Cell";
     self.funFactEntryField.returnKeyType = UIReturnKeyDone;
     [self.view addSubview:self.funFactEntryField];
 
+    // directionsLabel label
+    self.funFactEntryPlaceholderLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    [self.funFactEntryPlaceholderLabel setNumberOfLines:1];
+    [self.funFactEntryPlaceholderLabel setText:@"Type new fact or select existing to edit"];
+    [self.funFactEntryPlaceholderLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:14]];
+    self.funFactEntryPlaceholderLabel.textColor = [UIColor lightGrayColor];
+    [self.funFactEntryPlaceholderLabel setTextAlignment:NSTextAlignmentLeft];
+    [self.funFactEntryField addSubview:self.funFactEntryPlaceholderLabel];
+
     // table view listing your fun facts
-    self.funFactsTableView = [[UITableView alloc] initWithFrame:CGRectMake(CGRectGetMinX(self.funFactEntryField.frame),
-                                                                           CGRectGetMaxY(self.funFactEntryField.frame) + 15,
-                                                                           self.funFactEntryField.width,
-                                                                           220) style:UITableViewStylePlain];
+    self.funFactsTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     [self.funFactsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:cellIdentifier];
     self.funFactsTableView.delegate = self;
     self.funFactsTableView.dataSource = self;
@@ -139,6 +128,64 @@ static NSString *cellIdentifier = @"Cell";
                                          }];
     [self startActivityIndicator];
     [operation start];
+}
+
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+
+    CGFloat buffer = 30.0;
+
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+    {
+
+        int tableViewHeight = 0;
+        if (IS_IPHONE5)
+        {
+            tableViewHeight = 370;
+        }
+        else
+        {
+            tableViewHeight = 280;
+        }
+
+        self.funFactEntryField.frame = CGRectMake(0,
+                                                  15,
+                                                  self.view.width - 2 * buffer,
+                                                  80);
+
+        self.funFactEntryField.centerX = self.view.centerX;
+
+        self.funFactEntryPlaceholderLabel.frame = CGRectMake(5,
+                                                             0,
+                                                             self.funFactEntryField.width,
+                                                             30);
+
+        self.funFactsTableView.frame = CGRectMake(CGRectGetMinX(self.funFactEntryField.frame),
+                                                  CGRectGetMaxY(self.funFactEntryField.frame) + 15,
+                                                  self.funFactEntryField.width,
+                                                  tableViewHeight);
+    }
+    else
+    {
+
+        self.funFactEntryField.frame = CGRectMake(0,
+                                                  15,
+                                                  self.view.width - 2 * buffer,
+                                                  80);
+
+        self.funFactEntryField.centerX = self.view.centerX;
+
+        self.funFactEntryPlaceholderLabel.frame = CGRectMake(5,
+                                                             0,
+                                                             self.funFactEntryField.width,
+                                                             30);
+
+        self.funFactsTableView.frame = CGRectMake(CGRectGetMinX(self.funFactEntryField.frame),
+                                                  CGRectGetMaxY(self.funFactEntryField.frame) + 15,
+                                                  self.funFactEntryField.width,
+                                                  140);
+    }
 }
 
 -(void)startActivityIndicator
@@ -201,7 +248,7 @@ static NSString *cellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
     cell.textLabel.text = fact;
-    cell.textLabel.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
+    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
     return cell;
 }
 
@@ -285,8 +332,24 @@ static NSString *cellIdentifier = @"Cell";
         }
 
         self.funFactEntryField.text = @"";
+        self.funFactEntryPlaceholderLabel.hidden = NO;
         [self.funFactsTableView reloadData];
         return NO;
+    }
+    return YES;
+}
+
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView
+{
+    self.funFactEntryPlaceholderLabel.hidden = YES;
+    return YES;
+}
+
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView
+{
+    if (self.funFactEntryField.text.length == 0)
+    {
+        self.funFactEntryPlaceholderLabel.hidden = NO;
     }
     return YES;
 }
