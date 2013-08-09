@@ -241,13 +241,34 @@
     meetTheseHalpersTitleLabelFrame.size.width -= leftBuffer;
     self.meetTheseHalpersTitleLabel.frame = meetTheseHalpersTitleLabelFrame;
 
+    int meetTheseHalpersViewHeight = 0;
+    int halperImageHeightWidth = 0;
+
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+    {
+        if (IS_IPHONE5)
+        {
+            meetTheseHalpersViewHeight = 288;
+            halperImageHeightWidth = 120;
+        }
+        else
+        {
+            meetTheseHalpersViewHeight = 200;
+            halperImageHeightWidth = 80;
+        }
+    }
+    else
+    {
+        meetTheseHalpersViewHeight = 200;
+        halperImageHeightWidth = 80;
+    }
+
     self.meetTheseHalpersView.frame = CGRectMake(0,
                                                  0,
                                                  self.view.width,
-                                                 200);
+                                                 meetTheseHalpersViewHeight);
 
     // This is so pictures scale up both horizontally and vertically when iPhone 5 is used
-    int halperImageHeightWidth = 80/self.meetTheseHalpersView.height * 200;
     int halperImageTopBuffer = (self.meetTheseHalpersView.height - (halperImageHeightWidth)*2)/3;
     int halperImageBuffer = (self.meetTheseHalpersView.width - (halperImageHeightWidth)*2)/3;
 

@@ -148,7 +148,15 @@
 - (void)viewWillLayoutSubviews
 {
     int imageBuffer = 30;
-    int imageHeight = 175;
+    int imageHeight = 0;
+    if (IS_IPHONE5)
+    {
+        imageHeight = 255;
+    }
+    else
+    {
+        imageHeight = 175;
+    }
     int buttonHeight = 40;
     int buttonSize = 50;
     self.titleLabel.frame = CGRectMake(0, .05 * self.view.height, self.view.width, 30);
@@ -186,7 +194,9 @@
         
         self.funFactButton.frame = CGRectMake(CGRectGetMinX(self.leaderboardButton.frame) - 2*buttonSize, CGRectGetMinY(self.leaderboardButton.frame), buttonSize, buttonSize);
     } else {
-        
+
+        int imageHeight = 175;
+
         self.mysteryImageView.frame = CGRectMake(imageBuffer,
                                                  CGRectGetMaxY(self.titleLabel.frame) + 20,
                                                  (self.view.height - imageBuffer*2),
