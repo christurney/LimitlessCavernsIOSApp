@@ -10,6 +10,8 @@
 #import "AppDelegate.h"
 #import "AFJSONRequestOperation.h"
 #import "UIImageView+AFNetworking.h"
+#import "UIView+Dropbox.h"
+#import "GradientButton.h"
 
 static NSString *cellIdentifier = @"leaderboardCell";
 
@@ -18,6 +20,7 @@ static NSString *cellIdentifier = @"leaderboardCell";
 @property (nonatomic, strong) NSMutableArray *leaders;
 @property (nonatomic, strong) UIImage *placeHolderImage;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+@property (nonatomic, strong) UITableView *tableView;
 
 @end
 
@@ -27,15 +30,14 @@ static NSString *cellIdentifier = @"leaderboardCell";
 {
     self = [super init];
     if (self){
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(closeLeaderboard)];
-        self.title = @"Leaderboard";
+
     }
     return self;
 }
 
 - (void)closeLeaderboard
 {
-    [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(UIImage*)placeHolderImage
@@ -49,6 +51,48 @@ static NSString *cellIdentifier = @"leaderboardCell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    CGFloat titleHeight = 60;
+    CGFloat titleBuffer = 0;
+    CGFloat titleCloseButtonMargin = 10;
+    CGFloat buttonWidth = 60;
+    CGFloat buttonHeight = 40;
+
+    UIView *headerGrayView = [[UIView alloc] initWithFrame:CGRectMake(0,
+                                                                     0,
+                                                                     self.view.width,
+                                                                     titleHeight)];
+    headerGrayView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
+    [self.view addSubview:headerGrayView];
+
+    UILabel *title = [[UILabel alloc] initWithFrame:headerGrayView.bounds];
+    title.width = 150;
+    title.centerX = headerGrayView.centerX;
+    title.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
+    title.textAlignment = NSTextAlignmentCenter;
+    title.text = @"Leaderboard";
+    title.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:25];
+    title.numberOfLines = 1;
+    [headerGrayView addSubview:title];
+    title.textColor = [UIColor redColor];
+
+
+    GrayGradientButton *closeButton = [[GrayGradientButton alloc] init];
+    closeButton.frame = CGRectMake(CGRectGetMaxX(title.frame) + titleCloseButtonMargin,
+                                   0,
+                                   buttonWidth,
+                                   buttonHeight);
+    closeButton.centerY = headerGrayView.centerY;
+    [closeButton configure];
+    [closeButton setTitle:@"Close" forState:UIControlStateNormal];
+    [closeButton addTarget:self
+                        action:@selector(closeLeaderboard)
+              forControlEvents:UIControlEventTouchUpInside];
+    [headerGrayView addSubview: closeButton];
+
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, titleHeight + titleBuffer, self.view.width, self.view.height - titleHeight - titleBuffer) style:UITableViewStylePlain];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.view addSubview:self.tableView];
 
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     activityIndicator.color = [UIColor blackColor];
@@ -88,6 +132,8 @@ static NSString *cellIdentifier = @"leaderboardCell";
                                              [alertView show];
                                          }];
     [operation start];
+
+
 
 }
 

@@ -128,9 +128,7 @@
 
 - (void)showLeaderBoard
 {
-    [self.navigationController presentViewController:[[UINavigationController alloc]
-                                                      initWithRootViewController:[[LeaderboardViewController alloc] init]]
-                                            animated:YES completion:nil];
+    [self.navigationController presentViewController:[[LeaderboardViewController alloc] init] animated:YES completion:nil];
 }
 
 - (void)showFunFacts
