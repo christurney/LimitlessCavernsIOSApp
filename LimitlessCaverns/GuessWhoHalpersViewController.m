@@ -16,6 +16,7 @@
 #import "FunFactsView.h"
 #import "GradientButton.h"
 
+
 @interface GuessWhoHalpersViewController () <UIAlertViewDelegate>
 
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;

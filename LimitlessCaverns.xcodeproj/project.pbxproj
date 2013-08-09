@@ -13,6 +13,8 @@
 		1B71BCAF17B30CEA00412975 /* placeholderImage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1B71BCAE17B30CEA00412975 /* placeholderImage.jpg */; };
 		1BFDF71817B47A4D00E46681 /* FunFactsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BFDF71717B47A4D00E46681 /* FunFactsView.m */; };
 		1BFDF71A17B4839000E46681 /* Mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BFDF71917B4839000E46681 /* Mask.png */; };
+		1BFDF71C17B4916600E46681 /* more_facts_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BFDF71B17B4916600E46681 /* more_facts_right.png */; };
+		1BFDF71E17B4926400E46681 /* more_facts_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BFDF71D17B4926400E46681 /* more_facts_left.png */; };
 		2D12C3F517B2CE230059B82D /* GuessWhoHalpersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D12C3F417B2CE230059B82D /* GuessWhoHalpersViewController.m */; };
 		2D12C41917B40D9D0059B82D /* head_w_question_mark.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D12C41817B40D9D0059B82D /* head_w_question_mark.png */; };
 		2D12C42617B495C10059B82D /* leaderboard_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D12C42517B495C10059B82D /* leaderboard_button.png */; };
@@ -56,6 +58,8 @@
 		1BFDF71617B47A4D00E46681 /* FunFactsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FunFactsView.h; path = ../FunFactsView.h; sourceTree = "<group>"; };
 		1BFDF71717B47A4D00E46681 /* FunFactsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FunFactsView.m; path = ../FunFactsView.m; sourceTree = "<group>"; };
 		1BFDF71917B4839000E46681 /* Mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Mask.png; sourceTree = "<group>"; };
+		1BFDF71B17B4916600E46681 /* more_facts_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = more_facts_right.png; sourceTree = "<group>"; };
+		1BFDF71D17B4926400E46681 /* more_facts_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = more_facts_left.png; sourceTree = "<group>"; };
 		2D12C3F317B2CE230059B82D /* GuessWhoHalpersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuessWhoHalpersViewController.h; sourceTree = "<group>"; };
 		2D12C3F417B2CE230059B82D /* GuessWhoHalpersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuessWhoHalpersViewController.m; sourceTree = "<group>"; };
 		2D12C41817B40D9D0059B82D /* head_w_question_mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = head_w_question_mark.png; sourceTree = "<group>"; };
@@ -195,6 +199,8 @@
 			isa = PBXGroup;
 			children = (
 				2D12C42517B495C10059B82D /* leaderboard_button.png */,
+				1BFDF71D17B4926400E46681 /* more_facts_left.png */,
+				1BFDF71B17B4916600E46681 /* more_facts_right.png */,
 				1BFDF71917B4839000E46681 /* Mask.png */,
 				2D12C41817B40D9D0059B82D /* head_w_question_mark.png */,
 				1B71BCAE17B30CEA00412975 /* placeholderImage.jpg */,
@@ -290,10 +296,12 @@
 				757A771617B0698E005FE9ED /* InfoPlist.strings in Resources */,
 				757A771E17B0698E005FE9ED /* Default.png in Resources */,
 				757A772017B0698E005FE9ED /* Default@2x.png in Resources */,
+				1BFDF71E17B4926400E46681 /* more_facts_left.png in Resources */,
 				757A772217B0698E005FE9ED /* Default-568h@2x.png in Resources */,
 				1B71BCAA17B1F9C100412975 /* dabney.jpg in Resources */,
 				1B71BCAF17B30CEA00412975 /* placeholderImage.jpg in Resources */,
 				2D12C41917B40D9D0059B82D /* head_w_question_mark.png in Resources */,
+				1BFDF71C17B4916600E46681 /* more_facts_right.png in Resources */,
 				1BFDF71A17B4839000E46681 /* Mask.png in Resources */,
 				2D12C42617B495C10059B82D /* leaderboard_button.png in Resources */,
 			);

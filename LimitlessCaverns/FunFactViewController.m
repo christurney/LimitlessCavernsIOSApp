@@ -31,7 +31,9 @@ static NSString *cellIdentifier = @"Cell";
 {
     self = [super init];
     if (self){
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(close)];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Submit" style:UIBarButtonItemStyleBordered target:self action:@selector(done)];
+        self.title = @"Manage facts";
     }
     return self;
 }
@@ -56,22 +58,22 @@ static NSString *cellIdentifier = @"Cell";
     self.view.backgroundColor = [UIColor whiteColor];
     int imageBuffer = 30;
 
-    // Title label
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,
-                                                                    0,
-                                                                    self.view.width - 2 * imageBuffer,
-                                                                    65)];
-    titleLabel.centerY = self.view.height*.12;
-    titleLabel.centerX = self.view.width / 2.0;
-    [titleLabel setNumberOfLines:2];
-    [titleLabel setText:@"Manage your fun facts:"];
-    [titleLabel setFont:[UIFont boldSystemFontOfSize:25]];
-    [titleLabel setTextAlignment:NSTextAlignmentCenter];
-    [self.view addSubview:titleLabel];
+    // directionsLabel label
+    UILabel *directionsLabel = [[UILabel alloc] initWithFrame:CGRectMake(0,
+                                                                         0,
+                                                                         self.view.width - 2 * imageBuffer,
+                                                                         45)];
+    directionsLabel.centerY = self.view.height*.07;
+    directionsLabel.centerX = self.view.width / 2.0;
+    [directionsLabel setNumberOfLines:2];
+    [directionsLabel setText:@"Select facts in list to edit, swipe across facts in list to delete, or add new facts:"];
+    [directionsLabel setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]]];
+    [directionsLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.view addSubview:directionsLabel];
 
     // fun fact entry field
     self.funFactEntryField = [[UITextView alloc] initWithFrame:CGRectMake(0,
-                                                                          CGRectGetMaxY(titleLabel.frame) + 15,
+                                                                          CGRectGetMaxY(directionsLabel.frame) + 15,
                                                                           self.view.width - 2 * imageBuffer,
                                                                           80)];
     self.funFactEntryField.centerX = self.view.width / 2.0;
@@ -87,42 +89,38 @@ static NSString *cellIdentifier = @"Cell";
 
     int buttonWidth = 100;
     int buttonHeight = 40;
-    int buttonInset = 20;
     int buttonOffset = 15;
 
-    // Go button
-    UIButton *goButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    // add fact button
+    UIButton *addButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 
-    [goButton setFrame:CGRectMake(buttonInset + CGRectGetMinX(self.funFactEntryField.frame),
-                                  CGRectGetMaxY(self.funFactEntryField.frame) + buttonOffset,
-                                  buttonWidth,
-                                  buttonHeight)];
-    [goButton setTitle:@"Submit" forState:UIControlStateNormal];
-    [goButton addTarget:self
-                 action:@selector(goButtonClicked)
-       forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:goButton];
+    [addButton setFrame:CGRectMake(0,
+                                   CGRectGetMaxY(self.funFactEntryField.frame) + buttonOffset,
+                                   buttonWidth,
+                                   buttonHeight)];
+    addButton.centerX = self.view.centerX;
 
-    // Deselect button
-    UIButton *deselectButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-
-    [deselectButton setFrame:CGRectMake(CGRectGetMaxX(self.funFactEntryField.frame) - buttonInset - buttonWidth,
-                                        CGRectGetMaxY(self.funFactEntryField.frame) + buttonOffset,
-                                        buttonWidth,
-                                        buttonHeight)];
-
-    [deselectButton setTitle:@"Deselect Fact" forState:UIControlStateNormal];
-    [deselectButton addTarget:self
-                       action:@selector(deselectButtonButtonClicked)
-             forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:deselectButton];
+    [addButton setTitle:@"New Fact" forState:UIControlStateNormal];
+    [addButton addTarget:self
+                  action:@selector(addButtonClicked)
+        forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:addButton];
 
     // table view listing your fun facts
-    self.funFactsTableView = [[UITableView alloc] initWithFrame:CGRectMake(CGRectGetMinX(self.funFactEntryField.frame), CGRectGetMaxY(goButton.frame) + 15, self.funFactEntryField.width, 150) style:UITableViewStylePlain];
+    self.funFactsTableView = [[UITableView alloc] initWithFrame:CGRectMake(CGRectGetMinX(self.funFactEntryField.frame), CGRectGetMaxY(addButton.frame) + 15, self.funFactEntryField.width, 150) style:UITableViewStylePlain];
     [self.funFactsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:cellIdentifier];
     self.funFactsTableView.delegate = self;
     self.funFactsTableView.dataSource = self;
     self.funFactsTableView.layer.borderColor = [[UIColor redColor] CGColor];
+
+    self.funFactsTableView.layer.cornerRadius = 5;
+    [self.funFactsTableView.layer setBorderColor:[[[UIColor grayColor] colorWithAlphaComponent:0.5] CGColor]];
+    [self.funFactsTableView.layer setBorderWidth:2.0];
+    self.funFactsTableView.clipsToBounds = YES;
+
+
+
+    
     self.funFactsTableView.layer.borderWidth = 3.0;
     [self.view addSubview:self.funFactsTableView];
 
@@ -190,7 +188,6 @@ static NSString *cellIdentifier = @"Cell";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     self.funFactEntryField.text = [self.funFacts objectAtIndex:indexPath.row];
-
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -201,6 +198,7 @@ static NSString *cellIdentifier = @"Cell";
     NSString *fact = [self.funFacts objectAtIndex:indexPath.row];
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
     cell.textLabel.text = fact;
     cell.textLabel.font = [UIFont boldSystemFontOfSize:14];
     return cell;
@@ -219,7 +217,17 @@ static NSString *cellIdentifier = @"Cell";
     return 0;
 }
 
-- (void)goButtonClicked
+-(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    self.funFactEntryField.text = @"";
+}
+
+-(void)tableView:(UITableView *)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    self.funFactEntryField.text = @"";
+}
+
+- (void)done
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *userID = [defaults valueForKey:userIdKey];
@@ -251,10 +259,11 @@ static NSString *cellIdentifier = @"Cell";
     [operation start];
 }
 
-- (void)deselectButtonButtonClicked
+- (void)addButtonClicked
 {
     [self.funFactsTableView deselectRowAtIndexPath:[self.funFactsTableView indexPathForSelectedRow] animated:YES];
     self.funFactEntryField.text = @"";
+    [self.funFactEntryField becomeFirstResponder];
 }
 
 /*
