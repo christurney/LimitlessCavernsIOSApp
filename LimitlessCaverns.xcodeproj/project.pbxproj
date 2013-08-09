@@ -82,7 +82,7 @@
 		7574905B17B18D2900CAFA4F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		7574905D17B1A1CB00CAFA4F /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		7574905E17B1A1CB00CAFA4F /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
-		757A770817B0698E005FE9ED /* LimitlessCaverns.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LimitlessCaverns.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		757A770817B0698E005FE9ED /* Guess Who?.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Guess Who?.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		757A770B17B0698E005FE9ED /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		757A770D17B0698E005FE9ED /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		757A770F17B0698E005FE9ED /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -157,7 +157,7 @@
 		757A770917B0698E005FE9ED /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				757A770817B0698E005FE9ED /* LimitlessCaverns.app */,
+				757A770817B0698E005FE9ED /* Guess Who?.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -257,9 +257,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		757A770717B0698E005FE9ED /* Guess Who? */ = {
+		757A770717B0698E005FE9ED /* Guess Who */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 757A772517B0698E005FE9ED /* Build configuration list for PBXNativeTarget "Guess Who?" */;
+			buildConfigurationList = 757A772517B0698E005FE9ED /* Build configuration list for PBXNativeTarget "Guess Who" */;
 			buildPhases = (
 				757A770417B0698E005FE9ED /* Sources */,
 				757A770517B0698E005FE9ED /* Frameworks */,
@@ -269,9 +269,9 @@
 			);
 			dependencies = (
 			);
-			name = "Guess Who?";
+			name = "Guess Who";
 			productName = LimitlessCaverns;
-			productReference = 757A770817B0698E005FE9ED /* LimitlessCaverns.app */;
+			productReference = 757A770817B0698E005FE9ED /* Guess Who?.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -295,7 +295,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				757A770717B0698E005FE9ED /* Guess Who? */,
+				757A770717B0698E005FE9ED /* Guess Who */,
 			);
 		};
 /* End PBXProject section */
@@ -475,7 +475,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		757A772517B0698E005FE9ED /* Build configuration list for PBXNativeTarget "Guess Who?" */ = {
+		757A772517B0698E005FE9ED /* Build configuration list for PBXNativeTarget "Guess Who" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				757A772617B0698E005FE9ED /* Debug */,
