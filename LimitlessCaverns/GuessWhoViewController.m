@@ -21,7 +21,7 @@
 @property (nonatomic, strong) UIButton *leaderboardButton;
 @property (nonatomic, strong) NSArray *views;
 @property (nonatomic, strong) UIAlertView *knowThemAlertView;
-//@property (nonatomic, strong) UIButton *funFactButton;
+@property (nonatomic, strong) UIButton *funFactButton;
 @property (nonatomic, strong) FunFactsView *funFactsView;
 @property (nonatomic, strong) NSArray *funFacts;
 @property (nonatomic) BOOL foundEveryone;
@@ -105,12 +105,12 @@
     for (UIView *view in self.views){
         view.hidden = YES;
     }
-    
-//    self.funFactButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [self.view addSubview:self.funFactButton];
-//    [self.funFactButton.layer setBorderColor:[UIColor blueColor].CGColor];
-//    [self.funFactButton.layer setBorderWidth:3];
-//    [self.funFactButton addTarget:self action:@selector(funFactsClicked) forControlEvents:UIControlEventTouchUpInside];
+
+    self.funFactButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *funFactButtonImage = [UIImage imageNamed:@"list"];
+    [self.funFactButton setBackgroundImage:funFactButtonImage forState:UIControlStateNormal];
+    [self.view addSubview:self.funFactButton];
+    [self.funFactButton addTarget:self action:@selector(funFactsClicked) forControlEvents:UIControlEventTouchUpInside];
 
     [self.funFactsView setFunFacts:self.funFacts];
 }
@@ -150,11 +150,10 @@
     [self.delegate guessWhoViewControllerPressedLeaderboardButton:self];
 }
 
-//- (void)funFactsClicked
-//{
-//    [self.delegate guessWhoViewControllerPressedFunFactsButton:self];
-//}
-
+- (void)funFactsClicked
+{
+    [self.delegate guessWhoViewControllerPressedFunFactsButton:self];
+}
 
 - (void)viewWillLayoutSubviews
 {
@@ -169,7 +168,7 @@
         imageHeight = 175;
     }
     int buttonHeight = 40;
-    int buttonSize = 50;
+    int buttonSize = 60;
     self.titleLabel.frame = CGRectMake(0, .05 * self.view.height, self.view.width, 30);
 
     
@@ -198,12 +197,15 @@
                                         CGRectGetWidth(self.mysteryImageView.frame)/2.0 - 5,
                                         buttonHeight)];
         
-        self.leaderboardButton.frame = CGRectMake(CGRectGetMaxX(self.mysteryImageView.frame) - buttonSize,
-                                                                                 CGRectGetMaxY(self.playButton.frame) + 15,
-                                                                                 60,
-                                                                                 60);
+        self.leaderboardButton.frame = CGRectMake(CGRectGetMaxX(self.playButton.frame) - buttonSize,
+                                                  CGRectGetMaxY(self.playButton.frame) + 15,
+                                                  buttonSize,
+                                                  buttonSize);
         
-//        self.funFactButton.frame = CGRectMake(CGRectGetMinX(self.leaderboardButton.frame) - 2*buttonSize, CGRectGetMinY(self.leaderboardButton.frame), buttonSize, buttonSize);
+        self.funFactButton.frame = CGRectMake(self.knowThemButton.origin.x,
+                                              CGRectGetMinY(self.leaderboardButton.frame) + 5,
+                                              60,
+                                              60);
     } else {
 
         int imageHeight = 175;
@@ -237,6 +239,10 @@
                                             buttonSize,
                                             buttonSize);
 
+        self.funFactButton.frame = CGRectMake(self.knowThemButton.origin.x,
+                                              self.knowThemButton.origin.y,
+                                              buttonSize,
+                                              buttonSize);
         
     }
 }
