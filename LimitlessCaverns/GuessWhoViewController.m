@@ -21,7 +21,7 @@
 @property (nonatomic, strong) UIButton *leaderboardButton;
 @property (nonatomic, strong) NSArray *views;
 @property (nonatomic, strong) UIAlertView *knowThemAlertView;
-@property (nonatomic, strong) UIButton *funFactButton;
+//@property (nonatomic, strong) UIButton *funFactButton;
 @property (nonatomic, strong) FunFactsView *funFactsView;
 @property (nonatomic, strong) NSArray *funFacts;
 
@@ -45,7 +45,6 @@
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [self.titleLabel setText:self.titleString];
-    //[self.titleLabel setFont:[UIFont boldSystemFontOfSize:25]];
     [self.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:25]];
     self.titleLabel.textColor = [UIColor redColor];
     [self.titleLabel setTextAlignment:NSTextAlignmentCenter];
@@ -99,12 +98,12 @@
         view.hidden = YES;
     }
     
-    self.funFactButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.view addSubview:self.funFactButton];
-    [self.funFactButton.layer setBorderColor:[UIColor blueColor].CGColor];
-    [self.funFactButton.layer setBorderWidth:3];
-    [self.funFactButton addTarget:self action:@selector(funFactsClicked) forControlEvents:UIControlEventTouchUpInside];
-    
+//    self.funFactButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [self.view addSubview:self.funFactButton];
+//    [self.funFactButton.layer setBorderColor:[UIColor blueColor].CGColor];
+//    [self.funFactButton.layer setBorderWidth:3];
+//    [self.funFactButton addTarget:self action:@selector(funFactsClicked) forControlEvents:UIControlEventTouchUpInside];
+
     [self.funFactsView setFunFacts:self.funFacts];
 }
 
@@ -139,10 +138,10 @@
     [self.delegate guessWhoViewControllerPressedLeaderboardButton:self];
 }
 
-- (void)funFactsClicked
-{
-    [self.delegate guessWhoViewControllerPressedFunFactsButton:self];
-}
+//- (void)funFactsClicked
+//{
+//    [self.delegate guessWhoViewControllerPressedFunFactsButton:self];
+//}
 
 
 - (void)viewWillLayoutSubviews
@@ -192,7 +191,7 @@
                                                                                  60,
                                                                                  60);
         
-        self.funFactButton.frame = CGRectMake(CGRectGetMinX(self.leaderboardButton.frame) - 2*buttonSize, CGRectGetMinY(self.leaderboardButton.frame), buttonSize, buttonSize);
+//        self.funFactButton.frame = CGRectMake(CGRectGetMinX(self.leaderboardButton.frame) - 2*buttonSize, CGRectGetMinY(self.leaderboardButton.frame), buttonSize, buttonSize);
     } else {
 
         int imageHeight = 175;
