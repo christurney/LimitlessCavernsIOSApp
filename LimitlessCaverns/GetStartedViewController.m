@@ -11,6 +11,7 @@
 #import "GetStartedViewController.h"
 #import "UIView+Dropbox.h"
 #import <QuartzCore/QuartzCore.h>
+#import "GradientButton.h"
 
 @interface GetStartedViewController ()
 
@@ -42,7 +43,7 @@
     titleLabel.centerY = self.view.height*.15;
 
     [titleLabel setText:@"Guess Who?"];
-    [titleLabel setFont:[UIFont boldSystemFontOfSize:35]];
+    [titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:35]];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:titleLabel];
 
@@ -62,8 +63,8 @@
 
     // Start button
 
-    UIButton *startButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-
+    BlueGradientButton *startButton = [[BlueGradientButton alloc] init];
+    [startButton configure];
     [startButton setFrame:CGRectMake(titleLabel.origin.x,
                                      CGRectGetMaxY(self.emailEntryField.frame) + 20,
                                      self.view.width - imageBuffer*2,
@@ -84,8 +85,8 @@
                                                                                             .frame) + 20,
                                                                               (self.view.width - imageBuffer*2),
                                                                               imageHeight)];
-    [welcomeImage.layer setBorderColor:[UIColor redColor].CGColor];
-    [welcomeImage.layer setBorderWidth:3];
+    welcomeImage.contentMode = UIViewContentModeScaleAspectFit;
+    [welcomeImage setImage:[UIImage imageNamed:@"panda2.jpg"]];
     [self.view addSubview:welcomeImage];
 }
 
