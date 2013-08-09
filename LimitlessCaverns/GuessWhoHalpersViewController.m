@@ -44,6 +44,7 @@
 @property (nonatomic, strong) NSMutableArray *views;
 
 @property (nonatomic, strong) NSDictionary *userDataDictionary;
+@property (nonatomic) BOOL handlingBump;
 
 @end
 
@@ -68,10 +69,19 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
+    // Add notification observer
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(verifySuccessFailure:) name:@"VerifySuccessFailureNotification" object:nil];
+
+    // Set up loading indicator
     UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     activityIndicator.color = [UIColor blackColor];
     [self.view addSubview:activityIndicator];
@@ -464,22 +474,30 @@
     [self.failureAlertView show];
 }
 
-- (void)verifySuccessFailure:(NSString *)bumpedUserID
+- (void)verifySuccessFailure:(NSNotification *)notification
 {
-    if ([[self.userDataDictionary objectForKey:@"target_id"] isEqualToString:bumpedUserID])
+    // Ensure that this isn't called when user has Leaderboard opened.
+    if (!self.navigationController.presentedViewController && !self.handlingBump)
     {
-        [self userSucceeded];
-    }
-    else
-    {
-        [self showFailureAlertView];
+        self.handlingBump = YES;
+        NSDictionary *dict = [notification userInfo];
+        NSString *bumpedUserID = [dict objectForKey:@"bumped_user_id"];
+
+        if ([[self.userDataDictionary objectForKey:targetIdKey] isEqualToString:bumpedUserID])
+        {
+            [self userSucceeded];
+        }
+        else
+        {
+            [self showFailureAlertView];
+        }
     }
 }
 
 - (void)userSucceeded
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *userID = [defaults objectForKey:@"user_id"];
+    NSString *userID = [defaults objectForKey:userIdKey];
     NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[NSString stringWithFormat:@"/users/%@/complete_assignment", userID]]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     //TODO add a status overlay
@@ -508,8 +526,6 @@
                                              [self.activityIndicator stopAnimating];
                                          }];
     [operation start];
-
-    [self showSuccessAlertView];
 }
 
 #pragma mark - Alert view delegate
@@ -536,8 +552,11 @@
         else
         {
             //Show next person
-            [self.delegate guessWhoHalpersViewControllerPressedSkipButton:self];
+            [self.delegate guessWhoHalpersSucceeded:self];
         }
+    }
+    else if (alertView == self.failureAlertView){
+        self.handlingBump = NO;
     }
 }
 

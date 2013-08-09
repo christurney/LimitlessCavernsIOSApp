@@ -7,11 +7,13 @@
 //
 
 NSString *const requestURLString = @"https://limitless-caverns-4433.herokuapp.com";
+NSString *const userIdKey = @"user_id";
+NSString *const targetIdKey = @"target_id";
 
 #import "AppDelegate.h"
 #import "AFJSONRequestOperation.h"
 
-#ifndef TARGET_IPHONE_SIMULATOR
+#if TARGET_IPHONE_SIMULATOR == 0
 #import "BumpClient.h"
 #endif
 #import "GetStartedViewController.h"
@@ -20,27 +22,47 @@ NSString *const requestURLString = @"https://limitless-caverns-4433.herokuapp.co
 @implementation AppDelegate
 
 - (void) configureBump {
-#ifndef TARGET_IPHONE_SIMULATOR
-    // userID is a string that you could use as the user's name, or an ID that is semantic within your environment
+#if TARGET_IPHONE_SIMULATOR == 0
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
-    [BumpClient configureWithAPIKey:@"8990ba777c5340f98eb21033cfd9b06e" andUserID:[defaults objectForKey@"user_id"]];
+    NSString *userId = [defaults objectForKey:userIdKey];
+    if (!userId){
+        userId = @"default";
+    }
+    [BumpClient configureWithAPIKey:@"8990ba777c5340f98eb21033cfd9b06e" andUserID:userId];
 
     [[BumpClient sharedClient] setMatchBlock:^(BumpChannelID channel) {
-        NSLog(@"Matched with user: %@", [[BumpClient sharedClient] userIDForChannel:channel]);
         [[BumpClient sharedClient] confirmMatch:YES onChannel:channel];
+
     }];
 
     [[BumpClient sharedClient] setChannelConfirmedBlock:^(BumpChannelID channel) {
-        NSLog(@"Channel with %@ confirmed.", [[BumpClient sharedClient] userIDForChannel:channel]);
-        [[BumpClient sharedClient] sendData:[[NSString stringWithFormat:@"12345"] dataUsingEncoding:NSUTF8StringEncoding]
+        NSData *sendData = [userId dataUsingEncoding:NSUTF8StringEncoding];
+        
+        if (sendData){
+            NSString *string = [NSString stringWithUTF8String:[sendData bytes]];
+            NSLog(@"sending data: %@ string: %@", sendData, string);
+            [[BumpClient sharedClient] sendData:sendData
                                   toChannel:channel];
+        } else {
+            NSLog(@"NO DATA TO SEND");
+        }
     }];
 
     [[BumpClient sharedClient] setDataReceivedBlock:^(BumpChannelID channel, NSData *data) {
-        NSLog(@"Data received from %@: %@",
-              [[BumpClient sharedClient] userIDForChannel:channel],
-              [NSString stringWithCString:[data bytes] encoding:NSUTF8StringEncoding]);
+        
+        NSString *bumpedUserID = [[NSString alloc] initWithBytes:data.bytes length:data.length encoding:NSUTF8StringEncoding];
+
+        NSLog(@"Data received from %@: data:%@ %@",
+              [[BumpClient sharedClient] userIDForChannel:channel], data, 
+              bumpedUserID);
+        
+        if (bumpedUserID){
+            NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+            [notificationCenter postNotificationName:@"VerifySuccessFailureNotification"
+                                              object:nil
+                                            userInfo:[NSDictionary dictionaryWithObject:bumpedUserID forKey:@"bumped_user_id"]];
+        }
+
     }];
 
 
@@ -77,7 +99,6 @@ NSString *const requestURLString = @"https://limitless-caverns-4433.herokuapp.co
     self.navigationController.navigationBarHidden = YES;
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
-    [self configureBump];
     [self checkLoginState];
     return YES;
 }
@@ -97,7 +118,7 @@ NSString *const requestURLString = @"https://limitless-caverns-4433.herokuapp.co
 - (void)checkLoginState
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *userID = [defaults valueForKey:@"userID"];
+    NSString *userID = [defaults valueForKey:userIdKey];
     
     if (!userID)
     {
@@ -109,6 +130,7 @@ NSString *const requestURLString = @"https://limitless-caverns-4433.herokuapp.co
     }
     else
     {
+        [self configureBump];
         [self.viewController showUserInfo];
     }
 }
@@ -126,16 +148,12 @@ NSString *const requestURLString = @"https://limitless-caverns-4433.herokuapp.co
                                          success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
 
                                              NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                                             [defaults setObject:userID forKey:@"userID"];
+                                             [defaults setObject:userID forKey:userIdKey];
                                              [defaults synchronize];
-                                             [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+                                             [self configureBump];
+                                             [self.navigationController dismissViewControllerAnimated:NO completion:nil];
                                              [self.viewController showUserInfo];
-//                                             if([self.navigationController.presentingViewController isKindOfClass:[GetStartedViewController class]])
-//                                             {
-//                                                 [self.navigationController.visibleViewController dismissViewControllerAnimated:YES completion:^{
-//                                                     nil;
-//                                                 }];
-//                                             }
+                                             
                                          }
                                          failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
                                              UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"

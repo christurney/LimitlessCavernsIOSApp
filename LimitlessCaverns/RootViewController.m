@@ -114,7 +114,7 @@
 - (void)showUserInfo
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *userID = [defaults valueForKey:@"userID"];
+    NSString *userID = [defaults valueForKey:userIdKey];
     if (![defaults valueForKey:@"mysteryUserData"])
     {
         NSLog(@"Make server request!");
@@ -164,16 +164,20 @@
 
                                          success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
                                              // store user info and update the text box
+                                             self.view.userInteractionEnabled = YES;
+                                             self.currentlyDisplayedController.view.alpha = 1;
+                                             [self.activityIndicator stopAnimating];
 
+                                             if (JSON[@"error"]){
+                                                 [[[UIAlertView alloc] initWithTitle:@"You found everyone!" message:@"Aren't you a social butterfly?" delegate:nil cancelButtonTitle:@"Flutter Flutter" otherButtonTitles:nil] show];
+                                                 return;
+                                             }
                                              NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                                              
                                              [defaults setObject:JSON forKey:@"mysteryUserData"];
                                              [defaults synchronize];
 
                                              [self showControllerForData:JSON showHalpers:NO];
-                                             self.view.userInteractionEnabled = YES;
-                                             self.currentlyDisplayedController.view.alpha = 1;
-                                             [self.activityIndicator stopAnimating];
                                          }
                                          failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
                                              UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
@@ -200,7 +204,7 @@
 - (void)guessWhoViewControllerPressedKnowThemButton:(GuessWhoViewController *)guessWhoVC
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *userID = [defaults valueForKey:@"userID"];
+    NSString *userID = [defaults valueForKey:userIdKey];
     [self getMysteryUserInfo:userID userDidSkip:YES];
 }
 
@@ -214,13 +218,20 @@
 - (void)guessWhoHalpersViewControllerPressedSkipButton:(GuessWhoHalpersViewController *)guessWhoHalpersVC
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *userID = [defaults valueForKey:@"userID"];
+    NSString *userID = [defaults valueForKey:userIdKey];
     [self getMysteryUserInfo:userID userDidSkip:YES];
 }
 
 - (void)guessWhoViewControllerPressedFunFactsButton:(GuessWhoViewController *)guessWhoVC
 {
     [self showFunFacts];
+}
+
+- (void)guessWhoHalpersSucceeded:(GuessWhoHalpersViewController *)guessWhoHalpersVC
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *userID = [defaults valueForKey:userIdKey];
+    [self getMysteryUserInfo:userID userDidSkip:NO];
 }
 
 - (void)guessWhoViewControllerPressedLeaderboardButton:(GuessWhoViewController *)guessWhoVC
