@@ -87,9 +87,10 @@
     // leaderboard picture
     
     self.leaderboardButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *leaderboardButtonImage = [UIImage imageNamed:@"leaderboard_button"];
+    [self.leaderboardButton setBackgroundImage:leaderboardButtonImage forState:UIControlStateNormal];
     [self.view addSubview:self.leaderboardButton];
-    [self.leaderboardButton.layer setBorderColor:[UIColor redColor].CGColor];
-    [self.leaderboardButton.layer setBorderWidth:3];
+
     [self.leaderboardButton addTarget:self action:@selector(leaderboardClicked)
                      forControlEvents:UIControlEventTouchUpInside];
     
@@ -189,8 +190,8 @@
         
         self.leaderboardButton.frame = CGRectMake(CGRectGetMaxX(self.mysteryImageView.frame) - buttonSize,
                                                                                  CGRectGetMaxY(self.playButton.frame) + 15,
-                                                                                 buttonSize,
-                                                                                 buttonSize);
+                                                                                 60,
+                                                                                 60);
         
         self.funFactButton.frame = CGRectMake(CGRectGetMinX(self.leaderboardButton.frame) - 2*buttonSize, CGRectGetMinY(self.leaderboardButton.frame), buttonSize, buttonSize);
     } else {

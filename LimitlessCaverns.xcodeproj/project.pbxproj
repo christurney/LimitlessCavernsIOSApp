@@ -15,6 +15,7 @@
 		1BFDF71A17B4839000E46681 /* Mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BFDF71917B4839000E46681 /* Mask.png */; };
 		2D12C3F517B2CE230059B82D /* GuessWhoHalpersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D12C3F417B2CE230059B82D /* GuessWhoHalpersViewController.m */; };
 		2D12C41917B40D9D0059B82D /* head_w_question_mark.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D12C41817B40D9D0059B82D /* head_w_question_mark.png */; };
+		2D12C42617B495C10059B82D /* leaderboard_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D12C42517B495C10059B82D /* leaderboard_button.png */; };
 		7523DA8217B31AA000503927 /* FunFactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7523DA8117B31AA000503927 /* FunFactViewController.m */; };
 		7574905717B1799F00CAFA4F /* libBump.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7574905617B1799F00CAFA4F /* libBump.a */; };
 		7574905A17B188BA00CAFA4F /* UIView+Dropbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 7574905917B188BA00CAFA4F /* UIView+Dropbox.m */; };
@@ -57,6 +58,7 @@
 		2D12C3F317B2CE230059B82D /* GuessWhoHalpersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuessWhoHalpersViewController.h; sourceTree = "<group>"; };
 		2D12C3F417B2CE230059B82D /* GuessWhoHalpersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuessWhoHalpersViewController.m; sourceTree = "<group>"; };
 		2D12C41817B40D9D0059B82D /* head_w_question_mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = head_w_question_mark.png; sourceTree = "<group>"; };
+		2D12C42517B495C10059B82D /* leaderboard_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leaderboard_button.png; sourceTree = "<group>"; };
 		7523DA8017B31AA000503927 /* FunFactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FunFactViewController.h; sourceTree = "<group>"; };
 		7523DA8117B31AA000503927 /* FunFactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FunFactViewController.m; sourceTree = "<group>"; };
 		7574905517B1799F00CAFA4F /* BumpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BumpClient.h; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 		757A771217B0698E005FE9ED /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2D12C42517B495C10059B82D /* leaderboard_button.png */,
 				1BFDF71917B4839000E46681 /* Mask.png */,
 				2D12C41817B40D9D0059B82D /* head_w_question_mark.png */,
 				1B71BCAE17B30CEA00412975 /* placeholderImage.jpg */,
@@ -287,6 +290,7 @@
 				1B71BCAF17B30CEA00412975 /* placeholderImage.jpg in Resources */,
 				2D12C41917B40D9D0059B82D /* head_w_question_mark.png in Resources */,
 				1BFDF71A17B4839000E46681 /* Mask.png in Resources */,
+				2D12C42617B495C10059B82D /* leaderboard_button.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
