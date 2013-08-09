@@ -165,12 +165,16 @@
                                              self.view.userInteractionEnabled = YES;
                                              self.currentlyDisplayedController.view.alpha = 1;
                                              [self.activityIndicator stopAnimating];
+                                             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
-                                             if (JSON[@"error"]){
+                                             if ([JSON[@"error"] intValue] == -1){
                                                  [[[UIAlertView alloc] initWithTitle:@"You found everyone!" message:@"Aren't you a social butterfly?" delegate:nil cancelButtonTitle:@"Flutter Flutter" otherButtonTitles:nil] show];
+                                                 NSDictionary *data = @{@"facts":@[@"You Found Everyone"], targetIdKey:@"-1", @"found_everyone":@YES};
+                                                 [defaults setObject:data forKey:@"mysteryUserData"];
+                                                 [defaults synchronize];
+                                                 [self showControllerForData:data showHalpers:NO];
                                                  return;
                                              }
-                                             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                                              
                                              [defaults setObject:JSON forKey:@"mysteryUserData"];
                                              [defaults synchronize];

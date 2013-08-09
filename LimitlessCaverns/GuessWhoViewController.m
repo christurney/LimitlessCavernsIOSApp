@@ -24,6 +24,7 @@
 //@property (nonatomic, strong) UIButton *funFactButton;
 @property (nonatomic, strong) FunFactsView *funFactsView;
 @property (nonatomic, strong) NSArray *funFacts;
+@property (nonatomic) BOOL foundEveryone;
 
 @end
 
@@ -34,6 +35,7 @@
     self = [super init];
     if (self){
         self.funFacts = dictionary[@"facts"];
+        self.foundEveryone = [dictionary[@"found_everyone"] boolValue];
         self.titleString = @"Mystery Dropboxer";
     }
     return self;
@@ -66,7 +68,11 @@
     self.knowThemButton = [[GrayGradientButton alloc] init];
     [self.knowThemButton configure];
     [self.knowThemButton setFrame:CGRectZero];
-    [self.knowThemButton setTitle:@"Know Them" forState:UIControlStateNormal];
+    if (self.foundEveryone){
+        [self.knowThemButton setTitle:@"Check Again" forState:UIControlStateNormal];
+    } else {
+        [self.knowThemButton setTitle:@"Know Them" forState:UIControlStateNormal];
+    }
     [self.knowThemButton addTarget:self
                        action:@selector(knowThemClicked)
              forControlEvents:UIControlEventTouchUpInside];
@@ -80,7 +86,9 @@
     [self.playButton addTarget:self
                    action:@selector(playClicked)
          forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.playButton];
+    if (!self.foundEveryone){
+        [self.view addSubview:self.playButton];
+    }
     
     // leaderboard picture
     
@@ -109,6 +117,10 @@
 
 - (void)knowThemClicked
 {
+    if (self.foundEveryone){
+        [self.delegate guessWhoViewControllerPressedKnowThemButton:self];
+        return;
+    }
     self.knowThemAlertView = [[UIAlertView alloc] initWithTitle:@"Sure You Want To Skip?"
                                                         message:@"Get 1 point (and some exercise) by bumping phones with the Mystery Dropboxer!"
                                                        delegate:self

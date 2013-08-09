@@ -11,7 +11,7 @@
 #import "GuessWhoHalpersViewController.h"
 
 @interface RootViewController : UIViewController <GuessWhoViewControllerDelegate, GuessWhoHalpersViewControllerDelegate>
-- (void)getMysteryUserInfo:(NSString *)userID userDidSkip:(BOOL)userDidSkip;
+- (void)getMysteryUserInfo:(NSString *)userID userDidSkip:(BOOL)userDidSkip neverAgain:(BOOL)neverAgain;
 - (void)showUserInfo;
 @end
 
