@@ -12,10 +12,16 @@
 #import "AFHTTPClient.h"
 #import "AppDelegate.h"
 #import "AFHTTPRequestOperation.h"
+#import "AFJSONRequestOperation.h"
+
+static NSString *cellIdentifier = @"Cell";
 
 @interface FunFactViewController ()
 
 @property (nonatomic, strong) UITextView *funFactEntryField;
+@property (nonatomic, strong) NSMutableArray *funFacts;
+@property (nonatomic, strong) UITableView *funFactsTableView;
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
 @end
 
@@ -38,6 +44,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityIndicator.color = [UIColor blackColor];
+    [self.view addSubview:activityIndicator];
+    activityIndicator.center = [self.view convertPoint:self.view.center fromView:self.view.superview];
+    activityIndicator.hidesWhenStopped = YES;
+    self.activityIndicator = activityIndicator;
+    self.activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
+
     self.view.backgroundColor = [UIColor whiteColor];
     int imageBuffer = 30;
 
@@ -49,16 +64,16 @@
     titleLabel.centerY = self.view.height*.12;
     titleLabel.centerX = self.view.width / 2.0;
     [titleLabel setNumberOfLines:2];
-    [titleLabel setText:@"Add a fun fact about yourself:"];
+    [titleLabel setText:@"Manage your fun facts:"];
     [titleLabel setFont:[UIFont boldSystemFontOfSize:25]];
     [titleLabel setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:titleLabel];
 
     // fun fact entry field
     self.funFactEntryField = [[UITextView alloc] initWithFrame:CGRectMake(0,
-                                                                           CGRectGetMaxY(titleLabel.frame) + 15,
-                                                                           self.view.width - 2 * imageBuffer,
-                                                                           80)];
+                                                                          CGRectGetMaxY(titleLabel.frame) + 15,
+                                                                          self.view.width - 2 * imageBuffer,
+                                                                          80)];
     self.funFactEntryField.centerX = self.view.width / 2.0;
 
     self.funFactEntryField.delegate = self;
@@ -70,9 +85,9 @@
     self.funFactEntryField.returnKeyType = UIReturnKeyDone;
     [self.view addSubview:self.funFactEntryField];
 
-    int buttonWidth = 75;
+    int buttonWidth = 100;
     int buttonHeight = 40;
-    int buttonInset = 40;
+    int buttonInset = 20;
     int buttonOffset = 15;
 
     // Go button
@@ -82,76 +97,199 @@
                                   CGRectGetMaxY(self.funFactEntryField.frame) + buttonOffset,
                                   buttonWidth,
                                   buttonHeight)];
-    [goButton setTitle:@"Go" forState:UIControlStateNormal];
+    [goButton setTitle:@"Submit" forState:UIControlStateNormal];
     [goButton addTarget:self
                  action:@selector(goButtonClicked)
        forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:goButton];
 
-    // Skip button
-    UIButton *skipButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    // Deselect button
+    UIButton *deselectButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 
-    [skipButton setFrame:CGRectMake(CGRectGetMaxX(self.funFactEntryField.frame) - buttonInset - buttonWidth,
-                                    CGRectGetMaxY(self.funFactEntryField.frame) + buttonOffset,
-                                    buttonWidth,
-                                    buttonHeight)];
+    [deselectButton setFrame:CGRectMake(CGRectGetMaxX(self.funFactEntryField.frame) - buttonInset - buttonWidth,
+                                        CGRectGetMaxY(self.funFactEntryField.frame) + buttonOffset,
+                                        buttonWidth,
+                                        buttonHeight)];
 
-    [skipButton setTitle:@"Skip" forState:UIControlStateNormal];
-    [skipButton addTarget:self
-                   action:@selector(skipButtonClicked)
-         forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:skipButton];
+    [deselectButton setTitle:@"Deselect Fact" forState:UIControlStateNormal];
+    [deselectButton addTarget:self
+                       action:@selector(deselectButtonButtonClicked)
+             forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:deselectButton];
+
+    // table view listing your fun facts
+    self.funFactsTableView = [[UITableView alloc] initWithFrame:CGRectMake(CGRectGetMinX(self.funFactEntryField.frame), CGRectGetMaxY(goButton.frame) + 15, self.funFactEntryField.width, 150) style:UITableViewStylePlain];
+    [self.funFactsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:cellIdentifier];
+    self.funFactsTableView.delegate = self;
+    self.funFactsTableView.dataSource = self;
+    self.funFactsTableView.layer.borderColor = [[UIColor redColor] CGColor];
+    self.funFactsTableView.layer.borderWidth = 3.0;
+    [self.view addSubview:self.funFactsTableView];
+
+    // fetch fun facts from the server
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *userID = [defaults valueForKey:userIdKey];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/users/%@", requestURLString, userID]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    self.funFacts = [NSMutableArray array];
+    AFJSONRequestOperation *operation = [AFJSONRequestOperation
+                                         JSONRequestOperationWithRequest:request
+
+                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                                             [self stopActivityIndicator];
+                                             if([JSON objectForKey:@"facts"] != [NSNull null]){
+                                                 self.funFacts = [NSMutableArray array];
+                                                 for(NSString *fact in [JSON objectForKey:@"facts"]){
+                                                     [self.funFacts addObject:fact];
+                                                 }
+                                                 [self.funFactsTableView reloadData];
+                                             }
+                                         }
+                                         failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                                             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
+                                                                                                 message:[JSON valueForKeyPath:@"message"]
+                                                                                                delegate:self
+                                                                                       cancelButtonTitle:@"OK"
+                                                                                       otherButtonTitles:nil];
+                                             [alertView show];
+                                             [self stopActivityIndicator];
+                                         }];
+    [self startActivityIndicator];
+    [operation start];
+}
+
+-(void)startActivityIndicator
+{
+    self.view.alpha = .5;
+    self.view.userInteractionEnabled = NO;
+    [self.view bringSubviewToFront:self.activityIndicator];
+    [self.activityIndicator startAnimating];
+}
+
+-(void)stopActivityIndicator
+{
+    self.view.userInteractionEnabled = YES;
+    self.view.alpha = 1;
+    [self.activityIndicator stopAnimating];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 40.0;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [self.funFacts removeObjectAtIndex:indexPath.row];
+        [self.funFactsTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        self.funFactEntryField.text = @"";
+    }
+}
+
+// when a row is selected make that fact editable in the textview
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    self.funFactEntryField.text = [self.funFacts objectAtIndex:indexPath.row];
+
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger numFacts = [self.funFacts count];
+    if(indexPath.section != 0 || indexPath.row >= numFacts || indexPath.row < 0) return nil;
+
+    NSString *fact = [self.funFacts objectAtIndex:indexPath.row];
+
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    cell.textLabel.text = fact;
+    cell.textLabel.font = [UIFont boldSystemFontOfSize:14];
+    return cell;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if(section == 0){
+        return [self.funFacts count];
+    }
+    return 0;
 }
 
 - (void)goButtonClicked
 {
-    if ([self.funFactEntryField hasText]) {
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSString *userID = [defaults valueForKey:userIdKey];
-        if(!userID) return;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *userID = [defaults valueForKey:userIdKey];
+    if(!userID) return;
 
-        AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:requestURLString]];
-        [httpClient setParameterEncoding:AFFormURLParameterEncoding];
-        NSURLRequest *request = [httpClient requestWithMethod:@"POST"
-                                                                path:[NSString stringWithFormat:@"%@/users/%@/facts", requestURLString, userID]
-                                                          parameters:@{@"fact":self.funFactEntryField.text}];
+    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:requestURLString]];
+    [httpClient setParameterEncoding:AFJSONParameterEncoding];
 
-        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-        [httpClient registerHTTPOperationClass:[AFHTTPRequestOperation class]];
+    NSURLRequest *request = [httpClient requestWithMethod:@"POST"
+                                                     path:[NSString stringWithFormat:@"%@/users/%@/facts", requestURLString, userID]
+                                               parameters:@{@"facts":self.funFacts}];
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    [httpClient registerHTTPOperationClass:[AFHTTPRequestOperation class]];
 
-        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-            if([self.delegate respondsToSelector:@selector(funFactViewControllerFinished:)]){
-                [self.delegate funFactViewControllerFinished:self];
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self stopActivityIndicator];
+        [self close];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
+                                                            message:@"Your fun facts were not received."
+                                                           delegate:self
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+        [alertView show];
+        [self stopActivityIndicator];
+    }];
+
+    [self startActivityIndicator];
+    [operation start];
+}
+
+- (void)deselectButtonButtonClicked
+{
+    [self.funFactsTableView deselectRowAtIndexPath:[self.funFactsTableView indexPathForSelectedRow] animated:YES];
+    self.funFactEntryField.text = @"";
+}
+
+/*
+ when the user clicks Done don't treat it as if they typed a newline
+ treat it as if they finished editing a fun fact and want to save their changes
+ or they added a new fact
+ */
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    if ([text isEqual:@"\n"]) {
+        [textView resignFirstResponder];
+        // which row is selected indicates the fun fact they edited
+        // if no row is selected then they added a fun fact
+        BOOL validFunFact = [[self.funFactEntryField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] length] != 0;
+        if(validFunFact)
+        {
+            NSIndexPath *selectedIndexPath = [self.funFactsTableView indexPathForSelectedRow];
+
+            if(!selectedIndexPath){
+                [self.funFacts addObject:self.funFactEntryField.text];
+            } else {
+                [self.funFacts replaceObjectAtIndex:selectedIndexPath.row withObject:self.funFactEntryField.text];
             }
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error!"
-                                                                message:@"Your fun fact was not received."
+            self.funFactEntryField.text = @"";
+            [self.funFactsTableView reloadData];
+            return NO;
+        } else {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Invalid Fun Fact"
+                                                                message:@"To delete a fun fact, swipe and delete in the fun facts table."
                                                                delegate:self
                                                       cancelButtonTitle:@"OK"
                                                       otherButtonTitles:nil];
             [alertView show];
-        }];
-        
-        [operation start];
-    }
-}
-
-- (void)skipButtonClicked
-{
-    if([self.delegate respondsToSelector:@selector(funFactViewControllerFinished:)]){
-        [self.delegate funFactViewControllerFinished:self];
-    }
-}
-
-// when the user clicks Done don't treat it as if they typed a newline
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    if ([text isEqual:@"\n"]) {
-        [textView resignFirstResponder];
-        [self goButtonClicked];
-        return NO;
+        }
     }
     return YES;
 }
-
 
 @end

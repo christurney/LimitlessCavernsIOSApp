@@ -9,6 +9,7 @@
 #import "GuessWhoViewController.h"
 #import "UIView+Dropbox.h"
 #import <QuartzCore/QuartzCore.h>
+#import "FunFactViewController.h"
 
 @interface GuessWhoViewController ()
 @property (nonatomic, strong) UIImageView *mysteryImageView;

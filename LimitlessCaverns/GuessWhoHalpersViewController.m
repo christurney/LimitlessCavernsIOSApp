@@ -14,7 +14,7 @@
 #import "AFNetworking.h"
 #import "AppDelegate.h"
 
-@interface GuessWhoHalpersViewController () <UIAlertViewDelegate, FunFactViewControllerDelegate>
+@interface GuessWhoHalpersViewController () <UIAlertViewDelegate>
 
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
@@ -442,23 +442,11 @@
     NSString *titleString = @"YOU DID IT!!";
     NSString *messageString = @"+1 for finding the Mystery Dropboxer :-)";
 
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([defaults boolForKey:@"added_fun_fact"])
-    {
-        self.successAlertView = [[UIAlertView alloc] initWithTitle:titleString
-                                                           message:messageString
-                                                          delegate:self
-                                                 cancelButtonTitle:nil
-                                                 otherButtonTitles:@"Next Challenge", nil];
-    }
-    else
-    {
-        self.successAlertView = [[UIAlertView alloc] initWithTitle:titleString
-                                                           message:messageString
-                                                          delegate:self
-                                                 cancelButtonTitle:nil
-                                                 otherButtonTitles:@"Add Fun Fact", @"Next Challenge", nil];
-    }
+    self.successAlertView = [[UIAlertView alloc] initWithTitle:titleString
+                                                       message:messageString
+                                                      delegate:self
+                                             cancelButtonTitle:nil
+                                             otherButtonTitles:@"Add Fun Fact", @"Next Challenge", nil];
 
     [self.successAlertView show];
 }
@@ -546,7 +534,6 @@
             //Open Add fun fact controller if user presses 'Add fun fact'
             NSLog(@"%d", buttonIndex);
             FunFactViewController *funFactVC = [[FunFactViewController alloc] init];
-            funFactVC.delegate = self;
             [self presentViewController:funFactVC animated:YES completion:^(void){nil;}];
         }
         else
@@ -558,12 +545,6 @@
     else if (alertView == self.failureAlertView){
         self.handlingBump = NO;
     }
-}
-
-// FunFactViewControllerDelegate method
--(void)funFactViewControllerFinished:(FunFactViewController *)funFactVC
-{
-    [self.delegate guessWhoHalpersViewControllerPressedSkipButton:self];
 }
 
 - (void)didMoveToParentViewController:(UIViewController *)parent

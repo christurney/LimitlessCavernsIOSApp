@@ -10,10 +10,5 @@
 
 @protocol FunFactViewControllerDelegate;
 
-@interface FunFactViewController : UIViewController <UITextViewDelegate>
-@property (nonatomic, weak) id<FunFactViewControllerDelegate> delegate;
-@end
-
-@protocol FunFactViewControllerDelegate <NSObject>
-- (void)funFactViewControllerFinished:(FunFactViewController *)funFactVC;
+@interface FunFactViewController : UIViewController <UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
 @end
