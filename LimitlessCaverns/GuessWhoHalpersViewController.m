@@ -13,6 +13,7 @@
 #import "FunFactViewController.h"
 #import "AFNetworking.h"
 #import "AppDelegate.h"
+#import "FunFactsView.h"
 
 @interface GuessWhoHalpersViewController () <UIAlertViewDelegate>
 
@@ -23,7 +24,7 @@
 
 @property (nonatomic, strong) UIView *mysteryPersonView;
 @property (nonatomic, strong) UIImageView *mysteryPersonImageView;
-@property (nonatomic, strong) UILabel *funFactLabel;
+@property (nonatomic, strong) FunFactsView *funFactsView;
 
 @property (nonatomic, strong) UIView *meetTheseHalpersTitleView;
 @property (nonatomic, strong) UILabel *meetTheseHalpersTitleLabel;
@@ -45,6 +46,7 @@
 
 @property (nonatomic, strong) NSDictionary *userDataDictionary;
 @property (nonatomic) BOOL handlingBump;
+@property (nonatomic, strong) NSArray *funFacts;
 
 @end
 
@@ -63,7 +65,7 @@
 {
     self = [super init];
     if (self){
-        self.funFactString = dictionary[@"fact"];
+        self.funFacts = dictionary[@"facts"];
         self.userDataDictionary = dictionary;
     }
     return self;
@@ -121,11 +123,9 @@
     self.mysteryPersonImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.mysteryPersonView addSubview:self.mysteryPersonImageView];
 
-    self.funFactLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    [self.funFactLabel setTextAlignment:NSTextAlignmentCenter];
-    self.funFactLabel.adjustsFontSizeToFitWidth = NO;
-    self.funFactLabel.numberOfLines = 0;
-    [self.mysteryPersonView addSubview:self.funFactLabel];
+    self.funFactsView = [[FunFactsView alloc] initWithFrame:CGRectZero];
+    [self.funFactsView setFunFacts:self.funFacts];
+    [self.mysteryPersonView addSubview:self.funFactsView];
 
     // Meet these halpers title
     self.meetTheseHalpersTitleView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -226,12 +226,10 @@
                                                    80,
                                                    80);
 
-    self.funFactLabel.frame = CGRectMake(CGRectGetMaxX(self.mysteryPersonImageView.frame) + leftBuffer,
+    self.funFactsView.frame = CGRectMake(CGRectGetMaxX(self.mysteryPersonImageView.frame) + leftBuffer,
                                          leftBuffer,
                                          self.mysteryPersonView.width - leftBuffer - CGRectGetMaxX(self.mysteryPersonImageView.frame),
                                          80);
-    self.funFactLabel.text = self.funFactString;
-
 
     self.meetTheseHalpersTitleView.frame = CGRectMake(0,
                                                       0,
@@ -298,30 +296,6 @@
         NSURL *url = [NSURL URLWithString:[halperDictionary objectForKey:@"image"]];
         [[halperImageViewsArray objectAtIndex:[halpers indexOfObject:halperDictionary]] setImageWithURL:url placeholderImage:nil];
     }
-}
-
--(void)setFunFactString:(NSString *)str
-{
-    _funFactString = str;
-    self.funFactLabel.text = str;
-
-    CGRect funFactFrame = self.funFactLabel.frame;
-
-    CGFloat fontSize = 30;
-    while (fontSize > 0.0)
-    {
-        CGSize size = [_funFactString sizeWithFont:[UIFont systemFontOfSize:fontSize]
-                                 constrainedToSize:CGSizeMake(funFactFrame.size.width, 10000)
-                                     lineBreakMode:NSLineBreakByWordWrapping];
-
-        if (size.height <= funFactFrame.size.height) break;
-
-        fontSize -= 1.0;
-    }
-
-    //set font size
-    self.funFactLabel.font = [UIFont systemFontOfSize:fontSize];
-
 }
 
 #pragma mark - Table view data source

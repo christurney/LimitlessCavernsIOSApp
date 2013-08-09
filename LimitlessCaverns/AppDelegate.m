@@ -39,8 +39,6 @@ NSString *const targetIdKey = @"target_id";
         NSData *sendData = [userId dataUsingEncoding:NSUTF8StringEncoding];
         
         if (sendData){
-            NSString *string = [NSString stringWithUTF8String:[sendData bytes]];
-            NSLog(@"sending data: %@ string: %@", sendData, string);
             [[BumpClient sharedClient] sendData:sendData
                                   toChannel:channel];
         } else {

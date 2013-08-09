@@ -11,6 +11,8 @@
 		1B71BCAA17B1F9C100412975 /* dabney.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1B71BCA917B1F9C100412975 /* dabney.jpg */; };
 		1B71BCAD17B30CE100412975 /* LeaderboardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B71BCAC17B30CE000412975 /* LeaderboardViewController.m */; };
 		1B71BCAF17B30CEA00412975 /* placeholderImage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1B71BCAE17B30CEA00412975 /* placeholderImage.jpg */; };
+		1BFDF71817B47A4D00E46681 /* FunFactsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BFDF71717B47A4D00E46681 /* FunFactsView.m */; };
+		1BFDF71A17B4839000E46681 /* Mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 1BFDF71917B4839000E46681 /* Mask.png */; };
 		2D12C3F517B2CE230059B82D /* GuessWhoHalpersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D12C3F417B2CE230059B82D /* GuessWhoHalpersViewController.m */; };
 		2D12C41917B40D9D0059B82D /* head_w_question_mark.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D12C41817B40D9D0059B82D /* head_w_question_mark.png */; };
 		7523DA8217B31AA000503927 /* FunFactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7523DA8117B31AA000503927 /* FunFactViewController.m */; };
@@ -49,6 +51,9 @@
 		1B71BCAB17B30CE000412975 /* LeaderboardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeaderboardViewController.h; sourceTree = "<group>"; };
 		1B71BCAC17B30CE000412975 /* LeaderboardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeaderboardViewController.m; sourceTree = "<group>"; };
 		1B71BCAE17B30CEA00412975 /* placeholderImage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = placeholderImage.jpg; sourceTree = "<group>"; };
+		1BFDF71617B47A4D00E46681 /* FunFactsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FunFactsView.h; path = ../FunFactsView.h; sourceTree = "<group>"; };
+		1BFDF71717B47A4D00E46681 /* FunFactsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FunFactsView.m; path = ../FunFactsView.m; sourceTree = "<group>"; };
+		1BFDF71917B4839000E46681 /* Mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Mask.png; sourceTree = "<group>"; };
 		2D12C3F317B2CE230059B82D /* GuessWhoHalpersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuessWhoHalpersViewController.h; sourceTree = "<group>"; };
 		2D12C3F417B2CE230059B82D /* GuessWhoHalpersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GuessWhoHalpersViewController.m; sourceTree = "<group>"; };
 		2D12C41817B40D9D0059B82D /* head_w_question_mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = head_w_question_mark.png; sourceTree = "<group>"; };
@@ -154,6 +159,8 @@
 		757A771117B0698E005FE9ED /* LimitlessCaverns */ = {
 			isa = PBXGroup;
 			children = (
+				1BFDF71617B47A4D00E46681 /* FunFactsView.h */,
+				1BFDF71717B47A4D00E46681 /* FunFactsView.m */,
 				1B71BCAB17B30CE000412975 /* LeaderboardViewController.h */,
 				1B71BCAC17B30CE000412975 /* LeaderboardViewController.m */,
 				7574905517B1799F00CAFA4F /* BumpClient.h */,
@@ -180,6 +187,7 @@
 		757A771217B0698E005FE9ED /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				1BFDF71917B4839000E46681 /* Mask.png */,
 				2D12C41817B40D9D0059B82D /* head_w_question_mark.png */,
 				1B71BCAE17B30CEA00412975 /* placeholderImage.jpg */,
 				1B71BCA917B1F9C100412975 /* dabney.jpg */,
@@ -278,6 +286,7 @@
 				1B71BCAA17B1F9C100412975 /* dabney.jpg in Resources */,
 				1B71BCAF17B30CEA00412975 /* placeholderImage.jpg in Resources */,
 				2D12C41917B40D9D0059B82D /* head_w_question_mark.png in Resources */,
+				1BFDF71A17B4839000E46681 /* Mask.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,6 +313,7 @@
 				7574905F17B1A1CB00CAFA4F /* RootViewController.m in Sources */,
 				1B71BCA817B1E7BD00412975 /* GuessWhoViewController.m in Sources */,
 				7523DA8217B31AA000503927 /* FunFactViewController.m in Sources */,
+				1BFDF71817B47A4D00E46681 /* FunFactsView.m in Sources */,
 				2D12C3F517B2CE230059B82D /* GuessWhoHalpersViewController.m in Sources */,
 				1B71BCAD17B30CE100412975 /* LeaderboardViewController.m in Sources */,
 			);

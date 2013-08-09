@@ -10,17 +10,20 @@
 #import "UIView+Dropbox.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FunFactViewController.h"
+#import "FunFactsView.h"
+
 
 @interface GuessWhoViewController ()
 @property (nonatomic, strong) UIImageView *mysteryImageView;
 @property (nonatomic, strong) UILabel *titleLabel;
-@property (nonatomic, strong) UILabel *funFactLabel;
 @property (nonatomic, strong) UIButton *knowThemButton;
 @property (nonatomic, strong) UIButton *playButton;
 @property (nonatomic, strong) UIButton *leaderboardButton;
 @property (nonatomic, strong) NSArray *views;
 @property (nonatomic, strong) UIAlertView *knowThemAlertView;
 @property (nonatomic, strong) UIButton *funFactButton;
+@property (nonatomic, strong) FunFactsView *funFactsView;
+@property (nonatomic, strong) NSArray *funFacts;
 
 @end
 
@@ -30,7 +33,7 @@
 {
     self = [super init];
     if (self){
-        self.funFactString = dictionary[@"fact"];
+        self.funFacts = dictionary[@"facts"];
         self.titleString = @"Mystery Dropboxer";
     }
     return self;
@@ -48,13 +51,9 @@
     self.titleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
     [self.view addSubview:self.titleLabel];
     
-    self.funFactLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    [self.funFactLabel setTextAlignment:NSTextAlignmentCenter];
-    self.funFactLabel.adjustsFontSizeToFitWidth = NO;
-    self.funFactLabel.numberOfLines = 0;
-    self.funFactLabel.backgroundColor = [UIColor clearColor];
+    self.funFactsView = [[FunFactsView alloc] initWithFrame:CGRectZero];
     
-    [self.view addSubview:self.funFactLabel];
+    [self.view addSubview:self.funFactsView];
     self.mysteryImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     self.mysteryImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.mysteryImageView.layer setBorderColor:[UIColor redColor].CGColor];
@@ -95,7 +94,7 @@
                      forControlEvents:UIControlEventTouchUpInside];
     
     
-    self.views = @[self.titleLabel, self.funFactLabel, self.mysteryImageView, self.knowThemButton, self.playButton, self.leaderboardButton];
+    self.views = @[self.titleLabel, self.funFactsView, self.mysteryImageView, self.knowThemButton, self.playButton, self.leaderboardButton];
     for (UIView *view in self.views){
         view.hidden = YES;
     }
@@ -105,6 +104,8 @@
     [self.funFactButton.layer setBorderColor:[UIColor blueColor].CGColor];
     [self.funFactButton.layer setBorderWidth:3];
     [self.funFactButton addTarget:self action:@selector(funFactsClicked) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.funFactsView setFunFacts:self.funFacts];
 }
 
 - (void)knowThemClicked
@@ -143,28 +144,6 @@
     [self.delegate guessWhoViewControllerPressedFunFactsButton:self];
 }
 
--(void)setFunFactString:(NSString *)str
-{
-    _funFactString = str;
-    self.funFactLabel.text = str;
-    
-    CGRect funFactFrame = self.funFactLabel.frame;
-    
-    CGFloat fontSize = 30;
-    while (fontSize > 0.0)
-    {
-        CGSize size = [_funFactString sizeWithFont:[UIFont systemFontOfSize:fontSize]
-                                 constrainedToSize:CGSizeMake(funFactFrame.size.width, 10000)
-                                     lineBreakMode:NSLineBreakByWordWrapping];
-        
-        if (size.height <= funFactFrame.size.height) break;
-        
-        fontSize -= 1.0;
-    }
-    
-    //set font size
-    self.funFactLabel.font = [UIFont systemFontOfSize:fontSize];
-}
 
 - (void)viewWillLayoutSubviews
 {
@@ -177,12 +156,12 @@
     
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)){
                 
-        self.funFactLabel.frame = CGRectMake(0, CGRectGetMaxY(self.titleLabel.frame) + 12, self.view.width - 60, 70);
-        self.funFactLabel.centerX = self.view.width / 2;
+        self.funFactsView.frame = CGRectMake(0, CGRectGetMaxY(self.titleLabel.frame) + 12, self.view.width - 60, 70);
+        self.funFactsView.centerX = self.view.width / 2;
         
         
         self.mysteryImageView.frame = CGRectMake(imageBuffer,
-                                                 CGRectGetMaxY(self.funFactLabel.frame) + 12,
+                                                 CGRectGetMaxY(self.funFactsView.frame) + 12,
                                                  (self.view.width - imageBuffer*2),
                                                  imageHeight);
         
@@ -213,7 +192,7 @@
                                                  (self.view.height - imageBuffer*2),
                                                  imageHeight);
 
-        self.funFactLabel.frame = CGRectMake(CGRectGetMaxX(self.mysteryImageView.frame) + imageBuffer, CGRectGetMaxY(self.titleLabel.frame) + 12, self.view.height - 60, 70);
+        self.funFactsView.frame = CGRectMake(CGRectGetMaxX(self.mysteryImageView.frame) + imageBuffer, CGRectGetMaxY(self.titleLabel.frame) + 12, self.view.width - CGRectGetMaxX(self.mysteryImageView.frame) - imageBuffer, 70);
         
         
         
@@ -221,7 +200,7 @@
         // know them button
         
         self.knowThemButton.frame = CGRectMake(CGRectGetMaxX(self.mysteryImageView.frame) + imageBuffer,
-                                               CGRectGetMaxY(self.funFactLabel.frame) + 15,
+                                               CGRectGetMaxY(self.funFactsView.frame) + 15,
                                                CGRectGetWidth(self.mysteryImageView.frame)/2.0 - 5,
                                                buttonHeight);
         // play button
@@ -238,7 +217,6 @@
 
         
     }
-    [self setFunFactString:self.funFactString];
 }
 
 - (void)didMoveToParentViewController:(UIViewController *)parent
