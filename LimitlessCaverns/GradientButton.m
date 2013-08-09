@@ -113,8 +113,8 @@ UIColor *colorFromRGB(CGFloat red, CGFloat green, CGFloat blue, CGFloat alpha) {
 
 - (NSArray*)gradientColors
 {
-    return @[(id)colorFromRGB(56, 56, 255, 1).CGColor,
-             (id)colorFromRGB(0, 0, 255, 1).CGColor];
+    return @[(id)colorFromRGB(47, 147, 255, 1).CGColor,
+             (id)colorFromRGB(0, 122, 255, 1).CGColor];
 }
 
 - (UIColor*)gradientBorderColor
