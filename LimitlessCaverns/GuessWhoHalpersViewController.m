@@ -69,6 +69,9 @@
     if (self){
         self.funFacts = dictionary[@"facts"];
         self.userDataDictionary = dictionary;
+        if ([self respondsToSelector:@selector(automaticallyAdjustsScrollViewInsets)]){
+            self.tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
+        }
     }
     return self;
 }
