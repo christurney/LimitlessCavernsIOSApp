@@ -349,7 +349,23 @@
     }
     else if (indexPath.row == 3)
     {
-        return self.meetTheseHalpersView.height;
+        CGFloat height;
+        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+        {
+            if (IS_IPHONE5)
+            {
+                height = 288;
+            }
+            else
+            {
+                height = 200;
+            }
+        }
+        else
+        {
+            height = 200;
+        }
+        return height;
     }
     else if (indexPath.row == 4)
     {
