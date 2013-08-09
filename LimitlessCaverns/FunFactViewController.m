@@ -93,7 +93,7 @@
 {
     if ([self.funFactEntryField hasText]) {
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSString *userID = [defaults valueForKey:@"userID"];
+        NSString *userID = [defaults valueForKey:userIdKey];
         if(!userID) return;
 
         AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:requestURLString]];

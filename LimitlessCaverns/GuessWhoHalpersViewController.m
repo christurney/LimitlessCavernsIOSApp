@@ -44,6 +44,7 @@
 @property (nonatomic, strong) NSMutableArray *views;
 
 @property (nonatomic, strong) NSDictionary *userDataDictionary;
+@property (nonatomic) BOOL handlingBump;
 
 @end
 
@@ -476,12 +477,13 @@
 - (void)verifySuccessFailure:(NSNotification *)notification
 {
     // Ensure that this isn't called when user has Leaderboard opened.
-    if (self.navigationController.presentedViewController == self)
+    if (!self.navigationController.presentedViewController && !self.handlingBump)
     {
+        self.handlingBump = YES;
         NSDictionary *dict = [notification userInfo];
         NSString *bumpedUserID = [dict objectForKey:@"bumped_user_id"];
 
-        if ([[self.userDataDictionary objectForKey:@"target_id"] isEqualToString:bumpedUserID])
+        if ([[self.userDataDictionary objectForKey:targetIdKey] isEqualToString:bumpedUserID])
         {
             [self userSucceeded];
         }
@@ -495,7 +497,7 @@
 - (void)userSucceeded
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *userID = [defaults objectForKey:@"user_id"];
+    NSString *userID = [defaults objectForKey:userIdKey];
     NSURL *url = [NSURL URLWithString:[requestURLString stringByAppendingString:[NSString stringWithFormat:@"/users/%@/complete_assignment", userID]]];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     //TODO add a status overlay
@@ -524,8 +526,6 @@
                                              [self.activityIndicator stopAnimating];
                                          }];
     [operation start];
-
-    [self showSuccessAlertView];
 }
 
 #pragma mark - Alert view delegate
@@ -552,8 +552,11 @@
         else
         {
             //Show next person
-            [self.delegate guessWhoHalpersViewControllerPressedSkipButton:self];
+            [self.delegate guessWhoHalpersSucceeded:self];
         }
+    }
+    else if (alertView == self.failureAlertView){
+        self.handlingBump = NO;
     }
 }
 

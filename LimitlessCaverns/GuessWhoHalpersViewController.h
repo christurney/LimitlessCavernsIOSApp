@@ -21,4 +21,5 @@
 @protocol  GuessWhoHalpersViewControllerDelegate
 - (void)guessWhoHalpersViewControllerPressedSkipButton:(GuessWhoHalpersViewController *)guessWhoHalpersVC;
 - (void)guessWhoHalpersViewControllerPressedLeaderboardButton:(GuessWhoHalpersViewController*)guessWhoHalpersVC;
+- (void)guessWhoHalpersSucceeded:(GuessWhoHalpersViewController*)guessWhoHalpersVC;
 @end

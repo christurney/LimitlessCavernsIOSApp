@@ -7,6 +7,8 @@
 //
 
 extern NSString *const requestURLString;
+extern NSString *const userIdKey;
+extern NSString *const targetIdKey;
 
 #import <UIKit/UIKit.h>
 @class RootViewController;
