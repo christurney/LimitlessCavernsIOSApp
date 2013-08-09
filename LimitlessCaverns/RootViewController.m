@@ -118,7 +118,7 @@
     if (![defaults valueForKey:@"mysteryUserData"])
     {
         NSLog(@"Make server request!");
-        [self getMysteryUserInfo:userID userDidSkip:NO];
+        [self getMysteryUserInfo:userID userDidSkip:NO neverAgain:NO];
     }
     else
     {
@@ -140,13 +140,13 @@
                                             animated:YES completion:nil];
 }
 
--(void)getMysteryUserInfo:(NSString *)userID userDidSkip:(BOOL)userDidSkip
+-(void)getMysteryUserInfo:(NSString *)userID userDidSkip:(BOOL)userDidSkip neverAgain:(BOOL)never
 {
     NSURL *url = nil;
 
     if (userDidSkip)
     {
-        url = [NSURL URLWithString:[requestURLString stringByAppendingString:[NSString stringWithFormat:@"/users/%@/skip_assignment", userID]]];
+        url = [NSURL URLWithString:[requestURLString stringByAppendingString:[NSString stringWithFormat:@"/users/%@/skip_assignment%@", userID, never ? @"/never" : @""]]];
     }
     else
     {
@@ -205,7 +205,7 @@
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *userID = [defaults valueForKey:userIdKey];
-    [self getMysteryUserInfo:userID userDidSkip:YES];
+    [self getMysteryUserInfo:userID userDidSkip:YES neverAgain:YES];
 }
 
 - (void)guessWhoViewControllerPressedPlayButton:(GuessWhoViewController *)guessWhoVC
@@ -219,7 +219,7 @@
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *userID = [defaults valueForKey:userIdKey];
-    [self getMysteryUserInfo:userID userDidSkip:YES];
+    [self getMysteryUserInfo:userID userDidSkip:YES neverAgain:NO];
 }
 
 - (void)guessWhoViewControllerPressedFunFactsButton:(GuessWhoViewController *)guessWhoVC
@@ -231,7 +231,7 @@
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *userID = [defaults valueForKey:userIdKey];
-    [self getMysteryUserInfo:userID userDidSkip:NO];
+    [self getMysteryUserInfo:userID userDidSkip:NO neverAgain:NO];
 }
 
 - (void)guessWhoViewControllerPressedLeaderboardButton:(GuessWhoViewController *)guessWhoVC
