@@ -11,13 +11,13 @@
 #import <QuartzCore/QuartzCore.h>
 #import "FunFactViewController.h"
 #import "FunFactsView.h"
-
+#import "GradientButton.h"
 
 @interface GuessWhoViewController ()
 @property (nonatomic, strong) UIImageView *mysteryImageView;
 @property (nonatomic, strong) UILabel *titleLabel;
-@property (nonatomic, strong) UIButton *knowThemButton;
-@property (nonatomic, strong) UIButton *playButton;
+@property (nonatomic, strong) GrayGradientButton *knowThemButton;
+@property (nonatomic, strong) BlueGradientButton *playButton;
 @property (nonatomic, strong) UIButton *leaderboardButton;
 @property (nonatomic, strong) NSArray *views;
 @property (nonatomic, strong) UIAlertView *knowThemAlertView;
@@ -45,7 +45,9 @@
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [self.titleLabel setText:self.titleString];
-    [self.titleLabel setFont:[UIFont boldSystemFontOfSize:25]];
+    //[self.titleLabel setFont:[UIFont boldSystemFontOfSize:25]];
+    [self.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:25]];
+    self.titleLabel.textColor = [UIColor redColor];
     [self.titleLabel setTextAlignment:NSTextAlignmentCenter];
     self.titleLabel.backgroundColor = [UIColor clearColor];
     self.titleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
@@ -56,17 +58,14 @@
     [self.view addSubview:self.funFactsView];
     self.mysteryImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     self.mysteryImageView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.mysteryImageView.layer setBorderColor:[UIColor redColor].CGColor];
-    [self.mysteryImageView.layer setBorderWidth:3];
     self.mysteryImageView.layer.cornerRadius = 5;
-    self.mysteryImageView.backgroundColor = [UIColor redColor];
     [self.mysteryImageView setImage:[UIImage imageNamed:@"head_w_question_mark"]];
     [self.view addSubview:self.mysteryImageView];
     
     
     // know them button
-    self.knowThemButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    
+    self.knowThemButton = [[GrayGradientButton alloc] init];
+    [self.knowThemButton configure];
     [self.knowThemButton setFrame:CGRectZero];
     [self.knowThemButton setTitle:@"Know Them" forState:UIControlStateNormal];
     [self.knowThemButton addTarget:self
@@ -75,8 +74,8 @@
     [self.view addSubview:self.knowThemButton];
     
     // play button
-    self.playButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    
+    self.playButton = [[BlueGradientButton alloc] init];
+    [self.playButton configure];
     [self.playButton setFrame:CGRectZero];
     [self.playButton setTitle:@"Play!" forState:UIControlStateNormal];
     [self.playButton addTarget:self

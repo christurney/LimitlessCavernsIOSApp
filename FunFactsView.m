@@ -36,7 +36,7 @@
     CGFloat fontSize = 30;
     while (fontSize > 0.0)
     {
-        CGSize size = [funFactLabel.text sizeWithFont:[UIFont systemFontOfSize:fontSize]
+        CGSize size = [funFactLabel.text sizeWithFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize]
                                  constrainedToSize:CGSizeMake(funFactFrame.size.width, 10000)
                                      lineBreakMode:NSLineBreakByWordWrapping];
         
@@ -46,7 +46,8 @@
     }
     
     //set font size
-    funFactLabel.font = [UIFont systemFontOfSize:fontSize];
+    //funFactLabel.font = [UIFont systemFontOfSize:fontSize];
+    funFactLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize];
     [self addSubview:funFactLabel];
 }
 

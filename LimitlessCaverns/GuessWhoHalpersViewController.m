@@ -14,6 +14,7 @@
 #import "AFNetworking.h"
 #import "AppDelegate.h"
 #import "FunFactsView.h"
+#import "GradientButton.h"
 
 @interface GuessWhoHalpersViewController () <UIAlertViewDelegate>
 
@@ -36,7 +37,7 @@
 @property (nonatomic, strong) UIImageView *halper4ImageView;
 
 @property (nonatomic, strong) UIView *tableBottomView;
-@property (nonatomic, strong) UIButton *skipButton;
+@property (nonatomic, strong) GrayGradientButton *skipButton;
 @property (nonatomic, strong) UIButton *leaderboardButton;
 
 @property (nonatomic, strong) UIAlertView *skipAlertView;
@@ -98,12 +99,14 @@
 
     // Number of points box
     self.pointsBoxView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.pointsBoxView.backgroundColor = [UIColor colorWithRed:187/255.f green:220/255.f blue:241/255.f alpha:1];
+    self.pointsBoxView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
     [self.views addObject:self.pointsBoxView];
 
     self.pointsBoxLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-    [self.pointsBoxLabel setText:@"Bump phones with this mystery Dropboxer to get 1 point:"];
-    [self.pointsBoxLabel setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]]];
+    [self.pointsBoxLabel setText:@"Bump phones with this Mystery Dropboxer to get 1 point:"];
+    //[self.pointsBoxLabel setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]]];
+    [self.pointsBoxLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:16]];
+    self.pointsBoxLabel.textColor = [UIColor redColor];
     [self.pointsBoxLabel setTextAlignment:NSTextAlignmentLeft];
     self.pointsBoxLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
     self.pointsBoxLabel.numberOfLines = 2;
@@ -130,7 +133,8 @@
 
     self.meetTheseHalpersTitleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [self.meetTheseHalpersTitleLabel setText:@"Meet these HALPers to get clues:"];
-    [self.meetTheseHalpersTitleLabel setFont:[UIFont boldSystemFontOfSize:[UIFont systemFontSize]]];
+    [self.meetTheseHalpersTitleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:16]];
+    self.meetTheseHalpersTitleLabel.textColor = [UIColor redColor];
     [self.meetTheseHalpersTitleLabel setTextAlignment:NSTextAlignmentLeft];
     self.meetTheseHalpersTitleLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin;
     self.meetTheseHalpersTitleLabel.backgroundColor = self.pointsBoxView.backgroundColor;
@@ -171,7 +175,8 @@
     self.tableBottomView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
     [self.views addObject:self.tableBottomView];
 
-    self.skipButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    self.skipButton = [[GrayGradientButton alloc] init];
+    [self.skipButton configure];
     [self.skipButton setTitle:@"Skip" forState:UIControlStateNormal];
     [self.skipButton addTarget:self
                         action:@selector(skipClicked)
@@ -295,7 +300,7 @@
                                               60,
                                               60);
 
-    self.skipButton.frame = CGRectMake(CGRectGetMinX(self.leaderboardButton.frame) - leftBuffer - buttonWidth,
+    self.skipButton.frame = CGRectMake(CGRectGetMinX(self.leaderboardButton.frame) - leftBuffer - 10 - buttonWidth,
                                        leftBuffer,
                                        buttonWidth,
                                        60);
